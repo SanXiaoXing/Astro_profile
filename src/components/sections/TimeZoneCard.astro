@@ -1,0 +1,8 @@
+---
+import Card from '../Card.astro'
+import TimeZoneV2 from './TimeZoneCardV2'
+---
+
+<Card colSpan="lg:col-span-1" rowSpan="md:row-span-1" title="北京时间：">
+  <TimeZoneV2 timezone="China/Beijing" client:load />
+</Card>
