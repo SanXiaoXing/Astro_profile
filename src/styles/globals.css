@@ -35,3 +35,49 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes enter {
+  0% {
+      opacity: 0;
+      /* transform: translateY(-30px) */
+  }
+
+  to {
+      opacity: 1;
+      transform: none;
+  }
+}
+
+@keyframes blurOut {
+  from {
+      filter: blur(20px);
+  }
+
+  to {
+      filter: blur(0px);
+  }
+}
+
+[data-animate-enter] {
+  --stagger: 0;
+  --delay: 1000ms;
+  --start: 500ms;
+  animation: enter var(--delay) ease-in-out, blurOut var(--delay) ease-in-out;
+  animation-fill-mode: both;
+  animation-delay: var(--start);
+}
