@@ -16,25 +16,23 @@ const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
 ---
 
 <ShadcnCard
-  className={`card-animate transfor-y-[-40%] align-start perspective-1200 group group relative col-span-1 h-auto w-full flex-none transform justify-start overflow-hidden p-6 shadow-lg transition duration-75 ease-in-out ${
+  className={`card-animate transform-y-[-40%] align-start perspective-1200 group relative col-span-1 h-auto w-full flex-none transform justify-start overflow-hidden p-6 shadow-lg transition duration-300 ease-in-out hover:border-primary hover:shadow-[0_0_15px_0_hsl(20.5,90.2%,48.2%)] ${
     colSpan || 'md:col-span-2'
-  } ${rowSpan || ''} ${href ? 'cursor-pointer hover:border-primary' : ''}`}
+  } ${rowSpan || ''} ${href ? 'cursor-pointer' : ''}`}
 >
-  {
-    href ? (
-      <a href={href} class={`block h-full w-full ${colorText || ' '}`}>
-        <SquareArrowOutUpRight
-          className="group-hover:text-primary position absolute right-6 "
-          size={20}
-        />
-        <ContentCard title={title} body={body}>
-          <slot />
-        </ContentCard>
-      </a>
-    ) : (
+  {href ? (
+    <a href={href} class={`block h-full w-full ${colorText || ''}`}>
+      <SquareArrowOutUpRight
+        className="group-hover:text-primary absolute right-6"
+        size={20}
+      />
       <ContentCard title={title} body={body}>
         <slot />
       </ContentCard>
-    )
-  }
+    </a>
+  ) : (
+    <ContentCard title={title} body={body}>
+      <slot />
+    </ContentCard>
+  )}
 </ShadcnCard>
