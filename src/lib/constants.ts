@@ -7,12 +7,14 @@ export const loaderAnimation = [
 ]
 
 export const LINKS = {
-  github: 'https://github.com/bue221',
+  github: 'https://github.com/SanXiaoXing',
   linkedin: 'https://www.linkedin.com/in/bue221/',
-  mail: 'mailto:camiloplaza3@gmail.com',
-  instagram: 'https://www.instagram.com/ancap.tattoo/',
-  medium: 'https://ladvace.medium.com/',
-  discord: 'https://discordapp.com/users/163300027618295808',
+  mail: 'mailto:yanxing1137@gmail.com',
+  instagram: '',
+  medium: '',
+  discord: '',
+  rss: '/rss',
+  gitee: 'https://gitee.com/yan-kmd'
 }
 
 // Global

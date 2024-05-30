@@ -2,19 +2,27 @@
 import Card from '../Card.astro'
 import { Button } from '../ui/button'
 import { LINKS } from '../../lib/constants'
-import { Linkedin, Github, Mail } from 'lucide-react'
+import {  Github, Mail, Rss, Gitlab } from 'lucide-react'
 ---
 
 <Card colSpan="md:col-span-3" rowSpan="md:row-span-2">
   <div class="flex h-full w-full">
     <div class="flex flex-col justify-between gap-4 md:max-h-[300px]">
-      <div class="flex h-full flex-col">
-        <h6 class="m-0 text-sm font-light text-gray-500">welcome</h6>
-        <p class="m-0 text-xl font-light">
-          Hi, I'm <b class="font-bold">Andrés Camilo Plaza</b>, a software
-          developer, systems engineer and tattoo artist with  
-        </p>
+      <div class="flex h-full flex-col" style={{ justifyContent: 'center', display: 'flex', width: '100%', height: '100%' }}>
+
+        <h1 class="hometitle" >SanXiaoXing的博客</h1>
+        <br>
+        <div >
+          <p class="relative w-[max-content] font-mono text-xl
+          before:absolute before:inset-0 before:animate-typewriter
+          before:bg-background
+          after:absolute after:inset-0 after:w-[0.125em] after:animate-caret
+          after:bg-primary"
+          >欢迎来到SanXiaoXing的快乐世界！
+          </p>
+        </div>
       </div>
+      
       <div class="flex gap-4">
         <a href={LINKS.github} aria-label="github profile" target="_blank">
           <Button aria-label="github profile">
@@ -22,16 +30,22 @@ import { Linkedin, Github, Mail } from 'lucide-react'
             <span class="sr-only">GitHub Profile</span>
           </Button>
         </a>
-        <a href={LINKS.linkedin} aria-label="linkeding profile" target="_blank">
-          <Button aria-label="linkedin profile">
-            <Linkedin />
-            <span class="sr-only">Linkedin Profile</span>
+        <a href={LINKS.gitee} aria-label="gitee profile" target="_blank">
+          <Button aria-label="gitee profile">
+            <Gitlab />
+            <span class="sr-only">Gitee Profile</span>
           </Button>
         </a>
         <a href={LINKS.mail} aria-label="mail profile" target="_blank">
           <Button>
             <Mail />
             <span class="sr-only">Email contact</span>
+          </Button>
+        </a>
+        <a href={LINKS.rss} aria-label="rss profile" target="_blank">
+          <Button aria-label="rss profile">
+            <Rss />
+            <span class="sr-only">Rss Profile</span>
           </Button>
         </a>
       </div>
@@ -45,3 +59,16 @@ import { Linkedin, Github, Mail } from 'lucide-react'
     />
   </div>
 </Card>
+<style>
+    .hometitle {
+      max-height: 1fr;
+      font-size: 3rem;
+      font-weight: bold;
+      font-family: 'Future-mono';
+      background: linear-gradient(220.55deg, #FFC328 0%, #E20000 100%);
+      background-clip: border-box;
+      background-size: 100% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+  }
+</style>
