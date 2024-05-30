@@ -21,14 +21,29 @@ Inside of your Astro project, you'll see the following folders and files:
 ```text
 /
 ├── public/
-│   └── favicon.svg
+│   └── favicon.ico	(头像存放)
 ├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
+│   ├── components/	(组件布局)
+│   │   ├── sections/ (组件卡片)
+│   │   │	├── AboutMe.astro
+|	|	|	├── IntroCard.astro
+|	|	|	├── Now.astro
+|	|	|	├── TimeZoneCard.astro
+|	|	|	└── StudyCard.astro
+│   │   ├── ui/	(组件效果)
+│   │   │	├── card.tsx
+│   │   │	├── button.tsx
+│   │   │	└── badge.tsx
+│   │   ├── Card.astro
+│   │   ├── Footer.astro
+│   │   ├── Header.astro
+│   │   └──	HeadSEO.astro
+│   ├── layouts/	(基本布局)
+│   │   └── BaseLayout.astro
+│   ├── pages/	(界面)
+│   │   └── index.astro
+│   └── styles/	(css存放)
+│   │   └── globals.css
 └── package.json
 ```
 
