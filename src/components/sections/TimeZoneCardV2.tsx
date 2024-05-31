@@ -7,7 +7,7 @@ const Timezone = ({ timezone }: any) => {
   useEffect(() => {
     const interval = setInterval(() => {
       const now = moment().tz(timezone)
-      setDateTime(now.format('h:mm:ss'))
+      setDateTime(now.format('HH:mm:ss'))
     }, 1000)
 
     return () => clearInterval(interval)
@@ -15,7 +15,7 @@ const Timezone = ({ timezone }: any) => {
 
   return (
     <div style={{justifyContent: 'center', alignItems: 'center'}}>
-      <p style={{ fontSize: '48px', textAlign: 'center' }}>{dateTime}</p>
+      <p className="timezone-text">{dateTime}</p>
     </div>
   )
 }

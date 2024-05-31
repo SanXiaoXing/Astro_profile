@@ -16,13 +16,13 @@ import MyStack from '../components/sections/MyStack.astro'
   title="SanXiaoXing"
   description="SanXiaoXing - Happy everyday"
 >
-  <div
-    slot="loader"
-    class="loader bg-darkslate-700 fixed bottom-0 left-0 right-0 top-0 z-50 flex h-screen w-screen items-center justify-center text-3xl font-black uppercase text-neutral-50"
+<div
+  slot="loader"
+  class="loader bg-darkslate-700 text-neutral-50 text-3xl font-black uppercase flex justify-center items-center w-screen h-screen z-50 fixed top-0 bottom-0 right-0 left-0"
   >
   </div>
   <main
-  class="relative m-auto grid w-full max-w-6xl gap-3 overflow-hidden p-2 sm:gap-2 sm:p-4 md:grid-cols-2 md:gap-3 md:p-6 lg:grid-cols-4 lg:grid-rows-4 lg:gap-4"
+  class="text-white m-auto p-2 grid gap-2 max-w-6xl overflow-hidden relative w-full sm:p-4 sm:gap-2 md:grid-cols-2 md:gap-3 md:p-6 lg:h-screen lg:grid-rows-7 lg:grid-cols-4 lg:gap-4 lg:max-h-[800px]"
   data-animate-enter
 >
     <IntroCard />
@@ -31,8 +31,8 @@ import MyStack from '../components/sections/MyStack.astro'
     <Now />
     <TimeZoneCard />
     <StudyCard />  
-    <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
-      <div class="flex h-full flex-col justify-between">
+    <Card colSpan="md:col-span-1" rowSpan="md:row-span-2">
+      <div id="show" class="flex h-full flex-col justify-between">
         <blockquote class="mt-6 border-l-2 pl-6 italic">
           “Anything one man can imagine, other men can make real.”
         </blockquote> 
@@ -101,3 +101,34 @@ import MyStack from '../components/sections/MyStack.astro'
     });
   }
 </script>
+
+<style>
+  #show {
+      position: relative; /* 让伪元素可以绝对定位 */
+      overflow: hidden; 
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      flex-direction: column;
+      box-sizing: border-box; /* 确保内边距不会影响元素的总大小 */
+  }
+
+  /* 伪元素样式 */
+  #show::before {
+      content: '';
+      background-image: url('/favicon_bg.svg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0; /* 初始不透明 */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.5s ease; /* 添加过渡效果 */
+  }
+
+  #show:hover::before {
+      opacity: 0.2; /* 鼠标悬停时透明度变为 0.2，显示一点点 */
+  }
+</style>
