@@ -53,33 +53,48 @@ export const SEARCH: Page = {
 export const STUDIES = [
   {
     title: 'Computer Science',
-    institution: 'Universidad Central',
-    link: 'https://www.ucentral.edu.co/',
-    date: '2019 - 2027',
+    institution: 'Henan Normal University',
+    link: 'https://www.htu.edu.cn/',
+    date: '2019 - 2023',
   },
   {
     title: '...',
-    institution: 'Platzi',
-    link: 'https://platzi.com/',
-    date: '2018 - 2022',
+    institution: 'Bilibili',
+    link: 'https://www.bilibili.com/',
+    date: '2018 - 2024',
   },
   {
     title: '...',
-    institution: 'Udemy',
-    link: 'https://www.udemy.com/',
-    date: '2018 - 2022',
+    institution: 'Github',
+    link: 'https://github.com/',
+    date: '2018 - 2024',
   },
   {
     title: '...',
     institution: 'Youtube',
-    link: 'https://www.youtube.com/@midulive',
-    date: '2018 - 2022',
+    link: 'https://www.youtube.com/',
+    date: '2018 - 2025',
   },
   {
-    title: 'Tattoo Artist',
-    institution: 'Tattoo Academy',
-    link: 'https://www.instagram.com/tattoodcacademy/',
-    date: '2024 - 2025',
+    title: '...',
+    institution: 'ChatGPT',
+    link: 'https://chat.openai.com/',
+    date: '2018 - 2025',
+  }, {
+    title: '...',
+    institution: 'CNKI',
+    link: 'https://www.cnki.net/',
+    date: '2018 - 2025',
+  }, {
+    title: '...',
+    institution: 'Nature',
+    link: 'https://www.nature.com/',
+    date: '2018 - 2025',
+  },{
+    title: '...',
+    institution: 'Sci-hub',
+    link: 'https://www.sci-hub.st/',
+    date: '2018 - 2025',
   },
 ]
 

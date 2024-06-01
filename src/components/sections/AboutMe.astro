@@ -1,8 +1,12 @@
 ---
 import Card from '../Card.astro'
+import { Button } from '../ui/button'
+import { EXPERIENCE } from '../../lib/constants'
 ---
 
-<Card colSpan="md:col-span-1" rowSpan="md:row-span-5" title="About me">
+<Card 
+  href='/work'
+  colSpan="md:col-span-1" rowSpan="md:row-span-5" title="About me">
   <br>
   <div class="flex flex-col gap-2">
     <p class="text-sm font-light">
@@ -19,9 +23,36 @@ import Card from '../Card.astro'
         <li>C</li>
       </ul>
     </p>
-    <br />
-    <p class="text-sm font-light">
-      除此之外，我还喜欢听一些古典音乐。
-    </p>
+  </div>
+  <br>
+  <h2 class="z-20 m-0 text-xl font-bold text-orange-500">Experience</h2>
+  <div class="mt-2 space-y-4">
+    {
+      EXPERIENCE.slice(0, 2).map((exp) => (
+        <div>
+          <h3 class="text-lg font-semibold">{exp.position}</h3>
+          <a class="text-sm text-primary" href={exp?.link ?? ''}>
+            {exp.company}
+          </a>
+          <p class="text-sm text-gray-600">
+            {exp.start} - {exp.end}
+          </p>
+        </div>
+      ))
+    }
+    <a href="/work">
+      <Button variant="link" className="pl-0"> View More </Button>
+    </a>
   </div>
 </Card>
+<style>
+  .list-inside {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* 每行两个项目 */
+      gap: 8px; /* 项目之间的间距，可以自定义 */
+  }
+  .list-inside li {
+      list-style-type: disc; /* 保留项目前的圆点 */
+      margin-left: 10px; /* 调整圆点的位置 */
+  }
+</style>
