@@ -13,7 +13,7 @@ export const LINKS = {
   instagram: '',
   medium: '',
   discord: '',
-  rss: '/rss',
+  rss: '/rss.xml',
   gitee: 'https://gitee.com/yan-kmd'
 }
 
