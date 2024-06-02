@@ -15,9 +15,7 @@ interface Props {
 const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
 ---
 <ShadcnCard
-  className={`divc group relative col-span-1 h-auto w-full flex-none justify-start overflow-hidden transition ${
-    colSpan || 'md:col-span-2'
-  } ${rowSpan || ''} ${href ? 'cursor-pointer' : ''}`}
+  className={`divc group relative col-span-1 h-auto w-full flex-none justify-start overflow-hidden transition ${colSpan || 'md:col-span-2'} ${rowSpan || ''} ${href ? 'cursor-pointer' : ''}`}
 >
   {href ? (
     <a href={href} class={`h-full w-full ${colorText || ''}`}>
@@ -26,12 +24,12 @@ const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
         size={20}
       />
       <ContentCard title={title} body={body}>
-        <slot />
+        <div class="moving-gradient-text"><slot /></div>
       </ContentCard>
     </a>
   ) : (
     <ContentCard title={title} body={body}>
-      <slot />
+      <div class="moving-gradient-text"><slot /></div>
     </ContentCard>
   )}
 </ShadcnCard>
@@ -58,14 +56,15 @@ const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
   overflow: hidden;
 }
 
-.divc span {
+.divc .moving-gradient-text-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #eb2300;
-  border-radius: 1rem;
   width: 100%;
   height: 100%;
+}
+
+.divc span {
   transition: 300ms;
   font-size: 2rem;
   color: var(--hc);
@@ -77,15 +76,39 @@ const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
 }
 
 .divc:hover span {
-    background: none;
+  background: none;
 }
 
 .divc:active {
-    transform: scale(0.9);
+  transform: scale(0.9);
 }
 
-.divc:hover,.divc:active {
-    outline: 0;
-    box-shadow: 0px 0px 100px 10px rgba(6, 56, 238, 0.547);
+.divc:hover,
+.divc:active {
+  outline: 0;
+  box-shadow: 0px 0px 100px 10px rgba(6, 56, 238, 0.547);
+}
+
+.moving-gradient-text {
+  font-size: 48px;
+  font-weight: bold;
+  background: linear-gradient(270deg, #ff6ec4, #7873f5, #4adede);
+  background-size: 600% 600%;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  animation: gradient-animation 8s ease infinite;
+  display: inline-block;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 </style>
