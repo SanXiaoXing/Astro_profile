@@ -6,7 +6,7 @@
   :root {
     --background: 0, 0%, 9%;
     --foreground: 60 9.1% 97.8%;
-    --card: 0, 0%, 12%;
+    --card: 0, 0%, 13%;
     --card-foreground: 60 9.1% 97.8%;
     --popover: 20 14.3% 4.1%;
     --popover-foreground: 60 9.1% 97.8%;
@@ -24,9 +24,13 @@
     --input: 12 6.5% 15.1%;
     --ring: 20.5 90.2% 48.2%;
     --radius: 1rem;
+    --hc: #9bdbee;
   }
 }
-
+:root{
+  --card: 0, 0%, 13%;
+  --hc: #9bdbee;
+}
 @layer base {
   * {
     @apply border-border;

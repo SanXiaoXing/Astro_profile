@@ -4,7 +4,17 @@ import TimeZoneV2 from './TimeZoneCardV2'
 ---
 
 <Card colSpan="lg:col-span-1" rowSpan="md:row-span-1" >
-  <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%', height: '100%' }}>
+  <div 
+    style={{
+      justifyContent: 'center',
+      alignItems: 'center',
+      display: 'flex',
+      width: '100%',
+      height: '100%',
+      WebkitUserSelect: 'none', /* 添加这一行 */
+      userSelect: 'none' /* 对于非-WebKit浏览器 */
+    }}
+  >
     <TimeZoneV2 timezone="China/Beijing" client:load />
   </div>
 </Card>

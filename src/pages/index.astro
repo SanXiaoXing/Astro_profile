@@ -4,10 +4,10 @@ import IntroCard from '../components/sections/IntroCard.astro'
 import AboutMe from '../components/sections/AboutMe.astro'
 import Card from '../components/Card.astro'
 import TimeZoneCard from '../components/sections/TimeZoneCard.astro'
-import ContactsCard from '../components/sections/ContactsCard.astro'
 import Now from '../components/sections/Now.astro'
 import ExperienceCard from '../components/sections/ExperienceCard.astro'
 import StudyCard from '../components/sections/StudyCard.astro'
+import CardLink from '../components/Card_link.astro'
 ---
 
 <BaseLayout
@@ -29,11 +29,11 @@ import StudyCard from '../components/sections/StudyCard.astro'
     <Now />
     <StudyCard /> 
 
-    <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
-      <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%', height: '100%' }}>
+    <CardLink colSpan="md:col-span-1" rowSpan="md:row-span-1">
+      <a >
         <p class="text-4xl">Blog</p>
-      </div>
-    </Card>
+      </a>
+    </CardLink>
 
     <Card colSpan="md:col-span-1" rowSpan="md:row-span-2">
       <div id="show" class="flex h-full flex-col justify-between">
@@ -45,11 +45,11 @@ import StudyCard from '../components/sections/StudyCard.astro'
     </Card>
     <TimeZoneCard />
 
-    <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
-      <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%', height: '100%' }}>
+    <CardLink colSpan="md:col-span-1" rowSpan="md:row-span-1">
+      <a >
         <p class="text-4xl">Tags</p>
-      </div>
-    </Card>
+      </a>
+    </CardLink>
 
     <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
       <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%', height: '100%' }}>
