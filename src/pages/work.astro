@@ -5,9 +5,12 @@ import TopLayout from '../layouts/TopLayout.astro'
 import BottomLayout from '../layouts/BottomLayout.astro'
 
 import { EXPERIENCE } from '../lib/constants'
+import { imageConfig } from 'astro:assets'
+import { ViewTransitions } from 'astro:transitions'
 ---
 
 <BaseLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
+  <ViewTransitions />
   <main class="flex min-h-[80vh] flex-auto flex-col" transition:animate="fade">
     <TopLayout>
       <h2

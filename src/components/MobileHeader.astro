@@ -1,0 +1,140 @@
+---
+import HeaderLink from "./HeaderLink.astro";
+
+const homeSlug = "/";
+const blogSlug = "/blog";
+const tagSlug = "/tags";
+const aboutSlug = "/about";
+const friendSlug = "/friends";
+
+---
+
+<header>
+  <nav>
+    <div class="internal-links">
+      <HeaderLink href={homeSlug}>主页</HeaderLink>
+      <HeaderLink href={blogSlug}>博客</HeaderLink>
+      <HeaderLink href={tagSlug}>标签</HeaderLink>
+      <HeaderLink href={aboutSlug}>关于</HeaderLink>
+      <HeaderLink href={friendSlug}>友联</HeaderLink>
+    </div>
+  </nav>
+</header>
+
+<style>
+
+header {
+  display: none;
+}
+
+/* 移动设备 */
+@media only screen and (max-width: 600px) {
+  /* 在宽度小于等于600px的设备上应用以下样式 */
+  /* 这里可以放置针对移动设备的样式设置 */
+  header {
+    z-index: 100;
+    position: relative;
+    display: block;
+  }
+
+  nav a.active {
+    text-decoration: var(--hc);
+  }
+
+  h2 {
+    display: none;
+  }
+   .mobile-icon {
+    padding-top: 10px;
+   }
+  .language-dropdown {
+    position: relative;
+    display: block;
+  }
+
+  .dropdown-content {
+    font-size: 0.8rem;
+    border-radius: 5px;
+    display: none;
+    position: absolute;
+    min-width: 90px;
+    z-index: 1;
+    top: 100%;
+  }
+
+  .dropdown-content a {
+    text-decoration: none;
+    display: block;
+    background-color: #282a34;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #8c88887f;
+  }
+
+  .language-dropdown:hover .dropdown-content {
+    display: block;
+  }
+}
+
+/* 根据设备类型来应用样式 */
+@media only screen and (pointer: coarse) {
+  /* 在触摸屏设备上应用以下样式 */
+  /* 这里可以放置针对触摸屏设备的样式设置 */
+}
+
+/* 根据设备方向来应用样式 */
+@media only screen and (orientation: landscape) {
+  /* 在横向模式的设备上应用以下样式 */
+  /* 这里可以放置针对横向模式的样式设置 */
+}
+
+@media only screen and (orientation: portrait) {
+  /* 在纵向模式的设备上应用以下样式 */
+  /* 这里可以放置针对纵向模式的样式设置 */
+}
+
+header {
+  margin: 0;
+  padding: 0 1em;
+  background: var(--bgc);
+}
+
+h2 {
+  margin: 0;
+  font-size: 1em;
+}
+
+h2 a,
+h2 a.active {
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav a {
+  padding: 1em 0.5em;
+  color: var(--black);
+  text-decoration: none;
+}
+
+nav a.active {
+  text-decoration: var(--hc);
+}
+
+.social-links,
+.social-links a {
+  display: flex;
+}
+
+@media (max-width: 720px) {
+  .social-links {
+    display: none;
+  }
+}
+
+</style>

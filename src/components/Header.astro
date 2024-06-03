@@ -1,5 +1,103 @@
+---
+import HeaderLink from "./HeaderLink.astro";
 
-<header
-  class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
->
+const homeSlug = `/`;
+const blogSlug = `/blog`;
+const tagSlug = `/tags`;
+const cateSlug = `/categories`;
+const aboutSlug = `/about`;
+const friendSlug = `/friends`;
+const rssSlug = `/rss.xml`;
+
+const { pathname } = Astro.url;
+
+// 确定是否为文章页面
+const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSlug) || pathname.startsWith(cateSlug);
+---
+
+<header>
+  <nav>
+    <div class="header-home"><a href={homeSlug}>SanXiaoXing</a></div>
+    <div class="internal-links">
+      <HeaderLink href={blogSlug}>Blog</HeaderLink>
+      <!-- <HeaderLink href={cateSlug}>Categories</HeaderLink> -->
+      <HeaderLink href={tagSlug}>Tags</HeaderLink>
+      <!-- <HeaderLink href={aboutSlug}>About</HeaderLink> -->
+      <!-- <HeaderLink href={friendSlug}>Friends</HeaderLink> -->
+      <a href={rssSlug} class="icon-link" data-umami-event="Button-rss">
+        <svg t="1709804049548" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8431" width="200" height="200">
+          <path d="M42.666667 853.333333a128 128 0 1 1 256 0 128 128 0 0 1-256 0z m938.666666 128h-178.773333c0-418.986667-340.906667-759.893333-759.893333-759.893333V42.666667c517.546667 0 938.666667 421.12 938.666666 938.666666z m-298.666666 0h-182.826667c0-252.074667-205.098667-457.130667-457.173333-457.130666V341.333333c352.896 0 640 287.104 640 640z" fill="#EE802F" p-id="8432"></path>
+        </svg>
+      </a>
+    </div>
+  </nav>
 </header>
+
+<style>
+  .header-home {
+    display: flex;
+    font-size: 1.5rem;
+  }
+  @media only screen and (max-width: 600px) {
+      header {
+          display: none;
+      z-index: 100;
+      }
+  }
+  header {
+    font-size: 1.07rem;
+    z-index: 100;
+    position: relative;
+    margin: 0;
+    padding: 0 1em;
+  }
+  h2 {
+    margin: 0;
+    font-size: 1em;
+  }
+  h2 a,
+  h2 a.active {
+    text-decoration: none;
+  }
+  nav {
+    padding: 1em 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  nav a {
+    font-family: var(--font-family-mono);
+    padding: 0.5em 0.5em;
+    color: var(--black);
+    text-decoration: none;
+  }
+  nav a.active {
+    font-weight: bolder;
+  }
+  .internal-links {
+    display: flex;
+  }
+  @media (max-width: 720px) {
+    .social-links {
+      display: none;
+    }
+  }
+  .icon-link {
+    vertical-align: middle; /* 将图标垂直居中 */
+    display: inline-block;
+    width: 24px; /* 调整宽度和高度以适应您的 SVG 图标 */
+    height: 24px;
+    fill: #ffffff; /* 设置默认的 SVG 颜色 */
+    transition: fill 0.3s ease; /* 添加过渡效果 */
+    margin-left: 5px;
+  }
+
+  .icon-link:hover {
+    fill: #8dd3ff; /* 设置鼠标悬停时的 SVG 颜色 */
+  }
+
+  .icon-link svg {
+    width: 1rem; /* 调整图标的宽度 */
+    height: 1rem; /* 调整图标的高度 */
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import MobileHeader from "../components/MobileHeader.astro"; //移动端header
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer_blog.astro";
+type Props = CollectionEntry<"blog">["data"];
+
+const { title, description } =
+  Astro.props;
+---
+
+<!doctype html>
+<html lang="zh">
+  <head>
+    <BaseHead  title={title} description={description} />
+    <script id="MathJax-script" async src="https://img.asyncx.top/hexo/js/mathjax.js"></script>
+  </head>
+  <body>
+    <!-- <Mouse /> -->
+    <Header title="SanXiaoXing"/>
+    <MobileHeader title="SanXiaoXing" />
+    <main transition:animate="fade">
+    <slot />
+	</main>
+    <Footer />
+  </body>
+</html>

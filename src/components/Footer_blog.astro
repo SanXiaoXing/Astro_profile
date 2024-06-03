@@ -1,0 +1,35 @@
+---
+const today = new Date();
+---
+
+<footer>
+	<div class="CC"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div>
+	<div class="footer-text">Build with <a href="https://astro.build/">Astro</a> & <a href="https://github.com/SanXiaoXing" data-umami-event="Button-toRepo">TRON</a>.</div>
+	<div class="footer-text">&copy; 2023 - {today.getFullYear()}</div>
+</footer>
+<style>
+	.CC {
+		font-size: 0.6rem;
+		margin-bottom: 5px;
+	}
+	.footer-text {
+		padding: 5px 5px 5px 5px;
+	}
+	footer {
+		font-size: 0.8rem;
+		font-family: var(--font-family-mono);
+		padding: 1em 1em 3em 1em;
+		color: var(--gray);
+		text-align: center;
+		z-index: 10;
+		position: relative;
+	}
+
+	footer a {
+		font-family: var(--font-family-mono);
+		color: var(--hc);
+	}
+	footer a:hover {
+		text-decoration: none;
+	}
+</style>
