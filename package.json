@@ -13,7 +13,7 @@
     "preview": "astro preview",
     "start": "astro dev",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "release": "standard-version && git push --follow-tags"
+    "push": "standard-version && git push --follow-tags"
   },
   "dependencies": {
     "@astrojs/react": "^3.1.0",
