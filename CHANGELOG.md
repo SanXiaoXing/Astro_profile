@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.3...v0.0.4) (2024-06-05)
+
+
+### Bug Fixes
+
+* 修复pnpm-lock.yml文件异常 ([2d9dd77](https://github.com/SanXiaoXing/Astro_profile/commit/2d9dd771a19fb943f211741731ac5bf0f7aef5ea))
+
 ### [0.0.3](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.2...v0.0.3) (2024-06-05)
 
 ### 0.0.2 (2024-06-05)
