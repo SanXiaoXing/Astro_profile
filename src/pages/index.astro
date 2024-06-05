@@ -29,10 +29,10 @@ import CardLink from '../components/Card_link.astro'
     <Now />
     <StudyCard /> 
 
-    <CardLink colSpan="md:col-span-1" rowSpan="md:row-span-1">
-      <a >
+    <CardLink 
+      href='/blog'
+      colSpan="md:col-span-1" rowSpan="md:row-span-1">
         <p class="text-4xl">Blog</p>
-      </a>
     </CardLink>
 
     <Card colSpan="md:col-span-1" rowSpan="md:row-span-2">
@@ -45,10 +45,10 @@ import CardLink from '../components/Card_link.astro'
     </Card>
     <TimeZoneCard />
 
-    <CardLink colSpan="md:col-span-1" rowSpan="md:row-span-1">
-      <a href="/tags">
+    <CardLink 
+      href='/tags'
+      colSpan="md:col-span-1" rowSpan="md:row-span-1">
         <p class="text-4xl">Tags</p>
-      </a>
     </CardLink>
 
     <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
