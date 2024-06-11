@@ -1,0 +1,122 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+type Props = {
+  headings: MarkdownHeading[];
+};
+
+type HeadingWithSubheadings = MarkdownHeading & {
+  subheadings: MarkdownHeading[];
+};
+
+const { headings } = Astro.props;
+
+const grouppedHeadings = headings.reduce((array, heading) => {
+  if (heading.depth === 1) {
+    array.push({ ...heading, subheadings: [] });
+  } else if (heading.depth === 2) {
+    array.at(-1)?.subheadings.push(heading);
+  }
+  return array;
+}, [] as HeadingWithSubheadings[]);
+
+// 检查是否存在标题
+const hasHeadings = grouppedHeadings.length > 0;
+---
+
+{hasHeadings && (
+  <nav id="table-of-contents" aria-label="Table Of Contents" >
+    <details open>
+      <summary>目录</summary>
+      <ul>
+        {grouppedHeadings.map((h) => (
+          <li>
+            <a href={`#${h.slug}`}># {h.text}</a>
+            {h.subheadings.length > 0 && (
+              <ul>
+                {h.subheadings.map((sub) => (
+                  <li key={sub.slug}>
+                    <a href={`#${sub.slug}`}>- {sub.text}</a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </details>
+  </nav>
+)}
+
+<style>
+  /* 定义动画：从有 box-shadow 到无 box-shadow */
+  @keyframes disappearShadow {
+    from {
+      box-shadow: 0px 0px 30px 1px rgba(150, 222, 255, 0.303);
+    }
+    to {
+      box-shadow: none;
+    }
+  }
+
+  /* 针对 details 元素的样式 */
+  details {
+    color: var(--gray);
+    background-color: #00000030;
+    padding: 1rem;
+    border-radius: 10px;
+    transition: .5s all;
+    border: #00000030 solid 1px;
+    box-shadow: 0px 0px 30px 1px rgba(150, 222, 255, 0.303);
+    animation: disappearShadow 2s forwards 2s; /* 应用动画，并延迟3s开始 */
+  }
+
+  /* 鼠标悬停状态 */
+  details:hover {
+    border: var(--hc) solid 1px;
+    box-shadow: 0px 0px 30px 1px rgba(150, 222, 255, 0.303);
+    transition: .5s all;
+  }
+
+  ul li {
+    list-style-type: none;
+  }
+
+  ul li a {
+    all: initial;
+    color: var(--gray);
+    font-family: var(--font-family-base);
+  }
+
+  ul li a:hover {
+    all: initial;
+    color: var(--orange);
+    text-decoration: none;
+    font-family: var(--font-family-base);
+    transition: .1s ease-in-out;
+  }
+
+  ul {
+    padding-left: 2rem;
+  }
+</style>
+
+<script>
+    // 当页面DOM内容加载完毕后，添加事件监听器
+  window.addEventListener('DOMContentLoaded', () => {
+    // 获取页面中第一个details元素并为其添加鼠标移出事件监听器
+    document.querySelector('details').addEventListener('mouseout', (event) => {
+      // 获取事件目标元素，即details元素
+      const details = event.currentTarget;
+      
+      // 立即停止当前正在进行的动画
+      details.style.animation = 'none'; // 移除动画
+      
+      // 通过强制布局触发重绘，以确保样式变更生效
+      void details.offsetWidth; // 触发重绘
+      
+      // 2秒后重新应用动画，使details元素的阴影逐渐消失
+      details.style.animation = 'disappearShadow 2s forwards 2s'; // 重新应用动画
+    });
+  });
+</script>

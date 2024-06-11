@@ -15,7 +15,7 @@ const Timezone = ({ timezone }: any) => {
 
   return (
     <div style={{justifyContent: 'center', alignItems: 'center'}}>
-      <p className="timezone-text">{dateTime}</p>
+      <div className="timezone-text">{dateTime}</div>
     </div>
   )
 }

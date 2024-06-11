@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 231, 15%, 18%;
+    --background: 235, 14%, 15%;
     --foreground: 60 9.1% 97.8%;
     --card: 231, 15%, 18%;
     --card-foreground: 60 9.1% 97.8%;
@@ -25,6 +25,7 @@
     --ring: 20.5 90.2% 48.2%;
     --radius: 1rem;
     --hc: #9bdbee;
+    --orange: #ffb300;
 
     --font-family-base: 
     'noto-serif',
@@ -52,10 +53,6 @@
     --box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
       0 16px 32px rgba(var(--gray), 33%);
   }
-}
-:root{
-  --card: 0, 0%, 13%;
-  --hc: #9bdbee;
 }
 @layer base {
   * {
@@ -117,4 +114,139 @@
   font-family: "Lobster", Times, "Times New Roman", serif;
   font-size: 48px;
   text-align: center;
+}
+@font-face {
+	font-family: 'zpix';
+	src: url('/fonts/VonwaonBitmap-16px.woff2') format('woff');
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'FutureMono';
+	src: url('/fonts/FutureMono.woff2') format('woff');
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'noto-serif';
+	src: url('/fonts/noto-serif.woff2') format('woff');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+body {
+	font-family: var(--font-family-base);
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	background-color: var(--bgc);
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	color: var(--fontc);
+	font-size: 15px;
+	letter-spacing: 0.7px;
+	position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+background-size: 100%;
+/* background-image: url('bg.webp'); */
+  /* 添加模糊效果 */
+  filter: blur(5px);
+  /* 将遮罩层放置在背景图片前面 */
+  z-index: -1;
+min-height: 100vh;
+}
+::selection {
+  /* background-color: ;  */
+  color: var(--accent-dark); /* 修改选中文字的前景（文字）颜色 */
+}
+
+main {
+	width: 720px;
+	max-width: calc(100% - 2em);
+	margin: auto;
+	padding: 0em 1em;
+	/* padding-top: 10vh; */
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--font-family-base);
+	margin: 1rem 0 1rem 0;
+	color: var(--fontc);
+	line-height: 1.5;
+}
+h1 {
+	font-size: 3em;
+}
+h2 {
+	font-size: 1.6em;
+}
+h3 {
+	font-size: 1.4em;
+}
+h4 {
+	font-size: 1.3em;
+}
+h5 {
+	font-size: 1.2em;
+}
+.headline h1 {
+  font-size: 2em;
+  position: relative;
+  padding-left: 0rem; /* 可以调整以适应你的布局 */
+}
+
+.headline h1::before{
+  content: '#';
+  margin-right: 1.2rem;
+  color: var(--orange); /* 可根据需要调整颜色 */
+}
+.headline h2 {
+  position: relative;
+  padding-left: 0rem; /* 可以调整以适应你的布局 */
+}
+
+.headline h2::before{
+  content: '●';
+  margin-right: 1.2rem;
+  color: var(--orange); /* 可根据需要调整颜色 */
+}
+.headline p {
+  text-indent: 2em; /* 段前空两格 */
+  line-height: 2; /* 行间距为1.5倍 */
+  font-size: 12pt; /* 文字大小为小四 */
+}
+strong,
+b {
+	font-weight: 700;
+}
+p {
+	margin-bottom: 1em;
+	transition: 0.2s ease;
+  margin: 1em 0; /* 设置段落的上下间距，使段落之间有一定间距 */
+}
+p img {
+	margin: 2rem auto;
+	max-height: 600px;
+	display: block;
+	border-radius: 10px;
+}
+
+hr {
+	border-color: #00000000;
+	margin: 0.5rem;
 }

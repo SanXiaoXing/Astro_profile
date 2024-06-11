@@ -1,0 +1,39 @@
+---
+import { getBlogPosts } from "../../content/config";
+import BlogPost from "../../layouts/BlogPost.astro";
+import TableOfContents from '../../components/blog/utils/TableOfContents.astro';
+import { ViewTransitions } from 'astro:transitions';
+
+export async function getStaticPaths() {
+    const pages = await getBlogPosts();
+
+    const paths = pages.map((page) => {
+        return {
+            params: { slug: page.fileName },
+            props: page,
+        };
+    });
+
+    return paths;
+}
+
+const { slug } = Astro.params; // 删除了lang
+const page = Astro.props;
+const { Content, headings, remarkPluginFrontmatter } = await page.render();
+
+---
+
+<BlogPost {...page.data}>
+    <ViewTransitions />
+    <TableOfContents headings={headings} />
+    <hr>
+    <p class="remark-plugin-frontmatter">预计 {remarkPluginFrontmatter.minutesRead}</p>
+    <hr>
+    <Content />
+    <style>
+        /* 设置特定段落的文字颜色 */
+        .remark-plugin-frontmatter {
+        color: var(--orange); /* 设置文字颜色 */
+        }
+    </style>
+</BlogPost>
