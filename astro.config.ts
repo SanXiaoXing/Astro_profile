@@ -40,7 +40,13 @@ export default defineConfig({
       },
     })
   ],
+  vite: {
+    ssr: {
+      noExternal: ['mdast-util-from-markdown', 'mdast-util-to-string']
+    }
+  },
   markdown: {
     remarkPlugins: [remarkDirective, remarkCalloutDirectives, remarkReadingTime],
-  }
+  },
+
 })
