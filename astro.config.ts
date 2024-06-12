@@ -7,6 +7,7 @@ import remarkCalloutDirectives from "./src/components/mdrenders/remark-callout-d
 import { remarkReadingTime } from './src/components/mdrenders/remark-reading-time.mjs';
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections'
 import sitemap from '@astrojs/sitemap';
+import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 
 import expressiveCode from "astro-expressive-code";
 
@@ -21,8 +22,8 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
     expressiveCode({
-      plugins: [pluginCollapsibleSections()],
-      themes: ['material-theme-ocean'],
+      plugins: [pluginCollapsibleSections(),pluginLineNumbers()],
+      themes: ['dracula-soft'],
       styleOverrides: {
         // You can also override styles
         borderRadius: '10px',

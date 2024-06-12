@@ -8,7 +8,7 @@ export async function getStaticPaths() {
 
     const paths = [];
 
-    const blog = await getCollection('blog', ({ id }) => id.startsWith(`/`));
+    const blog = await getCollection('blog');
     const tags = [...new Set([].concat.apply([], blog.map(post => post.data.tags)))];
     // 为每个标签生成路径对象
     const langPaths = tags.map((tag) => {

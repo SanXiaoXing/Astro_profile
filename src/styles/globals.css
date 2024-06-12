@@ -26,6 +26,18 @@
     --radius: 1rem;
     --hc: #9bdbee;
     --orange: #ffb300;
+    --purple: #bd93f9;
+    --purple-hover: #bf93f980;
+    --cyan: #8be9fd;
+    --cyan-hover: #8be9fd80;
+    --pink: #ff79c6;
+    --pink-hover: #ff79c680;
+    --white: #f8f8f2;
+    --white-hover: #f8f8f280;
+    --red: #ff5555;
+    --yellow: #f1fa8c;
+    --green: #50fa7b;
+    --current-line: #44475a;
 
     --font-family-base: 
     'noto-serif',
@@ -230,6 +242,27 @@ h5 {
   line-height: 2; /* 行间距为1.5倍 */
   font-size: 12pt; /* 文字大小为小四 */
 }
+.headline a {
+  color: var(--hc);
+  text-decoration: none;
+  transition: 0.2s ease;
+  font-family: var(--font-family-mono)
+}
+.headline a:hover {
+  transition: 0.2s ease;
+  color: var(--orange);
+  text-decoration: underline;
+  text-decoration-style: dashed; /* 设置下划线为虚线 */
+}
+
+.headline blockquote {
+	border-left: 10px solid hsl(var(--primary));
+	padding:0.1rem 1rem;
+	margin: 1rem 0 0 0;
+	background-color: #00000030;
+	border-radius: 10px;
+}
+
 strong,
 b {
 	font-weight: 700;
@@ -250,3 +283,42 @@ hr {
 	border-color: #00000000;
 	margin: 0.5rem;
 }
+code  {
+	background-color: #00000030;
+	margin-right: 3px;
+	font-family: var(--font-family-mono);
+	color: var(--orange);
+}
+.expressive-code {
+	border: var(--hc) solid 1px;
+	transition: .5s all;
+	border-radius: 10px;
+	box-shadow: 0px 0px 30px 1px rgba(150, 222, 255, 0.303);
+}
+.expressive-code:hover {
+	border: var(--orange) solid 1px;
+	border-radius: 10px;
+	box-shadow: 0px 0px 30px 1px rgba(255, 179, 0, 0.303);
+	transition: .5s all;
+}
+
+/* 滚动条整体样式 */
+::-webkit-scrollbar {
+	width: 7px; /* 滚动条宽度 */
+  }
+  
+  /* 滚动条轨道样式 */
+  ::-webkit-scrollbar-track {
+	background: var(--bgc); /* 轨道背景色 */
+  }
+  
+  /* 滚动条滑块样式 */
+  ::-webkit-scrollbar-thumb {
+	background: var(--hc); /* 滑块颜色 */
+	border-radius: 10px; /* 滑块边角 */
+  }
+  
+  /* 滚动条鼠标悬停样式 */
+  ::-webkit-scrollbar-thumb:hover {
+	background: var(--accent); /* 鼠标悬停时的滑块颜色 */
+  }

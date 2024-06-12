@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { ViewTransitions } from 'astro:transitions';
 
-const blog = await getCollection('blog', ({ id }) => id.startsWith(`/`));
+const blog = await getCollection('blog');
 const tagsMap = {};
 blog.forEach(post => {
   post.data.tags.forEach(tag => {
@@ -31,6 +31,7 @@ const { comments } =
 <style>
   .tag {
     font-family: var(--font-family-mono);
+    color: var(--hc);
     font-size: 1.2rem;
     padding: 7px;
     margin: 10px;
@@ -39,6 +40,7 @@ const { comments } =
   }
   .tag:hover {
     border: 1px solid var(--hc);
+    color: var(--orange);
     background-color: #00000030;
     /* box-shadow: 0px 0px 30px 1px rgba(150, 222, 255, 0.303); */
   }
