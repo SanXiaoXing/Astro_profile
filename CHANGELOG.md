@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.5...v0.0.6) (2024-06-12)
+
+
+### Bug Fixes
+
+* 修复tags题目显示错误 ([ace5a97](https://github.com/SanXiaoXing/Astro_profile/commit/ace5a974671f2c700428cc31570d3f3683d3a056))
+* 修改tag标签页显示异常问题 ([d49b809](https://github.com/SanXiaoXing/Astro_profile/commit/d49b809ecef5827fc1e215ad0165bcf3bacbe92d))
+
 ### [0.0.5](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.4...v0.0.5) (2024-06-11)
 
 
