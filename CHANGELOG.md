@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.6...v0.0.7) (2024-06-15)
+
+
+### Features
+
+* **、:** 增加友链内容 ([3c38274](https://github.com/SanXiaoXing/Astro_profile/commit/3c3827418c026b44e35d36d6b268779cc02346ec))
+
+
+### Bug Fixes
+
+* 更新博客分类标签在文章中的位置及颜色 ([400dc1e](https://github.com/SanXiaoXing/Astro_profile/commit/400dc1e6673d0003699b438dab8259a3e8f400e6))
+
 ### [0.0.6](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.5...v0.0.6) (2024-06-12)
 
 
