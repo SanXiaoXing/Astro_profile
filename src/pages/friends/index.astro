@@ -1,0 +1,197 @@
+---
+import BlogPost from "../../layouts/BlogPost.astro";
+import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/friends.mjs';
+
+---
+<BlogPost
+    title="友链"
+    description="friend"
+    pubDate={new Date("2024-03-29")}
+    random={false}
+  >
+    <div class="friend-links">
+      <div class="list-card">
+        {friendLinksZh.map((link, index) => (
+            <a href={link.link} target="_blank" class="friend-item" data-umami-event="Button-toFriend">
+              {link.tag ? <span class="tag">{link.tag}</span> : null}
+              <div class="avatar-wrapper">
+                <img class="avatar" src={link.avatar} alt={link.name} onerror="this.src='/favicon.svg';" loading="lazy"/>
+              </div>
+              <div class="info">
+                <div class="name">{link.name}</div>
+                <div class="desc">{link.description}</div>
+              </div>
+            </a>
+        ))}
+      </div>
+      <br>
+      <details>
+        <summary>无效的友情链接</summary>
+        <div class="card">
+          {friendLinksInvalid.map((link, index) => (
+            <a href={link.link} target="_blank" class="friend-item" data-umami-event="Button-toFriend">
+              <div class="name">{link.name}</div>
+            </a>
+          ))}
+        </div>
+          
+          
+        
+      </details>
+      <br>
+      <details>
+        <summary style="center">欢迎添加我的友联</summary>
+        <pre><code>
+          欢迎您的友链：
+          ------------------------------
+          图标: https://blog.sanxiaoxing.cn/favicon.svg
+          名称: SanXiaoXing
+          链接: https://blog.sanxiaoxing.cn/
+          描述: 开心每一天
+          ------------------------------
+        </code></pre>
+      </details>
+      
+      <style>
+        
+        .details {
+          margin: 1rem 1rem 1rem 1rem;
+        }
+        .invalid {
+          all: unset;
+          color: var(-hc);
+        }
+        .list-card {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
+        }
+        .list-card .friend-item {
+          padding: 16px;
+          border-radius: 10px;
+          background-color: var(--card-bg);
+          border: 1px solid #cccccc;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          text-decoration: none;
+          transition: border-color 0.3s ease, box-shadow 0.3s ease;
+          position: relative;
+          overflow: hidden;
+          --avatar: 64px;
+        }
+        .list-card .friend-item .tag {
+          position: absolute;
+          right: 0px;
+          top: 0px;
+          font-size: 12px;
+          background-color: var(--orange);
+          color: var(--current-line);
+          padding: 4px 8px;
+          border-bottom-left-radius: 10px;
+          /* 设置初始可见状态和过渡效果 */
+          opacity: 1;
+          visibility: visible;
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .list-card .friend-item:is(:hover, :focus-within) {
+          --avatar: 0px;
+        }
+        .list-card .friend-item:is(:hover, :focus-within) .tag {
+          /* 悬停时隐藏tag */
+          opacity: 0;
+          visibility: hidden;
+        }
+        .list-card .friend-item .avatar {
+          width: var(--avatar);
+          height: var(--avatar);
+          border-radius: 50%;
+          transition: 0.3s;
+        }
+        .list-card .friend-item .info {
+          width: calc(100% - var(--avatar) - 16px);
+        }
+        .list-card .friend-item .name {
+          color: var(--fontc);
+          font-size: 20px;
+          font-weight: bold;
+          line-height: 30px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .list-card .friend-item .desc {
+          color: var(--gray);
+          height: 34px;
+          font-size: 12px;
+          line-height: 17px;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+        }
+        .list-card .friend-item:hover {
+          border-color: #F6C659;
+          box-shadow: 0 0 30px rgba(255, 165, 0, 0.7); /* 添加发光效果，可根据需要调整颜色和大小 */
+        }
+        .card {
+          padding: 1.5em;
+          border-radius: 8px;
+          grid-template-columns: repeat(2, 1fr);
+          background-color: #00000030!important;
+          transition: all .5s;
+          border: var(--purple) solid 1px;
+          line-height: 1.5;
+          margin-top: 1.5rem; /* 新增的 margin */
+          overflow: auto; /* 确保宽度过大时可以滚动 */
+        }
+        .card:hover {
+          transition: all .5s;
+          border: var(--hc) solid 1px;
+          box-shadow: 0px 0px 30px 1px rgba(58, 123, 243, 0.303);
+        }
+        pre {
+          padding: 1.5em;
+          border-radius: 8px;
+          background-color: #00000030!important;
+          transition: all .5s;
+          border: var(--hc) solid 1px;
+          line-height: 1.5;
+          margin-top: 1.5rem; /* 新增的 margin */
+          overflow: auto; /* 确保宽度过大时可以滚动 */
+        }
+        pre:hover {
+          transition: all .5s;
+          border: var(--orange) solid 1px;
+          box-shadow: 0px 0px 30px 1px rgba(243, 222, 58, 0.303);
+        }
+
+        @media (max-width: 600px) {
+          .list-card {
+            grid-template-columns: 1fr; /* 单列布局 */
+          }
+          .details {
+            display: flex;
+            flex-direction: column;
+          }
+          p {
+            color: var(--gray);
+            font-family: var(--font-family-mono);
+          }
+          * {
+            box-sizing: border-box;
+          }
+        }
+        @media (max-width: 800px) {
+          ul {
+            display: flex;
+            background: 0 0;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex-direction: column;
+            align-content: center;
+          }
+        }
+      </style>
+    </div>
+  </BlogPost>

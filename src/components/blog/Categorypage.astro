@@ -1,19 +1,19 @@
 ---
 import FormattedDate from "./FormattedDate.astro";
 import { getBlogPosts } from "../../content/config";
-const { tag } = Astro.params;
+const { category } = Astro.params;
 
-export async function getData(tag) {
+export async function getData(category) {
   const postf = await getBlogPosts();
   const filteredPosts = postf
-    .filter((post) => post.data.tags.includes(tag))
+    .filter((post) => post.data.categories.includes(category))
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
   return filteredPosts;
 }
 
-const postf = await getData(tag);
+const postf = await getData(category);
 ---
-<div class="tagtitle">#{tag}</div>
+<div class="categorytitle">#{category}</div>
 <ul data-pagefind-ignore="all">
     {postf.map((post) => (
       <li>
@@ -30,7 +30,7 @@ const postf = await getData(tag);
   main {
     width: 960px;
   }
-  .tagtitle {
+  .categorytitle {
     font-size: 2rem;
     text-align: center;
     font-family: var(--font-family-mono);

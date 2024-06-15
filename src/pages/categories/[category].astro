@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import Tagpage from '../../components/blog/Tagpage.astro';
+import Categorypage from '../../components/blog/Categorypage.astro';
 import { ViewTransitions } from 'astro:transitions';
 
 export async function getStaticPaths() {
@@ -9,11 +9,11 @@ export async function getStaticPaths() {
     const paths = [];
 
     const blog = await getCollection('blog');
-    const tags = [...new Set([].concat.apply([], blog.map(post => post.data.tags)))];
+    const categories = [...new Set([].concat.apply([], blog.map(post => post.data.categories)))];
     // 为每个标签生成路径对象
-    const langPaths = tags.map((tag) => {
+    const langPaths = categories.map((category) => {
         return {
-            params: { tag }, // 使用当前语言变量
+            params: { category }, // 使用当前语言变量
         };
     });
     // 将当前语言的路径合并到总路径数组中
@@ -25,8 +25,8 @@ export async function getStaticPaths() {
 <Layout
   comments={false}
 >
-<a href=`/tags`><div class="back">返回标签页</div></a>
-<Tagpage />
+<a href=`/categories`><div class="back">返回类别页</div></a>
+<Categorypage />
 <ViewTransitions />
 <style>
     a {

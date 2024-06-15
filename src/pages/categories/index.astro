@@ -4,32 +4,32 @@ import { getCollection } from 'astro:content';
 import { ViewTransitions } from 'astro:transitions';
 
 const blog = await getCollection('blog');
-const tagsMap = {};
+const categoriesMap = {};
 blog.forEach(post => {
-  post.data.tags.forEach(tag => {
-    tagsMap[tag] = (tagsMap[tag] || 0) + 1;
+  post.data.categories.forEach(category => {
+    categoriesMap[category] = (categoriesMap[category] || 0) + 1;
   });
 });
-const sortedTags = Object.entries(tagsMap).sort((a, b) => b[1] - a[1]).map(([tag]) => tag);
+const sortedcategories = Object.entries(categoriesMap).sort((a, b) => b[1] - a[1]).map(([category]) => category);
 
 const { comments } =
   Astro.props;
 ---
 
-<Layout title="标签" description="Tags"
+<Layout title="类别" description="Categories"
   comments={false}
 >
 <ViewTransitions />
-  <ul class="tag-list">
-    {sortedTags.map((tag) => (
-      <li><a class="tag" href={`/tags/${tag}`}>#{tag} <span class="tag-count">{tagsMap[tag]}</span></a></li>
+  <ul class="category-list">
+    {sortedcategories.map((category) => (
+      <li><a class="category" href={`/categories/${category}`}>{category} <span class="category-count">{categoriesMap[category]}</span></a></li>
     ))}
   </ul>
 </Layout>
 
 
 <style>
-  .tag {
+  .category {
     font-family: var(--font-family-mono);
     color: var(--hc);
     font-size: 1.2rem;
@@ -38,18 +38,18 @@ const { comments } =
     border: 1px solid #00000000;
     border-radius: 10px;
   }
-  .tag:hover {
+  .category:hover {
     border: 1px solid var(--hc);
     color: var(--orange);
     background-color: #00000030;
     /* box-shadow: 0px 0px 30px 1px rgba(150, 222, 255, 0.303); */
   }
-  .tag-count {
+  .category-count {
     font-size: 0.8rem;
     color: var(--gray);
     margin-left: 0.2rem;
   }
-  .tag-list {
+  .category-list {
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;

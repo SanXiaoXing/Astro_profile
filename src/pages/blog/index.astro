@@ -21,7 +21,7 @@ const groupedPosts = posts.reduce((groups, post) => {
 const sortedGroupedPosts = Object.entries(groupedPosts).sort(([yearA], [yearB]) => parseInt(yearB) - parseInt(yearA));
 ---
 
-<Layout title="Blog" description="Blog">
+<Layout title="博客" description="Blog">
   <PageFindSearch />
   <section>
     {

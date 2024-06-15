@@ -301,6 +301,26 @@ code  {
 	box-shadow: 0px 0px 30px 1px rgba(255, 179, 0, 0.303);
 	transition: .5s all;
 }
+pre {
+	padding: 1.5em;
+	border-radius: 8px;
+	background-color: #00000030!important;
+	transition: all .5s;
+	border: var(--hc) solid 1px;
+	line-height: 1.5;
+}
+pre > code {
+	font-family: var(--font-family-mono);
+	font-size: 0.8rem;
+	background-color: #00000000;
+	color: var(--fontc);
+	white-space: pre-wrap;
+}
+pre:hover {
+	transition: all .5s;
+	border: var(--orange) solid 1px;
+  box-shadow: 0px 0px 30px 1px rgba(243, 222, 58, 0.303);
+}
 
 /* 滚动条整体样式 */
 ::-webkit-scrollbar {
