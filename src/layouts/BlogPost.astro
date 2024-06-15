@@ -22,42 +22,57 @@ const { title, description, pubDate, updatedDate, heroImage, tags, categories, c
 >
   <article data-pagefind-body>
     <div class="prose">
-      {!!categories?.length && (
-        <div class="categories" style="font-family: var(--font-family-mono);">
-          {categories.map((category, i) => (
-            <>
-              <a href={`/categories/${category}`} class="taglink" data-pagefind-filter="category">#{category}</a>
-              {i < categories.length - 1 && ""}
-            </>
-          ))}
-        </div>
-      )}
       <div class="title">
         <h1 style="text-align: center;">{title}</h1>
       </div>
-      <div class="date" style="text-align: center;" >
+      <div class="date" style={{ textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        {!!categories?.length && (
+          <div class="categories" style={{ fontFamily: "var(--font-family-mono)", marginRight: "10px" }}>
+            {categories.map((category, i) => (
+              <>
+                <a href={`/categories/${category}`} class="taglink" data-pagefind-filter="category">{category}</a>
+                {i < categories.length - 1 && ""}
+              </>
+            ))}
+          </div>
+        )}
+        {!!categories?.length && !!tags?.length && (
+          <span style={{ margin: "0 10px" }}>|</span>
+        )}
         {!!tags?.length && (
-          <div class="tags" style="font-family: var(--font-family-mono);">
+          <div class="tags" style={{ fontFamily: "var(--font-family-mono)" }}>
             {tags.map((tag, i) => (
               <>
-                <a href={`/tags/${tag}`} class="taglink" data-pagefind-filter="tag">{tag}</a>
-                {i < tags.length - 1 && "|"}
+                <a href={`/tags/${tag}`} class="taglink" data-pagefind-filter="tag">#{tag}</a>
+                {i < tags.length - 1 && ""}
               </>
             ))}
             <FormattedDate date={pubDate} />
           </div>
-          
         )}
         <style>
+          /* 确保 .categories 和 .tags 以一行显示 */
+          .categories, .tags {
+            white-space: nowrap; /* 防止换行 */
+          }
+
           .date {
+            display: flex; /* 使子元素水平排列 */
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+          }
+
+          .categories {
+            margin-right: 10px; /* 添加右边距以便与 tags 分隔开 */
+            text-align: center ;
+          }
+          .date {
+            font-size: 0.9rem;
             font-family: var(--font-family-mono);
             color: var(--gray);
           }
           .tags {
             text-align: center;
-          }
-          .categories {
-            text-align: center ;
           }
           .categories a {
             all: initial;
@@ -65,12 +80,12 @@ const { title, description, pubDate, updatedDate, heroImage, tags, categories, c
             font-family: var(--font-family-mono);
             font-size: 1rem;
             transition: 0.2s ease-in-out;
-            background-color: var(--hc);
+            background-color: var(--purple);
             padding: 0.1rem 0.3rem 0.1rem 0.3rem;
-            border-radius: 10px;
+            border-radius: 7px;
           }
           .categories a:hover {
-            background-color: var(--orange);
+            background-color: var(--purple-hover);
             text-decoration: none;
             transition: 0.2s ease-in-out;
           }
@@ -78,7 +93,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, categories, c
             all: initial;
             color: var(--fontc);
             font-family: var(--font-family-mono);
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             transition: 0.2s ease-in-out;
             text-decoration: none;
           }
