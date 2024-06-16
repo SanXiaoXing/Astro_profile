@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.7...v0.0.8) (2024-06-16)
+
+
+### Features
+
+* 新增最近文章与置顶文章显示/增加返回顶部按钮 ([04b2ed3](https://github.com/SanXiaoXing/Astro_profile/commit/04b2ed368b28ea2c7774010aa106d3e2b6d1642a))
+
+
+### Bug Fixes
+
+* 修复上传失败问题 ([f7963f1](https://github.com/SanXiaoXing/Astro_profile/commit/f7963f185900e1da2ec587a2a1e09dd4dce04f9c))
+
 ### [0.0.7](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.6...v0.0.7) (2024-06-15)
 
 
