@@ -1,97 +1,142 @@
----
+<div align="center">
+  <img alt="logo" src="https://blog.sanxiaoxing.cn/favicon.svg" width="200" />
+</div>
+Astro Triple Star is a card-like blog site that is simple, lightweight and efficient.
 
-# Astro Portfolio
+## Language
 
-This template helps you build a portfolio using Astro, Tailwind CSS, and Shadcn UI.
+<span>
+    <a href="README.md">
+        <img src="https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/Chinese.svg" alt="Chinese" width="80" height="40" style="vertical-align: middle;">
+    </a>
+    <a href="README_EN.md">
+        <img src="https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/English.svg" alt="English" width="80" height="40" style="vertical-align: middle;">
+    </a>
+</span>
 
-## Design
+# Table Of Contents
+1. [Key Features](#key-features)
 
-![View 1](public/View1.png)
-![View 2](public/View2.png)
+2. [Demo](#demo)
 
-## Inspiration
+3. [Quick start](#quick-start)
 
-This project was inspired by several outstanding portfolios. Here are some that served as references:
+4. [Project Structure](#project-structure)
 
-- [Gianmarco Portfolio](https://gianmarco.xyz/)
-- [Vitesse Portfolio](https://astro-theme-vitesse.netlify.app/)
-- [Gurido Portfolio](https://gurido.vercel.app/)
+5. [Commands](#commands)
 
-## Technologies Used
+6. [Acknowledgment](#acknowledgment)
 
-This project utilizes the following technologies:
+# Key Features
 
-- **Astro**: A modern framework for building fast and efficient websites.
-- **Tailwind CSS**: A utility-first CSS framework for rapid and responsive design.
-- **Shadcn UI**: A collection of accessible and easy-to-use UI components.
-- **React**: For interactive components and advanced functionality.
+- Astro v4 Fast 🚀
+- TailwindCSS Utility classes
+- Accessible, semantic HTML markup
+- Responsive & SEO-friendly
+- MD & [MDX](https://docs.astro.build/en/guides/markdown-content/#mdx-only-features) posts
+- Pagination
+- [Automatic RSS feed](https://docs.astro.build/en/guides/rss)
+- Auto-generated [sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/)
+- [Astro Icon](https://github.com/natemoo-re/astro-icon) svg icon component
+- [Expressive Code](https://expressive-code.com/) source code and syntax highlighter
 
-## Requirements
 
-Before starting, make sure you have the following requirements installed:
 
-- Node.js (version 14 or higher)
-- npm or yarn
+# Demo
 
-## Installation
+Check out the [Demo💻](https://blog.sanxiaoxing.cn/)，hosted on` Vercel` 
 
-To install and run the project locally, follow these steps:
+# Quick start
 
-1. Clone this repository:
+> ##  🧑‍🚀How to use
 
-   ```bash
-   git clone https://github.com/bue221/astro-portfolio.git
-   ```
+```sh
+git clone https://github.com/SanXiaoXing/Template_Of_Astro.git
+```
 
-2. Navigate to the project directory:
+ [![前往GitHub打开](https://github.com/codespaces/badge.svg)](https://github.com/SanXiaoXing/Template_Of_Astro.git)
 
-   ```bash
-   cd astro-portfolio
-   ```
+> 🧑‍🚀 **Home page display**    
 
-3. Install the dependencies:
+![just-the-basics](https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/SanXiaoXing_2024-06-16_17-13-17.png)
 
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
+> 🧑‍🚀 **Blog presentation**  
 
-4. Start the development server:
+![just-the-basics](https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/SanXiaoXing_2024-06-16_17-14-19.png)
 
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
+> 🧑‍🚀 **Friends display**  
 
-5. Open your browser and visit `http://localhost:3000` to see your portfolio in action.
+![just-the-basics](https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/SanXiaoXing_2024-06-16_17-14-41.png)
 
-## Project Structure
 
-A brief overview of the project structure:
+# 🚀Project Structure
 
-- **/public**: Images and other static files.
-- **/src**: Contains all Astro components and pages.
-- **/styles**: Custom CSS files.
-- **astro.config.mjs**: Main configuration for Astro.
-- **tailwind.config.js**: Configuration for Tailwind CSS.
+Inside of your Astro project, you'll see the following folders and files:
 
-## Important Considerations
+```text
+/ (root)
+├── public/
+│   ├── fonts/                          ## (字体存放)
+│   └── favicon.svg                     ## (头像存放)
+├── src/
+│   ├── components/                     ## (组件布局)
+│   │   ├── blog/                       ## (博客样式)
+│   │   │   ├── utils/                  ## (博客组件样式)
+│   │   │   │   ├── Randomblogs.astro
+│   │   │   │   └── TableOfContents.astro
+│   │   │   ├── Categorypage.astro
+│   │   │   ├── FormatteredDate.astro
+│   │   │   └── Tagpage.astro
+│   │   ├── sections/                   ## (组件卡片)
+│   │   │   ├── AboutMe.astro
+│   │   │   ├── IntroCard.astro
+│   │   │   ├── Now.astro
+│   │   │   ├── TimeZoneCard.astro
+│   │   │   └── StudyCard.astro
+│   │   ├── ui/                         ## (组件效果)
+│   │   │   ├── card.tsx
+│   │   │   ├── button.tsx
+│   │   │   └── badge.tsx
+│   │   ├── Card.astro
+│   │   ├── Footer.astro
+│   │   ├── Header.astro
+│   │   └── HeadSEO.astro
+│   ├── content/                        ## (文本内容)
+│   │   ├── blog/                       ## (博客内容)
+│   │   │   └── about.md                ## (在此存放及修改博客内容)
+│   │   └── friendlinks/                ## (友链)
+│   │       └── friends.mjs             ## (友链内容)
+│   ├── layouts/                        ## (基本布局)
+│   │   └── BaseLayout.astro
+│   ├── pages/                          ## (界面)
+│   │   ├── 404.astro
+│   │   ├── work.astro
+│   │   └── index.astro
+│   └── styles/                         ## (css 存放)
+│       └── globals.css
+└── package.json
+```
 
-- **Accessibility**: Ensure your portfolio is accessible to all users, including those with disabilities.
-- **SEO**: Optimize your portfolio for search engines by adding meta tags and relevant content.
-- **Performance**: Use modern web development practices to ensure optimal performance, such as lazy loading images and minimizing CSS/JS.
-- **Responsive Design**: Make sure your portfolio looks good on devices of all sizes, from mobile to desktop screens.
+- Astro在`src/ages/`目录中查找`.star`或`.md`文件。每个页面都根据其文件名显示为一条路径。
 
-This project use Contentful to fetch data from the API. and load your projects section, if you want to use your contentful data add variables to your .env file.
+- `src/Components/`没有什么特别之处，但我们喜欢在那里放置任何Astro/Reaction/Vue/Svelte/Preact组件。
 
-## Contributions
+- 任何静态资源，如图片，都可以放在`public/`目录下。
 
-Contributions are welcome! If you have ideas or improvements, please open an issue or submit a pull request.
 
-## License
+# 🧞Commands
 
-This project is licensed under the [MIT License](LICENSE).
+Replace  `pnpm` with your choice of ` npm / yarn `
 
----
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at`localhost:4321`       |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+# 👀Acknowledgment
+
+This theme was inspired by [AsyncX](https://blog.asyncx.top/)

@@ -1,71 +1,142 @@
-# Astro Starter Kit: Basics
+<div align="center">
+  <img alt="logo" src="https://blog.sanxiaoxing.cn/favicon.svg" width="200" />
+</div>
+Astro SanXiaoXing是一个卡片式的博客网站，简易、轻量、高效
+
+## 更换语言
+
+<span>
+    <a href="README.md">
+        <img src="https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/Chinese.svg" alt="Chinese" width="80" height="40" style="vertical-align: middle;">
+    </a>
+    <a href="README_EN.md">
+        <img src="https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/English.svg" alt="English" width="80" height="40" style="vertical-align: middle;">
+    </a>
+</span>
+
+# 目录
+1. [主要特点](#主要特点)
+
+2. [演示](#演示)
+
+3. [如何使用](#如何使用)
+
+4. [项目框架](#项目框架)
+
+5. [命令](#命令)
+
+6. [致谢](#致谢)
+
+# 主要特点
+
+- Astro v4 更加快速 🚀
+- TailwindCSS 实用的程序类
+- 可访问的语义 HTML 标记
+- 响应式和友好的SEO
+- MD & [MDX](https://docs.astro.build/en/guides/markdown-content/#mdx-only-features) 文章使用
+- 分页
+- [RSS自动摘要](https://docs.astro.build/en/guides/rss)
+- 自动生成网络站点 [sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/)
+- [Astro 图标](https://github.com/natemoo-re/astro-icon) svg图标组件
+- [Expressive Code](https://expressive-code.com/) 源代码和语法高亮显示
+
+
+
+# 演示
+
+查看[演示💻](https://blog.sanxiaoxing.cn/)，托管在` Vercel` 上
+
+# Astro 博客预览与使用方法
+
+> ##  🧑‍🚀如何使用
 
 ```sh
-npm create astro@latest -- --template basics
+git clone https://github.com/SanXiaoXing/Template_Of_Astro.git
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)]()
+ [![前往GitHub打开](https://github.com/codespaces/badge.svg)](https://github.com/SanXiaoXing/Template_Of_Astro.git)
 
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)]()
+> 🧑‍🚀 **首页展示**    
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)]()
+![just-the-basics](https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/SanXiaoXing_2024-06-16_17-13-17.png)
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+> 🧑‍🚀 **博客展示**  
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+![just-the-basics](https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/SanXiaoXing_2024-06-16_17-14-19.png)
 
-## 🚀 Project Structure
+> 🧑‍🚀 **友链展示**  
 
-Inside of your Astro project, you'll see the following folders and files:
+![just-the-basics](https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/SanXiaoXing_2024-06-16_17-14-41.png)
+
+
+# 🚀项目框架
+
+在Astro项目中，您将看到以下文件夹和文件：
 
 ```text
-/
+/ (root)
 ├── public/
-│   └── favicon.ico	(头像存放)
+│   ├── fonts/                          ## (字体存放)
+│   └── favicon.svg                     ## (头像存放)
 ├── src/
-│   ├── components/	(组件布局)
-│   │   ├── sections/ (组件卡片)
-│   │   │	├── AboutMe.astro
-|	|	|	├── IntroCard.astro
-|	|	|	├── Now.astro
-|	|	|	├── TimeZoneCard.astro
-|	|	|	└── StudyCard.astro
-│   │   ├── ui/	(组件效果)
-│   │   │	├── card.tsx
-│   │   │	├── button.tsx
-│   │   │	└── badge.tsx
+│   ├── components/                     ## (组件布局)
+│   │   ├── blog/                       ## (博客样式)
+│   │   │   ├── utils/                  ## (博客组件样式)
+│   │   │   │   ├── Randomblogs.astro
+│   │   │   │   └── TableOfContents.astro
+│   │   │   ├── Categorypage.astro
+│   │   │   ├── FormatteredDate.astro
+│   │   │   └── Tagpage.astro
+│   │   ├── sections/                   ## (组件卡片)
+│   │   │   ├── AboutMe.astro
+│   │   │   ├── IntroCard.astro
+│   │   │   ├── Now.astro
+│   │   │   ├── TimeZoneCard.astro
+│   │   │   └── StudyCard.astro
+│   │   ├── ui/                         ## (组件效果)
+│   │   │   ├── card.tsx
+│   │   │   ├── button.tsx
+│   │   │   └── badge.tsx
 │   │   ├── Card.astro
 │   │   ├── Footer.astro
 │   │   ├── Header.astro
-│   │   └──	HeadSEO.astro
-│   ├── layouts/	(基本布局)
+│   │   └── HeadSEO.astro
+│   ├── content/                        ## (文本内容)
+│   │   ├── blog/                       ## (博客内容)
+│   │   │   └── about.md                ## (在此存放及修改博客内容)
+│   │   └── friendlinks/                ## (友链)
+│   │       └── friends.mjs             ## (友链内容)
+│   ├── layouts/                        ## (基本布局)
 │   │   └── BaseLayout.astro
-│   ├── pages/	(界面)
+│   ├── pages/                          ## (界面)
+│   │   ├── 404.astro
+│   │   ├── work.astro
 │   │   └── index.astro
-│   └── styles/	(css存放)
-│   │   └── globals.css
+│   └── styles/                         ## (css 存放)
+│       └── globals.css
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+- Astro在`src/ages/`目录中查找`.star`或`.md`文件。每个页面都根据其文件名显示为一条路径。
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- `src/Components/`没有什么特别之处，但我们喜欢在那里放置任何Astro/Reaction/Vue/Svelte/Preact组件。
 
-Any static assets, like images, can be placed in the `public/` directory.
+- 任何静态资源，如图片，都可以放在`public/`目录下。
 
-## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
+# 🧞命令
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+将  `pnpm` 替换成您选择的 ` npm / yarn `
 
-## 👀 Want to learn more?
+| Command                   | Action                                            |
+| :------------------------ | :------------------------------------------------ |
+| `npm install`             | 安装依赖                                          |
+| `npm run dev`             | 启动本地开发服务器 `localhost:4321`               |
+| `npm run build`           | 构建项目 `./dist/`                                |
+| `npm run preview`         | 在部署之前，请在本地预览生成                      |
+| `npm run astro ...`       | 运行命令行界面命令，如 `astro add`, `astro check` |
+| `npm run astro -- --help` | 获取使用Astro CLI的帮助                           |
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+# 👀致谢
+
+主题灵感来源于 [AsyncX](https://blog.asyncx.top/)
