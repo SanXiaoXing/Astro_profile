@@ -2,9 +2,11 @@
 import Card from '../Card.astro'
 import { Button } from '../ui/button'
 import { EXPERIENCE } from '../../lib/constants'
+import LatestBlogPosts from '../LatestBlogPosts.astro'
+import Pin from '../Pin.astro'
 ---
 
-<Card href='/work'
+<!-- <Card href='/work'
 colSpan="md:col-span-1" rowSpan="md:row-span-4" title="Experience">
   <div class="mt-2 space-y-4">
     {
@@ -23,5 +25,18 @@ colSpan="md:col-span-1" rowSpan="md:row-span-4" title="Experience">
     <a href="/work">
       <Button variant="link" className="pl-0"> View More </Button>
     </a>
+  </div>
+</Card> -->
+
+<Card 
+colSpan="md:col-span-1" rowSpan="md:row-span-4" title="置顶文章">
+
+  <div class="mt-2 space-y-4">
+    <Pin/>
+  </div>
+  <br>
+  <h2 class="z-20 m-0 text-xl font-bold ">最近更新</h2>
+    <div class="mt-2 space-y-4">
+    <LatestBlogPosts/>
   </div>
 </Card>

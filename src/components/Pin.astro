@@ -1,0 +1,73 @@
+---
+import { getBlogPosts } from "../content/config";
+
+export async function getTopPosts() {
+    const posts = await getBlogPosts();
+    const topPosts = posts.filter(post => {
+        // 过滤置顶文章（如果存在pin属性且为true）
+        return post.data.pin;
+    });
+    return topPosts;
+}
+const topPosts = await getTopPosts();
+---
+{topPosts.length > 0 && (
+    <ul>
+      {topPosts.map(post => (
+        <li>
+          <p class="title">
+            <a href={`/blog/${post.fileName}`}>
+              {post.data.title}
+            </a>
+          </p>
+        </li>
+      ))}
+    </ul>
+  )}
+
+<style>
+main {
+    width: 960px;
+}
+ul {
+    /* display: flex; */
+    flex-wrap: wrap;
+    gap: 2rem;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+ul li {
+    display: flex;
+    margin-top: 1rem;
+}
+ul li a {
+    display: flex;
+    font-family: var(--font-family-mono);
+}
+.title {
+    margin: 0;
+    line-height: 1;
+}
+/* 标题变色: */
+ul li a:hover {
+    color: var(--orange);
+    text-decoration: none;
+}
+ul li a{
+    color: var(--hc);
+    text-decoration: none;
+}
+@media (max-width: 720px) {
+    ul {
+    gap: 0.5em;
+    }
+    ul li {
+    display:inherit;
+    width: 100%;
+    /* text-align: center; */
+    }
+
+}
+</style>
+  
