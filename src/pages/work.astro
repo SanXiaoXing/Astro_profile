@@ -5,7 +5,6 @@ import TopLayout from '../layouts/TopLayout.astro'
 import BottomLayout from '../layouts/BottomLayout.astro'
 
 import { EXPERIENCE } from '../lib/constants'
-import { imageConfig } from 'astro:assets'
 import { ViewTransitions } from 'astro:transitions'
 ---
 
@@ -22,22 +21,47 @@ import { ViewTransitions } from 'astro:transitions'
     <BottomLayout>
       <ul>
         {
-          EXPERIENCE.map((entry) => (
+          EXPERIENCE.map((entry, index) => (
             <li class="animate mt-4 border-b border-black/10 py-8 first-of-type:mt-0 first-of-type:pt-0 last-of-type:border-none dark:border-white/25">
               <div class="mb-4 text-sm uppercase">
                 {entry.start} - {entry.end}
               </div>
-              <a
-                href={entry.link ?? ''}
-                class={`font-semibold ${entry?.link ? 'text-primary' : 'text-foreground'}`}
-              >
-                {entry.company}
-              </a>
-              <div class="text-sm font-semibold">{entry.position}</div>
-              <article class="prose dark:prose-invert">
-                {entry.tasks.map((i) => (
-                  <>{i}</>
-                ))}
+              <div class="mb-4">
+                <a
+                  href={entry.link}
+                  class={`font-semibold text-primary text-xl uppercase`}
+                >
+                  {entry.company}
+                </a>
+              </div>
+              <div class="mb-4 text-x font-semibold">{entry.position}</div>
+              <article key={index} class="prose dark:prose-invert">
+                <ol>
+                  {entry.tasks.map((task, i) => (
+                    <li key={i}>
+                      <strong>{task.title}</strong>
+                      <br/>
+                      {Array.isArray(task.details) ? (
+                      <ul>
+                        {task.details.map((detail, j) => (
+                          typeof detail === 'string' ? (
+                            <li key={j}>{detail}</li>
+                          ) : (
+                          <li key={j}>
+                            <strong>{detail.subtitle}</strong>
+                            <ul>
+                              {detail.subdetails.map((subdetail, k) => (
+                              <li key={k}>{subdetail}</li>
+                              ))}
+                            </ul>
+                          </li>
+                          )
+                        ))}
+                      </ul>
+                      ): null}
+                    </li>
+                  ))}
+                </ol>
               </article>
             </li>
           ))
@@ -46,3 +70,33 @@ import { ViewTransitions } from 'astro:transitions'
     </BottomLayout>
   </main>
 </BaseLayout>
+
+<style>
+article {
+  background-color: hsl(var(--card)); /* 背景颜色 */
+  color: #f8f8f2; /* 文字颜色 */
+  padding: 20px; /* 内边距 */
+  border-radius: 8px; /* 圆角边框 */
+  font-family: Arial, sans-serif; /* 字体 */
+  margin-bottom: 20px; /* 底部外边距 */
+}
+
+p {
+  font-size: 1em; /* 正文字体大小 */
+  margin-bottom: 15px; /* 正文下边距 */
+}
+
+ol {
+  list-style-type: decimal; /* 有序列表样式 */
+  padding-left: 20px; /* 列表内边距 */
+}
+
+ul {
+  list-style-type: disc; /* 无序列表样式 */
+  padding-left: 20px; /* 列表内边距 */
+}
+
+li {
+  margin-bottom: 10px; /* 列表项下边距 */
+}
+</style>
