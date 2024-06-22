@@ -1,6 +1,6 @@
 ---
 import { WORK } from '../lib/constants'
-import BaseLayout from '../layouts/BaseLayout.astro'
+import BaseLayout from '../layouts/Layout.astro'
 import TopLayout from '../layouts/TopLayout.astro'
 import BottomLayout from '../layouts/BottomLayout.astro'
 
@@ -10,7 +10,8 @@ import { ViewTransitions } from 'astro:transitions'
 
 <BaseLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
   <ViewTransitions />
-  <main class="flex min-h-[80vh] flex-auto flex-col" transition:animate="fade">
+  <main class="flex min-h-[80vh] flex-auto flex-col" 
+      transition:animate="fade">
     <TopLayout>
       <h2
         class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0"
@@ -73,12 +74,13 @@ import { ViewTransitions } from 'astro:transitions'
 
 <style>
 article {
-  background-color: hsl(var(--card)); /* 背景颜色 */
-  color: #f8f8f2; /* 文字颜色 */
+  background-color: hsl(var(--background)); /* 背景颜色 */
+  color: #f8f8f380; /* 文字颜色 */
   padding: 20px; /* 内边距 */
   border-radius: 8px; /* 圆角边框 */
   font-family: Arial, sans-serif; /* 字体 */
   margin-bottom: 20px; /* 底部外边距 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 p {
@@ -99,4 +101,23 @@ ul {
 li {
   margin-bottom: 10px; /* 列表项下边距 */
 }
+ /* 初始样式 */
+ main {
+    display: flex;
+    min-height: 80vh;
+    flex-grow: 1;
+    flex-direction: column;
+  }
+
+  h2 {
+    scroll-margin: 20px;
+    border-bottom: 1px solid;
+    padding-bottom: 0.5rem; /* 8px */
+    font-size: 1.875rem; /* 30px */
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-top: 0;
+  }
+
 </style>

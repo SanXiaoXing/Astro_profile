@@ -23,13 +23,13 @@ const { title, description } =
     <main transition:animate="fade">
     <slot />
 	</main>
-  <div id="back-to-top" aria-label="Back to top">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#FFD43B" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM135.1 217.4l107.1-99.9c3.8-3.5 8.7-5.5 13.8-5.5s10.1 2 13.8 5.5l107.1 99.9c4.5 4.2 7.1 10.1 7.1 16.3c0 12.3-10 22.3-22.3 22.3H304v96c0 17.7-14.3 32-32 32H240c-17.7 0-32-14.3-32-32V256H150.3C138 256 128 246 128 233.7c0-6.2 2.6-12.1 7.1-16.3z"/></svg>
-  </div>
     <Footer />
+    <div id="back-to-top" aria-label="Back to top">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#FFD43B" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM135.1 217.4l107.1-99.9c3.8-3.5 8.7-5.5 13.8-5.5s10.1 2 13.8 5.5l107.1 99.9c4.5 4.2 7.1 10.1 7.1 16.3c0 12.3-10 22.3-22.3 22.3H304v96c0 17.7-14.3 32-32 32H240c-17.7 0-32-14.3-32-32V256H150.3C138 256 128 246 128 233.7c0-6.2 2.6-12.1 7.1-16.3z"/></svg>
+    </div>
   </body>
   <style>
-        #back-to-top {
+    #back-to-top {
       display: none; /* 默认隐藏按钮 */
       position: fixed; /* 让按钮固定在页面右下角 */
       bottom: 20px;
@@ -42,6 +42,7 @@ const { title, description } =
       width: 40px; /* 按钮宽度 */
       height: 40px; /* 按钮高度 */
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* 添加阴影效果 */
+      z-index: 9999;
     }
     @media (max-width: 1024px) {
       #back-to-top {

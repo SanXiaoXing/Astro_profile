@@ -15,7 +15,7 @@ interface Props {
 const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
 ---
 <ShadcnCard
-  className={`divc group relative col-span-1 h-auto w-full flex-none justify-start overflow-hidden transition ${colSpan || 'md:col-span-2'} ${rowSpan || ''} ${href ? 'cursor-pointer' : ''}`}
+  className={`card-animate transform-y-[-40%] align-start perspective-1200 group relative col-span-1 h-auto w-full flex-none transform justify-start overflow-hidden p-6 shadow-lg transition duration-300 ease-in-out divc group ${colSpan || 'md:col-span-2'} ${rowSpan || ''} ${href ? 'cursor-pointer' : ''}`}
 >
   {href ? (
     <a href={href} className={`${colSpan} ${rowSpan}`}>

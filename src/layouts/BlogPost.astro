@@ -46,7 +46,16 @@ const { title, description, pubDate, updatedDate, heroImage, tags, categories, c
                 {i < tags.length - 1 && ""}
               </>
             ))}
-            <FormattedDate date={pubDate} />
+
+            <div class="date-container my-1">
+              {pubDate &&(
+              <time class="pub-date"><FormattedDate date={pubDate} /></time>
+              )}
+              {updatedDate && (
+              <div class="update-badge">
+                最后更新于 <time><FormattedDate date={updatedDate} /></time>
+              </div>)}
+            </div>
           </div>
         )}
         <style>
@@ -141,6 +150,46 @@ const { title, description, pubDate, updatedDate, heroImage, tags, categories, c
       transition: 0.2s ease;
       color: var(--accent);
       text-decoration: underline;
+    }
+
+    .date-container {
+      position: relative;
+      display: inline-block;
+      max-width: 100%;
+    }
+    .pub-date, .update-badge {
+      display: inline-block;
+      white-space: nowrap; /* 防止时间换行 */
+      transition: all 0.5s ease;
+    }
+
+    .pub-date {
+      position: relative;
+      z-index: 1;
+    }
+
+    .update-badge {
+      position: absolute;
+      bottom: 0;
+      left: 0; /* 初始时与pub-date同一位置 */
+      opacity: 0; /* 初始透明度为0 */
+      z-index: 2;
+      background-color: var(--purple);
+      color: black;
+      padding: .1em .5em;
+      border-radius: 10px;
+      transform: translateX(50%);
+      }
+
+    /* 只有当.date-container有.update-badge子元素时才会应用以下样式 */
+    .date-container:has(.update-badge):hover .pub-date {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+
+    .date-container:has(.update-badge):hover .update-badge {
+      opacity: 1;
+      transform: translateX(0%);
     }
   </style>
 </Layout>
