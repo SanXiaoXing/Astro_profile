@@ -1,0 +1,35 @@
+<div class="post-comments">
+    <div class="tabs">
+      <input type="radio" class="hidden-radio" name="comment-provider" id="by-twikoo" autocomplete="off" data-umami-event="Comment-Twikoo">
+      <label class="tab" for="by-twikoo">Twikoo</label>
+    </div>
+    <div class="post-comments-content twikoo" id="comment" hidden>
+      <div id="twikoo-comments"></div>
+      <script src="//cdn.jsdelivr.net/npm/twikoo@1.6.36/dist/twikoo.all.min.js" is:inline></script>
+      <script>
+        twikoo.init({
+          envId: 'https://twikoo.asyncx.top/',
+          el: '#twikoo-comments',
+        })
+      </script>
+    </div>
+    <div style="color: var(--gray);">⬆︎Say something to me.⬆︎</div>
+  </div>
+  <script>
+    const group = document.querySelectorAll('input[name="comment-provider"]');
+    const contents = document.querySelectorAll('.post-comments-content');
+    const handleChange = () => {
+      let commentProvider = document.querySelector('input[name="comment-provider"]:checked+.tab');
+      if (commentProvider) {
+        commentProvider = commentProvider.textContent.toLowerCase();
+        contents.forEach(content => {
+          if (content.classList.contains(commentProvider)) {
+            content.style.display = 'block';
+          } else {
+            content.style.display = 'none';
+          }
+        })
+      }
+    }
+    group.forEach(radio => radio.addEventListener('input', handleChange))
+  </script>
