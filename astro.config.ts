@@ -13,9 +13,7 @@ import expressiveCode from "astro-expressive-code";
 
 // https://astro.build/config
 export default defineConfig({
-  site: process.env.CI
-    ? 'https://blog.sanxiaoxing.cn'
-    : 'http://localhost:4321',
+  site: 'https://blog.sanxiaoxing.cn',
   integrations: [sitemap(),
     react(),
     tailwind({
