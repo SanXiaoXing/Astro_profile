@@ -1,35 +1,86 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <div class="post-comments">
-    <div class="tabs">
-      <input type="radio" class="hidden-radio" name="comment-provider" id="by-twikoo" autocomplete="off" data-umami-event="Comment-Twikoo">
-      <label class="tab" for="by-twikoo">Twikoo</label>
-    </div>
-    <div class="post-comments-content twikoo" id="comment" hidden>
-      <div id="twikoo-comments"></div>
-      <script src="//cdn.jsdelivr.net/npm/twikoo@1.6.36/dist/twikoo.all.min.js" is:inline></script>
-      <script>
-        twikoo.init({
-          envId: 'https://twikoo.asyncx.top/',
-          el: '#twikoo-comments',
-        })
-      </script>
-    </div>
-    <div style="color: var(--gray);">⬆︎Say something to me.⬆︎</div>
+  <div class="dashed-line"></div>
+  <div class="comment-container">
+    <i class="fa-solid fa-comments fa-beat-fade"></i>&nbsp;&nbsp;&nbsp;
+    <div class="characters">评论</div>
   </div>
-  <script>
-    const group = document.querySelectorAll('input[name="comment-provider"]');
-    const contents = document.querySelectorAll('.post-comments-content');
-    const handleChange = () => {
-      let commentProvider = document.querySelector('input[name="comment-provider"]:checked+.tab');
-      if (commentProvider) {
-        commentProvider = commentProvider.textContent.toLowerCase();
-        contents.forEach(content => {
-          if (content.classList.contains(commentProvider)) {
-            content.style.display = 'block';
-          } else {
-            content.style.display = 'none';
-          }
-        })
-      }
+  
+  <div class="post-comments-content twikoo" id="comment">
+    <div id="twikoo-comments"></div>
+    <script src="//cdn.jsdelivr.net/npm/twikoo@1.6.36/dist/twikoo.all.min.js" is:inline></script>
+    <script>
+      twikoo.init({
+        envId: 'https://blog-twikoo.sanxiaoxing.cn/',
+        el: '#twikoo-comments',
+      });
+    </script>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const commentSection = document.getElementById('comment');
+    if(commentSection) {
+      commentSection.style.display = 'block';
     }
-    group.forEach(radio => radio.addEventListener('input', handleChange))
-  </script>
+  });
+</script>
+
+  <style>
+      .tabs {
+        max-width: 300px;
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        width: 100%;
+        border-radius: 10px;
+        padding: 0.25rem;
+        background-color: #00000030;
+        color: #a6adba;
+        transition: all .5s;
+        border: #00000030 solid 1px;
+      }
+      .tabs:hover{
+        border: var(--hc) solid 1px;
+        box-shadow: 0px 0px 30px 1px rgba(150, 222, 255, 0.303);
+      }
+      .dashed-line {
+        display: flex;
+        align-items: center;
+        margin: 20px 0;
+        margin-top: 50px; /* 设置评论内容和虚线之间的间距 */
+      }
+
+      .dashed-line::after {
+        content: "";
+        flex: 1;
+        border-bottom: 3px dashed #bbb; /* 设置虚线的颜色和样式 */
+        margin-left: 10px; /* 设置虚线和文字之间的间距 */
+      }
+      .comment-icon {
+        width: 2px; /* SVG 图标的宽度 */
+        height: 2px; /* SVG 图标的高度 */
+        margin-right: 8px; /* SVG 图标与文字之间的间距 */
+      }
+
+      .comment-container {
+        display: inline-flex; /* 设为inline-flex布局 */
+        align-items: center;
+        border: var(--bgc) solid 1px;
+        box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.2);
+        justify-content: center; /* 水平居中 */
+        padding: 10px; /* 边框内边距 */ 
+        background-color: #00000030;
+        border-radius: 10px;
+        transition: .5s all;
+      }
+      .comment-container:hover {
+        transition: all .3s;
+        border: var(--current-line) solid 1px;
+        box-shadow: 0px 0px 100px 10px rgba(6, 56, 238, 0.547);
+      }
+
+      .post-comments-content {
+        margin-top: 20px; /* 设置评论内容和虚线之间的间距 */
+      }
+  </style>
