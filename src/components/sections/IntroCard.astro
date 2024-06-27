@@ -2,35 +2,33 @@
 import Card from '../Card.astro'
 import { Button } from '../ui/button'
 import { LINKS } from '../../lib/constants'
-import {  Github, Mail, Rss, Gitlab } from 'lucide-react'
+import { Github, Mail, Rss, Gitlab } from 'lucide-react'
 ---
 
 <Card colSpan="md:col-span-3" rowSpan="md:row-span-3">
   <div class="flex h-full w-full">
     <img
-    width="300"
-    height="300"
-    src="/favicon.svg"
-    class="pointer-events-none absolute bottom-[-20px] right-[-110px] z-[-1] max-h-[300px] w-auto select-none opacity-50  md:relative md:bottom-auto md:right-auto md:z-auto md:opacity-100"
-    alt="memoji of andres plaza"
-  />
-  <!-- 增加了 rounded-full 类将图片调整为圆形 -->
+      width="300"
+      height="300"
+      src="/favicon.svg"
+      class="pointer-events-none absolute bottom-[-20px] right-[-110px] z-[-1] max-h-[300px] w-auto select-none opacity-50 md:relative md:bottom-auto md:right-auto md:z-auto md:opacity-100 rounded-full"
+      alt="memoji of andres plaza"
+    />
     <div class="flex flex-col justify-between gap-4 md:max-h-[300px]">
       <div class="flex h-full flex-col" style={{ justifyContent: 'center', display: 'flex', width: '100%', height: '100%' }}>
-
-        <h1 class="hometitle" >SanXiaoXing的博客</h1>
+        <h1 class="hometitle">SanXiaoXing的博客</h1>
         <br>
-        <div >
-          <p class="relative w-[max-content] font-mono text-xl
-          before:absolute before:inset-0 before:animate-typewriter
-          before:bg-card
-          after:absolute after:inset-0 after:w-[0.125em] after:animate-caret
-          after:bg-primary"
-          >欢迎来到SanXiaoXing的快乐世界！
-          </p>
+        <div>
+          <div class="box">
+            <div class="word">欢迎来到快乐天地</div>
+            <div class="word">在这里可以感受到我的快乐</div>
+            <div class="word">天天开心呦~</div>
+            
+            <!-- 添加更多的 .word 元素 -->
+          </div>
         </div>
       </div>
-      
+
       <div class="flex gap-4">
         <a href={LINKS.github} aria-label="github profile" target="_blank">
           <Button aria-label="github profile">
@@ -58,19 +56,65 @@ import {  Github, Mail, Rss, Gitlab } from 'lucide-react'
         </a>
       </div>
     </div>
-
   </div>
 </Card>
-<style>
-    .hometitle {
-      max-height: 1fr;
-      font-size: 3rem;
-      font-weight: bold;
-      font-family: 'Future-mono';
-      background: linear-gradient(220.55deg, #FFC328 0%, #E20000 100%);
-      background-clip: border-box;
-      background-size: 100% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+
+<style global>
+  .hometitle {
+    font-size: 3rem;
+    font-weight: bold;
+    font-family: 'Future-mono';
+    background: linear-gradient(220.55deg, #FFC328 0%, #E20000 100%);
+    background-clip: border-box;
+    background-size: 100% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .box {
+    font-size: 2rem; /* 设置字体大小为12px */
+    font-family: "STFangsong", "宋体", serif; /* 使用宋体 */
+    filter: contrast(24); /* 调整对比度 */
+    position: relative;
+    color: #a09b9b;
+    user-select: none;
+    display: flex; /* 使用flexbox布局让其居中 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+}
+
+  .word {
+    filter: blur(0);
+    position: absolute;
+    left: 0;
+    /* top: 0; */
+    animation: changeWord 16s infinite ease-in-out;
+  }
+
+  @keyframes changeWord {
+    0%,
+    12.5%,
+    100% {
+      filter: blur(0);
+      opacity: 1;
+    }
+
+    37.5%,
+    62.5% {
+      filter: blur(64px);
+      opacity: 0;
+    }
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const words = document.querySelectorAll('.word');
+    const duration = 16; // 动画的总时间（秒）
+    const delayIncrement = duration / words.length; // 每个词的延迟增量
+
+    words.forEach((word, index) => {
+      word.style.animationDelay = `-${index * delayIncrement}s`;
+    });
+  });
+</script>
