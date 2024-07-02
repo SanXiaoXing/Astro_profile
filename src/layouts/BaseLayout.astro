@@ -40,6 +40,11 @@ const { title, description, ogImage } = Astro.props
         width: 40px; /* 按钮宽度 */
         height: 40px; /* 按钮高度 */
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* 添加阴影效果 */
+        transition: .5s all;
+      }
+      #back-to-top:hover {
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0px 0px 90px 10px rgba(255, 179, 0, 0.547);
       }
       @media (max-width: 1024px) {
         #back-to-top {
