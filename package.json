@@ -8,12 +8,13 @@
   "license": "MIT",
   "scripts": {
     "build": "astro build",
-    "dev": "astro dev",
+    "dev": "astro build && npm run postbuild && astro preview",
     "format": "prettier -w . --cache",
     "preview": "astro preview",
     "start": "astro dev",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "push": "standard-version && git push --follow-tags"
+    "push": "standard-version && git push --follow-tags",
+    "postbuild": "pagefind --site dist"
   },
   "dependencies": {
     "@astrojs/preact": "^3.4.0",
@@ -24,6 +25,7 @@
     "@contentful/rich-text-html-renderer": "^16.3.5",
     "@expressive-code/plugin-collapsible-sections": "^0.35.3",
     "@expressive-code/plugin-line-numbers": "^0.35.3",
+    "@microflash/remark-callout-directives": "^4.3.1",
     "@microflash/remark-figure-caption": "^2.0.2",
     "@pagefind/default-ui": "^1.1.0",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -70,6 +72,7 @@
     "conventional-changelog-cli": "^5.0.0",
     "conventional-changelog-custom-config": "^0.3.1",
     "husky": "^9.0.11",
+    "pagefind": "^1.1.0",
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.13.0",
     "prettier-plugin-tailwindcss": "^0.5.12",

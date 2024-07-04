@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config'
 import react from '@astrojs/react'
 import tailwind from '@astrojs/tailwind'
-// import remarkFigureCaption from '@microflash/remark-figure-caption';
+import remarkFigureCaption from '@microflash/remark-figure-caption';
 import remarkDirective from 'remark-directive';
 import remarkCalloutDirectives from "./src/components/mdrenders/remark-callout-directives-customized.mjs"
 import { remarkReadingTime } from './src/components/mdrenders/remark-reading-time.mjs';
@@ -45,7 +45,7 @@ export default defineConfig({
     }
   },
   markdown: {
-    remarkPlugins: [remarkDirective, remarkCalloutDirectives, remarkReadingTime],
+    remarkPlugins: [remarkFigureCaption,remarkDirective, remarkCalloutDirectives, remarkReadingTime],
   },
 
 })

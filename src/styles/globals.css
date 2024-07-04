@@ -237,6 +237,15 @@ h5 {
   margin-right: 1.2rem;
   color: var(--orange); /* 可根据需要调整颜色 */
 }
+.headline h3 {
+  position: relative;
+  padding-left: 0rem; /* 可以调整以适应你的布局 */
+}
+.headline h3::before{
+  content: '~';
+  margin-right: 1.2rem;
+  color: var(--orange); /* 可根据需要调整颜色 */
+}
 .headline p {
   text-indent: 2em; /* 段前空两格 */
   line-height: 2; /* 行间距为1.5倍 */
@@ -277,6 +286,10 @@ h5 {
 .headline li {
   margin-bottom: 10px; /* 列表项下边距 */
 }
+.headline li li li{
+  margin-bottom: 10px; /* 列表项下边距 */
+  list-style-type: circle;
+}
 
 .headline li p {
   text-indent: 0; /* 去掉缩进 */
@@ -297,6 +310,10 @@ p img {
 	display: block;
 	border-radius: 10px;
 }
+img {
+	max-width: 100%;
+	border-radius: 10px;
+  }
 
 hr {
 	border-color: #00000000;
@@ -360,4 +377,15 @@ pre:hover {
   /* 滚动条鼠标悬停样式 */
   ::-webkit-scrollbar-thumb:hover {
 	background: hsl(var(--primary)); /* 鼠标悬停时的滑块颜色 */
+  }
+
+  figure {
+    padding: 10px;
+    text-align: center;
+  }
+  figcaption {
+    padding: 5px;
+    text-align: center;
+    color: var(--gray);
+    font-size: 0.8rem;
   }
