@@ -14,7 +14,8 @@
     "start": "astro dev",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "push": "standard-version && git push --follow-tags",
-    "postbuild": "pagefind --site dist"
+    "postbuild": "pagefind --site dist",
+    "pnpm": "pnpm install --no-frozen-lockfile"
   },
   "dependencies": {
     "@astrojs/preact": "^3.4.0",
