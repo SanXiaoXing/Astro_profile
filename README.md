@@ -7,8 +7,7 @@ Astro SanXiaoXing是一个卡片式的博客网站，简易、轻量、高效
 
 <span>
     <a href="README.md">
-        <img src="https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/Chinese.svg" alt="Chinese" width="80" height="40" style="vertical-align: middle;">
-    </a>
+        <img src="https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/Chinese.svg" alt="Chinese" width="80" height="40" style="vertical-align: middle;">   </a>
     <a href="README_EN.md">
         <img src="https://cdn.jsdelivr.net/gh/SanXiaoXing/Image@main/blog/English.svg" alt="English" width="80" height="40" style="vertical-align: middle;">
     </a>

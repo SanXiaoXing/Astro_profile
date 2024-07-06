@@ -3,6 +3,9 @@ import Card from '../Card.astro'
 import { Button } from '../ui/button'
 import { LINKS } from '../../lib/constants'
 import { Github, Mail, Rss, Gitlab } from 'lucide-react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faGit} from '@fortawesome/free-brands-svg-icons'; // 如果是品牌图标
+import { faHouseSignal } from '@fortawesome/free-solid-svg-icons'; //如果是实心图标
 ---
 
 <Card colSpan="md:col-span-3" rowSpan="md:row-span-3">
@@ -32,14 +35,22 @@ import { Github, Mail, Rss, Gitlab } from 'lucide-react'
       <div class="flex gap-4">
         <a href={LINKS.github} aria-label="github profile" target="_blank">
           <Button aria-label="github profile">
-            <Github />
+            <FontAwesomeIcon icon={faGithub} className="icon"/>
             <span class="sr-only">GitHub Profile</span>
           </Button>
         </a>
         <a href={LINKS.gitee} aria-label="gitee profile" target="_blank">
           <Button aria-label="gitee profile">
-            <Gitlab />
+            <!-- <Gitlab /> -->
+            <FontAwesomeIcon icon={faGit} className="icon"/>
             <span class="sr-only">Gitee Profile</span>
+          </Button>
+        </a>
+        <a href={LINKS.homepage} aria-label="homepage profile" target="_blank">
+          <Button aria-label="homepage profile">
+            <!-- <Gitlab /> -->
+            <FontAwesomeIcon icon={faHouseSignal} className="icon"/>
+            <span class="sr-only">homepage Profile</span>
           </Button>
         </a>
         <a href={LINKS.mail} aria-label="mail profile" target="_blank">
@@ -59,7 +70,7 @@ import { Github, Mail, Rss, Gitlab } from 'lucide-react'
   </div>
 </Card>
 
-<style global>
+<style is:global>
   .hometitle {
     font-size: 3rem;
     font-weight: bold;
@@ -70,7 +81,9 @@ import { Github, Mail, Rss, Gitlab } from 'lucide-react'
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-
+  .icon {
+    width: 1.5rem; /* 调整为您想要的宽度 */
+  }
   .box {
     font-size: 2rem; /* 设置字体大小为12px */
     font-family: "STFangsong", "宋体", serif; /* 使用宋体 */

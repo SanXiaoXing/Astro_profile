@@ -14,7 +14,8 @@ export const LINKS = {
   medium: '',
   discord: '',
   rss: '/rss.xml',
-  gitee: 'https://gitee.com/yan-kmd'
+  gitee: 'https://gitee.com/yan-kmd',
+  homepage: 'https://sanxiaoxing.cn/',
 }
 
 // Global
