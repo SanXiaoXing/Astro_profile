@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.21](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.20...v0.0.21) (2024-07-06)
+
+
+### Bug Fixes
+
+* 修复界面上图标显示错误问题 ([9103a18](https://github.com/SanXiaoXing/Astro_profile/commit/9103a18baea49646d76b87034bec776b6b1aaf78))
+* fix pnpm-lock ([356e1fa](https://github.com/SanXiaoXing/Astro_profile/commit/356e1faec0df07ba4c5851876fddd18bff1f554a))
+* fix vercel.json内容 ([6cbfa8e](https://github.com/SanXiaoXing/Astro_profile/commit/6cbfa8e61e53a84d49746750df35a3740cb84a3d))
+
 ### [0.0.20](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.19...v0.0.20) (2024-07-04)
 
 
