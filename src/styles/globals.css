@@ -242,7 +242,16 @@ h5 {
   padding-left: 0rem; /* 可以调整以适应你的布局 */
 }
 .headline h3::before{
-  content: '~';
+  content: '☉';
+  margin-right: 1.2rem;
+  color: var(--orange); /* 可根据需要调整颜色 */
+}
+.headline h4 {
+  position: relative;
+  padding-left: 0rem; /* 可以调整以适应你的布局 */
+}
+.headline h4::before{
+  content: '◌';
   margin-right: 1.2rem;
   color: var(--orange); /* 可根据需要调整颜色 */
 }
