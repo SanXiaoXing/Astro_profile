@@ -94,10 +94,10 @@ import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/fri
           visibility: visible;
           transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        .list-card .friend-item:is(:hover, :focus-within) {
+        .list-card .friend-item:is(:hover) {
           --avatar: 0px;
         }
-        .list-card .friend-item:is(:hover, :focus-within) .tag {
+        .list-card .friend-item:is(:hover) .tag {
           /* 悬停时隐藏tag */
           opacity: 0;
           visibility: hidden;
