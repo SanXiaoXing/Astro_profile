@@ -139,3 +139,6 @@ git clone https://github.com/SanXiaoXing/Template_Of_Astro.git
 # 👀致谢
 
 主题灵感来源于 [AsyncX](https://blog.asyncx.top/)
+
+---
+![Alt](https://repobeats.axiom.co/api/embed/53c74bef592e6037c37916f9fabce28514cbe1ba.svg "Repobeats analytics image")
