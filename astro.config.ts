@@ -8,11 +8,29 @@ import { remarkReadingTime } from './src/components/mdrenders/remark-reading-tim
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections'
 import sitemap from '@astrojs/sitemap';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
+import { getVersion } from './getVersion';
 
 import expressiveCode from "astro-expressive-code";
 
 // https://astro.build/config
 export default defineConfig({
+  async setup() {
+    const version = await getVersion();
+    console.log(`
+  =======================================================================================
+                                                                     
+  ███████╗ █████╗ ███╗   ██╗██╗  ██╗██╗ █████╗  ██████╗ ██╗  ██╗██╗███╗   ██╗ ██████╗ 
+  ██╔════╝██╔══██╗████╗  ██║╚██╗██╔╝██║██╔══██╗██╔═══██╗╚██╗██╔╝██║████╗  ██║██╔════╝ 
+  ███████╗███████║██╔██╗ ██║ ╚███╔╝ ██║███████║██║   ██║ ╚███╔╝ ██║██╔██╗ ██║██║  ███╗
+  ╚════██║██╔══██║██║╚██╗██║ ██╔██╗ ██║██╔══██║██║   ██║ ██╔██╗ ██║██║╚██╗██║██║   ██║
+  ███████║██║  ██║██║ ╚████║██╔╝ ██╗██║██║  ██║╚██████╔╝██╔╝ ██╗██║██║ ╚████║╚██████╔╝
+  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝╚═╝  ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝
+
+                                     ${version}
+  =======================================================================================
+    `);
+  }
+});
   site: 'https://blog.sanxiaoxing.cn',
   integrations: [sitemap(),
     react(),
