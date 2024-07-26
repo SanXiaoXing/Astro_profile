@@ -30,7 +30,6 @@ export default defineConfig({
   =======================================================================================
     `);
   }
-});
   site: 'https://blog.sanxiaoxing.cn',
   integrations: [sitemap(),
     react(),
