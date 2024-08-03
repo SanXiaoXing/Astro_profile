@@ -24,3 +24,4 @@ pnpm-debug.log*
 .vscode/
 scr/content/blog/.obsidian/
 .obsidian/
+scr/content/blog/Templates/
