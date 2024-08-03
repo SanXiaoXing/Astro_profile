@@ -140,3 +140,6 @@ Replace  `pnpm` with your choice of ` npm / yarn `
 # 👀Acknowledgment
 
 This theme was inspired by [AsyncX](https://blog.asyncx.top/)
+
+---
+![Alt](https://repobeats.axiom.co/api/embed/53c74bef592e6037c37916f9fabce28514cbe1ba.svg "Repobeats analytics image")
