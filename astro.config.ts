@@ -8,7 +8,8 @@ import { remarkReadingTime } from './src/components/mdrenders/remark-reading-tim
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections'
 import sitemap from '@astrojs/sitemap';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
-import { getVersion } from './getVersion';
+
+import remarkRemoveObsidianLinks from './src/components/mdrenders/remark-remove-obsidian-links' 
 
 import expressiveCode from "astro-expressive-code";
 
@@ -46,22 +47,7 @@ export default defineConfig({
     }
   },
   markdown: {
-    remarkPlugins: [remarkFigureCaption,remarkDirective, remarkCalloutDirectives, remarkReadingTime],
-  },async setup() {
-    const version = await getVersion();
-    console.log(`
-  =======================================================================================
-                                                                     
-  ███████╗ █████╗ ███╗   ██╗██╗  ██╗██╗ █████╗  ██████╗ ██╗  ██╗██╗███╗   ██╗ ██████╗ 
-  ██╔════╝██╔══██╗████╗  ██║╚██╗██╔╝██║██╔══██╗██╔═══██╗╚██╗██╔╝██║████╗  ██║██╔════╝ 
-  ███████╗███████║██╔██╗ ██║ ╚███╔╝ ██║███████║██║   ██║ ╚███╔╝ ██║██╔██╗ ██║██║  ███╗
-  ╚════██║██╔══██║██║╚██╗██║ ██╔██╗ ██║██╔══██║██║   ██║ ██╔██╗ ██║██║╚██╗██║██║   ██║
-  ███████║██║  ██║██║ ╚████║██╔╝ ██╗██║██║  ██║╚██████╔╝██╔╝ ██╗██║██║ ╚████║╚██████╔╝
-  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝╚═╝  ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝
-
-                                     ${version}
-  =======================================================================================
-    `);
+    remarkPlugins: [remarkRemoveObsidianLinks ,remarkFigureCaption,remarkDirective, remarkCalloutDirectives, remarkReadingTime],
   },
 
 })

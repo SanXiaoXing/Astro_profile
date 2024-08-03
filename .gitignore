@@ -22,3 +22,5 @@ pnpm-debug.log*
 
 .idea/
 .vscode/
+scr/content/blog/.obsidian/
+.obsidian/
