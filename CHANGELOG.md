@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.23](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.22...v0.0.23) (2024-08-04)
+
+
+### Bug Fixes
+
+* **\:** 更新文档中的错误内容 ([8b622ac](https://github.com/SanXiaoXing/Astro_profile/commit/8b622ac98f938379403dd3e0d1c8eb14f4d313a1))
+* 更新work内容 ([11aca0c](https://github.com/SanXiaoXing/Astro_profile/commit/11aca0c646405f6fccb8e28c17f81dd52a7736db))
+
 ### [0.0.22](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.21...v0.0.22) (2024-08-03)
 
 
