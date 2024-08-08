@@ -56,6 +56,12 @@ const friendLinksZh = [
     link: 'https://www.sleepymoon.cyou/',
     description: '月光冷寂，恍若一场死眠',
   },
+  {
+    avatar: 'https://pic.longtao.fun/pics/20210916/avatar.71pjc2scvak0.jpg',
+    name: 'LongTao',
+    link: 'https://longtao.fun',
+    description: 'Ewige Wiederkunft',
+  },
 ];
 
 const friendLinksInvalid = [
