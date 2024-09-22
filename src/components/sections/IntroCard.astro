@@ -104,18 +104,14 @@ import { faHouseSignal } from '@fortawesome/free-solid-svg-icons'; //如果是�
     animation: changeWord 16s infinite ease-in-out;
   }
 
-  @keyframes changeWord {
-    0%,
-    12.5%,
-    100% {
-      filter: blur(0);
+    @keyframes changeWord {
+    0%, 12.5%, 100% {
       opacity: 1;
+      filter: blur(0);
     }
-
-    37.5%,
-    62.5% {
-      filter: blur(64px);
+    37.5%, 62.5% {
       opacity: 0;
+      filter: blur(64px);
     }
   }
   @media screen and (min-width: 640px) and (max-width: 1000px) {
