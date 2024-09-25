@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.28](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.27...v0.0.28) (2024-09-25)
+
+
+### Features
+
+* 修改标题样式，使其更简洁明了 ([83236d5](https://github.com/SanXiaoXing/Astro_profile/commit/83236d52c27f70b61a9268c59efc4d747917cb8f))
+
 ### [0.0.27](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.26...v0.0.27) (2024-09-25)
 
 ### [0.0.26](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.25...v0.0.26) (2024-09-22)
