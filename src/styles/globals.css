@@ -203,6 +203,7 @@ h6 {
 }
 h1 {
 	font-size: 3em;
+  
 }
 h2 {
 	font-size: 1.6em;
@@ -218,46 +219,39 @@ h5 {
 }
 .headline h1 {
   font-size: 2em;
+  font-weight: bold;  
+  font-family: "黑体", sans-serif; 
   position: relative;
   padding-left: 0rem; /* 可以调整以适应你的布局 */
+  line-height: 2; 
 }
 
-.headline h1::before{
-  content: '#';
-  margin-right: 1.2rem;
-  color: var(--orange); /* 可根据需要调整颜色 */
-}
+
 .headline h2 {
+  font-weight: bold;  /* 加粗效果 */
+  font-family: "黑体", sans-serif; 
   position: relative;
   padding-left: 0rem; /* 可以调整以适应你的布局 */
+  line-height: 2; 
 }
 
-.headline h2::before{
-  content: '●';
-  margin-right: 1.2rem;
-  color: var(--orange); /* 可根据需要调整颜色 */
-}
 .headline h3 {
+  font-family: "黑体", sans-serif; 
+  font-weight: bold;  /* 加粗效果 */
   position: relative;
   padding-left: 0rem; /* 可以调整以适应你的布局 */
+  line-height: 2; 
 }
-.headline h3::before{
-  content: '☉';
-  margin-right: 1.2rem;
-  color: var(--orange); /* 可根据需要调整颜色 */
-}
+
 .headline h4 {
+  font-family: "黑体", sans-serif; 
+  font-weight: bold;  /* 加粗效果 */
   position: relative;
-  padding-left: 0rem; /* 可以调整以适应你的布局 */
-}
-.headline h4::before{
-  content: '◌';
-  margin-right: 1.2rem;
-  color: var(--orange); /* 可根据需要调整颜色 */
+  padding-left: 0rem; 
 }
 .headline p {
   text-indent: 2em; /* 段前空两格 */
-  line-height: 2; /* 行间距为1.5倍 */
+  line-height: 1.5; 
   font-size: 12pt; /* 文字大小为小四 */
 }
 .headline a {
@@ -284,12 +278,13 @@ h5 {
 .headline ol {
   list-style-type: decimal; /* 有序列表样式 */
   padding-left: 20px; /* 列表内边距 */
-  text-indent: 0em; /* 段前空两格 */
+  line-height: 1.5; 
 }
 
 .headline ul {
   list-style-type: disc; /* 无序列表样式 */
   padding-left: 20px; /* 列表内边距 */
+  padding-top: 10px;
 }
 
 .headline li {
