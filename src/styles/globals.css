@@ -161,6 +161,7 @@ body {
 	font-size: 15px;
 	letter-spacing: 0.7px;
 	position: relative;
+  counter-reset: h1-counter;  /* 定义并初始化计数器 */
 }
 
 body::before {
@@ -224,8 +225,16 @@ h5 {
   position: relative;
   padding-left: 0rem; /* 可以调整以适应你的布局 */
   line-height: 2; 
+  counter-reset: h2-counter;
 }
 
+.headline h1::before {
+  content: counter(h1-counter,upper-roman) " ";
+  counter-increment: h1-counter;
+  font-weight: bold;
+  margin-right: 10px;
+  text-transform: uppercase;  /* 转换为大写 */
+}
 
 .headline h2 {
   font-weight: bold;  /* 加粗效果 */
@@ -233,6 +242,14 @@ h5 {
   position: relative;
   padding-left: 0rem; /* 可以调整以适应你的布局 */
   line-height: 2; 
+  counter-reset: h3-counter;
+}
+
+.headline h2::before {
+  content: counter(h1-counter) "." counter(h2-counter) " ";  /* h1.h2 格式 */
+  counter-increment: h2-counter;  /* 每个 h2 递增 h2 计数器 */
+  font-weight: bold;
+  margin-right: 10px;
 }
 
 .headline h3 {
@@ -241,6 +258,13 @@ h5 {
   position: relative;
   padding-left: 0rem; /* 可以调整以适应你的布局 */
   line-height: 2; 
+}
+
+.headline h3::before {
+  content: counter(h1-counter) "." counter(h2-counter) "." counter(h3-counter) " ";  /* h1.h2.h3 格式 */
+  counter-increment: h3-counter;  /* 每个 h3 递增 h3 计数器 */
+  font-weight: bold;
+  margin-right: 10px;
 }
 
 .headline h4 {
