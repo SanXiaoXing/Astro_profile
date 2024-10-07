@@ -1,3 +1,14 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.0.32](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.31...v0.0.32) (2024-10-07)
+
+
+### Features
+
+* 更新CHANGELOG.md文件生成逻辑，使其能够完整生成日志 ([ba7701d](https://github.com/SanXiaoXing/Astro_profile/commit/ba7701dfaa9b7ce4dec577a56b57a8813ed2b74f))
+
 ## <small>0.0.31 (2024-10-04)</small>
 
 * chore(release): 0.0.31 ([b4d9105](https://github.com/SanXiaoXing/Astro_profile/commit/b4d9105))
@@ -253,6 +264,3 @@
 * docs: 更新README ([3979cd6](https://github.com/SanXiaoXing/Astro_profile/commit/3979cd6))
 * docs: 增加404页面显示图片 ([371db58](https://github.com/SanXiaoXing/Astro_profile/commit/371db58))
 * refactor(init): init file ([3f806ff](https://github.com/SanXiaoXing/Astro_profile/commit/3f806ff))
-
-
-
