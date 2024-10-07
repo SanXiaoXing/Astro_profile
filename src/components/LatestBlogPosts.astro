@@ -16,10 +16,6 @@ const postf = await getData();
 <ul data-pagefind-ignore="all">
     {postf.map((post) => (
       <li>
-        {/* <p class="date">
-          <FormattedDate date={post.data.pubDate} />
-        </p> */}
-        <br/>
         <a href={`/blog/${post.fileName}`}>
           <p class="title">{post.data.title}</p>
         </a>
@@ -75,7 +71,7 @@ const postf = await getData();
       ul li {
         display:inherit;
         width: 100%;
-        /* text-align: center; */
+        text-align: center;
       }
   
     }

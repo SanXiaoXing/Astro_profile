@@ -1,7 +1,6 @@
 ---
 import ContentCard from './ContentCard.astro'
 import { Card as ShadcnCard } from './ui/card'
-import { SquareArrowOutUpRight } from 'lucide-react'
 
 interface Props {
   title?: string
@@ -14,21 +13,16 @@ interface Props {
 
 const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
 ---
-<ShadcnCard
-  className={`card-animate transform-y-[-40%] align-start perspective-1200 group relative col-span-1 h-auto w-full flex-none transform justify-start overflow-hidden p-6 shadow-lg transition duration-300 ease-in-out divc group ${colSpan || 'md:col-span-2'} ${rowSpan || ''} ${href ? 'cursor-pointer' : ''}`}
->
-  {href ? (
-    <a href={href} className={`${colSpan} ${rowSpan}`}>
-      <ContentCard title={title} body={body}>
+<ShadcnCard className='divc'>
+  <a 
+    href={href} 
+    className={`card-animate transform-y-[-40%] align-start perspective-1200 group relative col-span-1 h-auto w-full flex-none transform justify-start overflow-hidden p-6 shadow-lg transition duration-300 ease-in-out  group ${colSpan || 'md:col-span-2'} ${rowSpan || ''}`}>
+      <ContentCard title={title} body={body} className="flex items-center justify-center text-center">
         <div class="moving-gradient-text"><slot /></div>
       </ContentCard>
-    </a>
-  ) : (
-    <ContentCard title={title} body={body}>
-      <div class="moving-gradient-text"><slot /></div>
-    </ContentCard>
-  )}
+  </a>
 </ShadcnCard>
+<link href="https://fonts.googleapis.com/css2?family=Edu+Australia+VIC+WA+NT+Hand+Guides&display=swap" rel="stylesheet">
 
 <style>
 .divc {
@@ -86,14 +80,18 @@ const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
 }
 
 .moving-gradient-text {
+  display: flex; 
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  text-align: center; /* 使文本在其容器内居中 */
+  width: 100%; /* 使其宽度占满父容器 */
+  font-family: 'Bradley Hand', monospace;
   font-size: 48px;
-  font-weight: bold;
   background: linear-gradient(270deg, #ff6ec4, #7873f5, #4adede);
   background-size: 600% 600%;
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
   animation: gradient-animation 8s ease infinite;
-  display: inline-block;
 }
 
 @keyframes gradient-animation {
