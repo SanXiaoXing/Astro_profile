@@ -3,6 +3,7 @@ import { getBlogPosts } from "../../content/config";
 import FormattedDate from "../../components/blog/FormattedDate.astro";
 import Layout from "../../layouts/Layout.astro";
 import PageFindSearch from '../../components/PageFind.astro';
+import MarqueeDemo from "../../components/ui/MarqueeDemo";
 
 const posts = (await getBlogPosts())
   ?.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());

@@ -6,6 +6,8 @@ import { Github, Mail, Rss, Gitlab } from 'lucide-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faGit} from '@fortawesome/free-brands-svg-icons'; // 如果是品牌图标
 import { faHouseSignal } from '@fortawesome/free-solid-svg-icons'; //如果是实心图标
+import HyperTxt from "../ui/HyperText"
+import ScollTxt from "../ui/Scoll"
 ---
 
 <Card colSpan="md:col-span-3" rowSpan="md:row-span-3">
@@ -20,16 +22,6 @@ import { faHouseSignal } from '@fortawesome/free-solid-svg-icons'; //如果是�
     <div class="flex flex-col justify-between gap-4 md:max-h-[300px]">
       <div class="flex h-full flex-col" style={{ justifyContent: 'center', display: 'flex', width: '100%', height: '100%' }}>
         <h1 class="hometitle">SanXiaoXing的博客</h1>
-        <br>
-        <div>
-          <div class="box">
-            <div class="word">欢迎来到快乐天地</div>
-            <div class="word">在这里可以感受到我的快乐</div>
-            <div class="word">天天开心呦~</div>
-            
-            <!-- 添加更多的 .word 元素 -->
-          </div>
-        </div>
       </div>
 
       <div class="flex gap-4">
@@ -84,69 +76,4 @@ import { faHouseSignal } from '@fortawesome/free-solid-svg-icons'; //如果是�
   .icon {
     width: 1.5rem; /* 调整为您想要的宽度 */
   }
-  .box {
-    font-size: 2rem; /* 设置字体大小为12px */
-    font-family: "STFangsong", "宋体", serif; /* 使用宋体 */
-    filter: contrast(24); /* 调整对比度 */
-    position: relative;
-    color: #a09b9b;
-    user-select: none;
-    display: flex; /* 使用flexbox布局让其居中 */
-    justify-content: center; /* 水平居中 */
-    align-items: center; /* 垂直居中 */
-}
-
-  .word {
-    filter: blur(0);
-    position: absolute;
-    left: 0;
-    /* top: 0; */
-    animation: changeWord 16s infinite ease-in-out;
-  }
-
-    @keyframes changeWord {
-    0%, 12.5%, 100% {
-      opacity: 1;
-      filter: blur(0);
-    }
-    37.5%, 62.5% {
-      opacity: 0;
-      filter: blur(64px);
-    }
-  }
-  @media screen and (min-width: 640px) and (max-width: 1000px) {
-    .hometitle {
-      font-size: 2.25rem;
-    } 
-    .box {
-      font-size: 1.5rem; /* 移动端字体大小为 1rem */
-    }
-    .word {
-      font-size: 1.5rem; /* 移动端字体大小为 1rem */
-    }
-  }
-    /* 设置移动端字体大小为1rem */
-  @media (max-width: 639px) {
-    .hometitle {
-      font-size: 2rem;
-    } 
-    .box {
-      font-size: 1.25rem; /* 移动端字体大小为 1rem */
-    }
-    .word {
-      font-size: 1.25rem; /* 移动端字体大小为 1rem */
-    }
-  }
 </style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const words = document.querySelectorAll('.word');
-    const duration = 16; // 动画的总时间（秒）
-    const delayIncrement = duration / words.length; // 每个词的延迟增量
-
-    words.forEach((word, index) => {
-      word.style.animationDelay = `-${index * delayIncrement}s`;
-    });
-  });
-</script>

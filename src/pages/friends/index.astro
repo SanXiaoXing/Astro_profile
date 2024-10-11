@@ -1,6 +1,7 @@
 ---
 import BlogPost from "../../layouts/BlogPost.astro";
 import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/friends.mjs';
+import MarqueeShow from "../../components/ui/MarqueeDemo";
 
 ---
 <BlogPost
@@ -25,6 +26,7 @@ import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/fri
         ))}
       </div>
       <br>
+      <MarqueeShow />
       <details>
         <summary>无效的友情链接</summary>
         <div class="card">
