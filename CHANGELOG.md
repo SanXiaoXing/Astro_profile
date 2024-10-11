@@ -1,3 +1,15 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.0.33](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.32...v0.0.33) (2024-10-11)
+
+
+### Features
+
+* 更新主界面链接按钮不能正常使用问题 ([00b5a4d](https://github.com/SanXiaoXing/Astro_profile/commit/00b5a4dc74db224f6559c8f24048f598c2caf539))
+* 新增动画效果 ([1237a7d](https://github.com/SanXiaoXing/Astro_profile/commit/1237a7dbd27bcd2811da02854eda2f23c4aaeb98))
+
 ## <small>0.0.32 (2024-10-07)</small>
 
 * chore(release): 0.0.32 ([3b6f5c8](https://github.com/SanXiaoXing/Astro_profile/commit/3b6f5c8))
@@ -260,6 +272,3 @@
 * docs: 更新README ([3979cd6](https://github.com/SanXiaoXing/Astro_profile/commit/3979cd6))
 * docs: 增加404页面显示图片 ([371db58](https://github.com/SanXiaoXing/Astro_profile/commit/371db58))
 * refactor(init): init file ([3f806ff](https://github.com/SanXiaoXing/Astro_profile/commit/3f806ff))
-
-
-
