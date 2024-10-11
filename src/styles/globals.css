@@ -407,14 +407,8 @@ pre:hover {
 	background: hsl(var(--primary)); /* 鼠标悬停时的滑块颜色 */
   }
 
-  figure {
-    padding: 10px;
-    text-align: center;
-  }
   figcaption {
-    padding: 5px;
-    text-align: center;
     color: var(--gray);
-    font-size: 0.8rem;
+    font-size: 1.5rem;
   }
 
