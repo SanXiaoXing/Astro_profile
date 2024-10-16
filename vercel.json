@@ -1,6 +1,5 @@
 {
-  "installCommand": "npm install",
-  "buildCommand": "astro build && pagefind --site dist",
+  "installCommand": "pnpm install",
   "outputDirectory": "dist",
   "github": {
     "silent": true
