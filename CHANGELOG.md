@@ -1,3 +1,14 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.0.35](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.34...v0.0.35) (2024-10-16)
+
+
+### Features
+
+* 更新友链及工作经验样式 ([ff66c12](https://github.com/SanXiaoXing/Astro_profile/commit/ff66c12b87321e88b858ef06f5a2e805c5ba55e9))
+
 ## [0.0.34](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.33...v0.0.34) (2024-10-11)
 
 
@@ -271,6 +282,3 @@
 * **globals.cdd:** 增加入场特效 ([b2ed81e](https://github.com/SanXiaoXing/Astro_profile/commit/b2ed81e8bd25bde4d889830be0794d8178181738))
 * **introcard.astro:** 更新界面 ([c3014ca](https://github.com/SanXiaoXing/Astro_profile/commit/c3014ca6dc5a80789851b73fd34bdb4f3fc3b73b))
 * **rss.xml.js:** 增加rss内容 ([71dc77a](https://github.com/SanXiaoXing/Astro_profile/commit/71dc77a2e17ba4b873a301762074e368a98818fa))
-
-
-
