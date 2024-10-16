@@ -4,85 +4,80 @@ import { cn } from "@/lib/utils";
 
 const reviews = [
   {
-    name: "Jack",
-    username: "@jack",
-    body: "I've never seen anything like this before. It's amazing. I love it.",
-    img: "https://avatar.vercel.sh/jack",
+    name: "AsyncX",
+    body: "🌌 Per Aspera Ad Astra ",
+    img: "https://blog.asyncx.top/favicon.svg",
+    link: "https://blog.asyncx.top/", 
   },
   {
-    name: "Jill",
-    username: "@jill",
-    body: "I don't know what to say. I'm speechless. This is amazing.",
-    img: "https://avatar.vercel.sh/jill",
+    name: "安知鱼",
+    body: "生活明朗，万物可爱",
+    img: "https://npm.elemecdn.com/anzhiyu-blog-static@1.0.4/img/avatar.jpg",
+    link: "https://blog.anheyu.com/",
   },
   {
-    name: "John",
-    username: "@john",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/john",
+    name: "张洪Heo",
+    body: "分享设计与科技生活",
+    img: "https://bu.dusays.com/2022/12/28/63ac2812183aa.png",
+    link: "https://blog.zhheo.com/", 
   },
   {
-    name: "Jane",
-    username: "@jane",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/jane",
+    name: "iMaeGoo’s Blog",
+    body: "虹墨空间站",
+    img: "https://cdn.jsdelivr.net/npm/imaegoo/avatar.jpg",
+    link: "https://www.imaegoo.com", // 添加链接
   },
   {
-    name: "Jenny",
-    username: "@jenny",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/jenny",
+    name: "椒盐豆豉",
+    body: "喜欢就买 不行就分 多喝热水",
+    img: "https://blog.douchi.space/dino.gif",
+    link: "https://blog.douchi.space/", // 添加链接
   },
   {
-    name: "James",
-    username: "@james",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/james",
+    name: "LongTao",
+    body: "Ewige Wiederkunft",
+    img: "https://pic.longtao.fun/pics/20210916/avatar.71pjc2scvak0.jpg",
+    link: "https://longtao.fun", // 添加链接
   },
 ];
+
 
 const firstRow = reviews.slice(0, reviews.length / 2);
 const secondRow = reviews.slice(reviews.length / 2);
 
-const ReviewCard = ({ img, name, username, body }) => {
+const ReviewCard = ({ img, name, body, link }) => {
   return (
-    <figure
-      className={cn(
-        "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-2",
-        "border-white bg-gray-950/[.01] hover:bg-gray-950/[.05]",
-        "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]",
-      )}
-    >
-      <div className="flex flex-row items-center gap-2">
-        <img className="rounded-full" width="32" height="32" alt="" src={img} />
+    <a href={link} target="_blank" rel="noopener noreferrer">
+      <figure className="flex items-center w-70 gap-4 p-4 border rounded-lg bg-gray-800 border-gray-700 hover:shadow-lg hover:bg-gray-500/[.15] transition-shadow duration-300">
+        <img className="w-16 h-16 rounded-full" alt={name} src={img} />
         <div className="flex flex-col">
-          <figcaption className="text-x font-medium dark:text-gray-950">
-            {name}
-          </figcaption>
-          {/* <div className="text-xs font-medium dark:text-white/40">{username}</div> */}
+          <figcaption className="font-bold text-white">{name}</figcaption>
+          <blockquote1 className="mt-1 text-gray-400 break-words">{body}</blockquote1>
         </div>
-      </div>
-      <blockquote1 className="mt-2 text-sm">{body}</blockquote1>
-    </figure>
+      </figure>
+    </a>
   );
 };
 
+
+
 export function MarqueeDemo() {
   return (
-    <div className="relative flex h-[300px] w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl">
+    <div className="relative flex h-350px] w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-transparent md:shadow-xl">
       <Marquee pauseOnHover className="[--duration:20s]">
         {firstRow.map((review) => (
-          <ReviewCard key={review.username} {...review} />
+          <ReviewCard key={review.img} {...review} />
         ))}
       </Marquee>
       <Marquee reverse pauseOnHover className="[--duration:20s]">
         {secondRow.map((review) => (
-          <ReviewCard key={review.username} {...review} />
+          <ReviewCard key={review.img} {...review} />
         ))}
       </Marquee>
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-gray-950/[.05] dark:from-background"></div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-gray-950/[.05] dark:from-background"></div>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent dark:from-background"></div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-transparent dark:from-background"></div>
     </div>
   );
 }
+
 export default MarqueeDemo;

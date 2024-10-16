@@ -10,6 +10,8 @@ import MarqueeShow from "../../components/ui/MarqueeDemo";
     pubDate={new Date("2024-03-29")}
     random={false}
   >
+    <MarqueeShow />
+    <div class="dashed-line"></div>
     <div class="friend-links">
       <div class="list-card">
         {friendLinksZh.map((link, index) => (
@@ -26,7 +28,7 @@ import MarqueeShow from "../../components/ui/MarqueeDemo";
         ))}
       </div>
       <br>
-      <MarqueeShow />
+      
       <details>
         <summary>无效的友情链接</summary>
         <div class="card">
@@ -55,6 +57,19 @@ import MarqueeShow from "../../components/ui/MarqueeDemo";
       </details>
       
       <style>
+        .dashed-line {
+        display: flex;
+        align-items: center;
+        margin: 20px 0;
+        margin-top: 50px; /* 设置评论内容和虚线之间的间距 */
+      }
+
+      .dashed-line::after {
+        content: "";
+        flex: 1;
+        border-bottom: 3px dashed #bbb; /* 设置虚线的颜色和样式 */
+        margin-left: 10px; /* 设置虚线和文字之间的间距 */
+      }
         
         .details {
           margin: 1rem 1rem 1rem 1rem;

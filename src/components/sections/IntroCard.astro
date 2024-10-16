@@ -6,8 +6,8 @@ import { Github, Mail, Rss, Gitlab } from 'lucide-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faGit} from '@fortawesome/free-brands-svg-icons'; // 如果是品牌图标
 import { faHouseSignal } from '@fortawesome/free-solid-svg-icons'; //如果是实心图标
-import HyperTxt from "../ui/HyperText"
-import ScollTxt from "../ui/Scoll"
+import { imageConfig } from 'astro:assets';
+import Dock from "../ui/DockTxt"
 ---
 
 <Card colSpan="md:col-span-3" rowSpan="md:row-span-3">
@@ -23,7 +23,6 @@ import ScollTxt from "../ui/Scoll"
       <div class="flex h-full flex-col" style={{ justifyContent: 'center', display: 'flex', width: '100%', height: '100%' }}>
         <h1 class="hometitle">SanXiaoXing的博客</h1>
       </div>
-
       <div class="flex gap-4">
         <a href={LINKS.github} aria-label="github profile" target="_blank">
           <Button aria-label="github profile">

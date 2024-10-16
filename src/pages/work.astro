@@ -1,75 +1,18 @@
 ---
 import { WORK } from '../lib/constants'
-import BaseLayout from '../layouts/Layout.astro'
+import BaseLayout from '../layouts/LayoutWork.astro'
 import TopLayout from '../layouts/TopLayout.astro'
 import BottomLayout from '../layouts/BottomLayout.astro'
 
 import { EXPERIENCE } from '../lib/constants'
 import { ViewTransitions } from 'astro:transitions'
+import Timeline from "../components/ui/TimeLine"
+
 ---
 
 <BaseLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
   <ViewTransitions />
-  <main class="flex min-h-[80vh] flex-auto flex-col" 
-      transition:animate="fade">
-    <TopLayout>
-      <h2
-        class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0"
-      >
-        {WORK.TITLE}
-      </h2>
-    </TopLayout>
-    <BottomLayout>
-      <ul>
-        {
-          EXPERIENCE.map((entry, index) => (
-            <li class="animate mt-4 border-b border-black/10 py-8 first-of-type:mt-0 first-of-type:pt-0 last-of-type:border-none dark:border-white/25">
-              <div class="mb-4 text-sm uppercase">
-                {entry.start} - {entry.end}
-              </div>
-              <div class="mb-4">
-                <a
-                  href={entry.link}
-                  class={`font-semibold text-primary text-xl uppercase`}
-                >
-                  {entry.company}
-                </a>
-              </div>
-              <div class="mb-4 text-x font-semibold">{entry.position}</div>
-              <article key={index} class="prose dark:prose-invert">
-                <ol>
-                  {entry.tasks.map((task, i) => (
-                    <li key={i}>
-                      <strong>{task.title}</strong>
-                      <br/>
-                      {Array.isArray(task.details) ? (
-                      <ul>
-                        {task.details.map((detail, j) => (
-                          typeof detail === 'string' ? (
-                            <li key={j}>{detail}</li>
-                          ) : (
-                          <li key={j}>
-                            <strong>{detail.subtitle}</strong>
-                            <ul>
-                              {detail.subdetails.map((subdetail, k) => (
-                              <li key={k}>{subdetail}</li>
-                              ))}
-                            </ul>
-                          </li>
-                          )
-                        ))}
-                      </ul>
-                      ): null}
-                    </li>
-                  ))}
-                </ol>
-              </article>
-            </li>
-          ))
-        }
-      </ul>
-    </BottomLayout>
-  </main>
+  <Timeline client:load/>
 </BaseLayout>
 
 <style>

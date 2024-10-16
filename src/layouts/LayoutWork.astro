@@ -1,0 +1,80 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import MobileHeader from "../components/MobileHeader.astro"; //移动端header
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer_blog.astro";
+type Props = CollectionEntry<"blog">["data"];
+
+const { title, description } =
+  Astro.props;
+---
+
+<!doctype html>
+<html lang="zh">
+  <head>
+    <BaseHead  title={title} description={description} />
+    <script id="MathJax-script" async src="https://img.asyncx.top/hexo/js/mathjax.js"></script>
+    <script defer src="https://umami.sanxiaoxing.cn/script.js" data-website-id="ea11c5c3-4f18-44b9-8bfd-9e168a49edab"></script>
+  </head>
+  <body>
+    <!-- <Mouse /> -->
+    <Header title="SanXiaoXing"/>
+    <MobileHeader title="SanXiaoXing" />
+    <main_work transition:animate="fade">
+    <slot />
+	</main_work>
+    <Footer />
+    <div id="back-to-top" aria-label="Back to top">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#FFD43B" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM135.1 217.4l107.1-99.9c3.8-3.5 8.7-5.5 13.8-5.5s10.1 2 13.8 5.5l107.1 99.9c4.5 4.2 7.1 10.1 7.1 16.3c0 12.3-10 22.3-22.3 22.3H304v96c0 17.7-14.3 32-32 32H240c-17.7 0-32-14.3-32-32V256H150.3C138 256 128 246 128 233.7c0-6.2 2.6-12.1 7.1-16.3z"/></svg>
+    </div>
+  </body>
+  <style>
+    #back-to-top {
+      display: none; /* 默认隐藏按钮 */
+      position: fixed; /* 让按钮固定在页面右下角 */
+      bottom: 20px;
+      right: 40px;
+      background-color: hsl(var(--background)); /* 按钮背景颜色 */
+      border: none;
+      border-radius: 50%; /* 让按钮呈现圆形 */
+      padding: 10px;
+      cursor: pointer;
+      width: 40px; /* 按钮宽度 */
+      height: 40px; /* 按钮高度 */
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* 添加阴影效果 */
+      z-index: 9999;
+      transition: .5s all;
+    }
+    #back-to-top:hover {
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0px 0px 90px 10px rgba(255, 179, 0, 0.547);
+    }
+    /* @media (max-width: 1024px) {
+      #back-to-top {
+        display: none !important;
+      }
+    } */
+  </style>
+  <script>
+    // 获取 ID 为 'back-to-top' 的元素
+    const backToTopButton = document.getElementById("back-to-top");
+
+    // 监听 window 对象的 'scroll' 事件
+    window.addEventListener("scroll", () => {
+      // 如果页面垂直滚动距离大于 100，显示返回顶部按钮
+      if (window.pageYOffset > 100) {
+        backToTopButton.style.display = "block";
+      } else {
+        // 否则，隐藏返回顶部按钮
+        backToTopButton.style.display = "none";
+      }
+    });
+
+    // 监听返回顶部按钮的 'click' 事件
+    backToTopButton.addEventListener("click", () => {
+      // 平滑滚动到页面顶部
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</html>
