@@ -1,8 +1,9 @@
-# Changelog
+## [0.0.40](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.39...v0.0.40) (2024-10-17)
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [0.0.40](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.39...v0.0.40) (2024-10-17)
+### Bug Fixes
+
+* 更新pnpm丢失问题 ([06ddd45](https://github.com/SanXiaoXing/Astro_profile/commit/06ddd45110887f90617b36ef57d602bfd518b444))
 
 
 ### Features
@@ -10,9 +11,6 @@ All notable changes to this project will be documented in this file. See [standa
 * 主界面增加欢迎词 ([0312995](https://github.com/SanXiaoXing/Astro_profile/commit/0312995d7354751f96249979cfdbf8ff6b327e16))
 
 
-### Bug Fixes
-
-* 更新pnpm丢失问题 ([06ddd45](https://github.com/SanXiaoXing/Astro_profile/commit/06ddd45110887f90617b36ef57d602bfd518b444))
 
 ## [0.0.39](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.38...v0.0.39) (2024-10-16)
 
@@ -333,3 +331,6 @@ All notable changes to this project will be documented in this file. See [standa
 * **globals.cdd:** 增加入场特效 ([b2ed81e](https://github.com/SanXiaoXing/Astro_profile/commit/b2ed81e8bd25bde4d889830be0794d8178181738))
 * **introcard.astro:** 更新界面 ([c3014ca](https://github.com/SanXiaoXing/Astro_profile/commit/c3014ca6dc5a80789851b73fd34bdb4f3fc3b73b))
 * **rss.xml.js:** 增加rss内容 ([71dc77a](https://github.com/SanXiaoXing/Astro_profile/commit/71dc77a2e17ba4b873a301762074e368a98818fa))
+
+
+
