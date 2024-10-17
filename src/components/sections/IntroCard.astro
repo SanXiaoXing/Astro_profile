@@ -7,7 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faGit} from '@fortawesome/free-brands-svg-icons'; // 如果是品牌图标
 import { faHouseSignal } from '@fortawesome/free-solid-svg-icons'; //如果是实心图标
 import { imageConfig } from 'astro:assets';
-import Dock from "../ui/DockTxt"
+import { FlipWords } from "../ui/flip-words"
+
+const words = ["你好，欢迎来到我的博客", "这是我的开心乐园", "这里记录我的技术成长", "努力向上，天天开心啊！"];
 ---
 
 <Card colSpan="md:col-span-3" rowSpan="md:row-span-3">
@@ -22,6 +24,9 @@ import Dock from "../ui/DockTxt"
     <div class="flex flex-col justify-between gap-4 md:max-h-[300px]">
       <div class="flex h-full flex-col" style={{ justifyContent: 'center', display: 'flex', width: '100%', height: '100%' }}>
         <h1 class="hometitle">SanXiaoXing的博客</h1>
+      </div>
+      <div class="h-[10rem] flex justify-center items-center px-1">
+        <FlipWords words={words} duration={2000} className="text-4xl font-simsun" client:load />
       </div>
       <div class="flex gap-4">
         <a href={LINKS.github} aria-label="github profile" target="_blank">
@@ -74,5 +79,8 @@ import Dock from "../ui/DockTxt"
   }
   .icon {
     width: 1.5rem; /* 调整为您想要的宽度 */
+  }
+  .font-simsun {
+  font-family: 'SimSun', serif;
   }
 </style>
