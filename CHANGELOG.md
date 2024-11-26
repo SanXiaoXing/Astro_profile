@@ -1,3 +1,14 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.0.41](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.40...v0.0.41) (2024-11-26)
+
+
+### Bug Fixes
+
+* fix vercel.json ([4b72887](https://github.com/SanXiaoXing/Astro_profile/commit/4b728875720a1523f97f7ea13f326ffe99e4f6d7))
+
 ## [0.0.40](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.39...v0.0.40) (2024-10-17)
 
 
