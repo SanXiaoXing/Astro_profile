@@ -9,6 +9,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["./src/env.d.ts", "**/*.ts", "**/*.tsx", "src/components/ui/TextReveal.jsx"],
+  "include": ["./src/env.d.ts", "**/*.ts", "**/*.tsx", "src/components/ui/TextReveal.jsx", "src/components/ui/morphing-text.jsx"],
   "exclude": ["dist"]
 }

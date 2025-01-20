@@ -7,7 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faGit} from '@fortawesome/free-brands-svg-icons'; // 如果是品牌图标
 import { faHouseSignal } from '@fortawesome/free-solid-svg-icons'; //如果是实心图标
 import { imageConfig } from 'astro:assets';
-import { FlipWords } from "../ui/flip-words"
+import { FlipWords } from "../ui/flip-words";
+import MorphingText from "../ui/morphing-text";
 
 const words = ["你好，欢迎来到我的博客", "这是我的开心乐园", "这里记录我的技术成长", "努力向上，天天开心啊！"];
 ---
@@ -27,6 +28,7 @@ const words = ["你好，欢迎来到我的博客", "这是我的开心乐园", 
       </div>
       <div class="h-[10rem] flex justify-center items-center px-1">
         <FlipWords words={words} duration={2000} className="text-4xl font-simsun" client:load />
+        <!-- <MorphingText client:load texts={["Hello", "World", "Welcome"]} /> -->
       </div>
       <div class="flex gap-4">
         <a href={LINKS.github} aria-label="github profile" target="_blank">
