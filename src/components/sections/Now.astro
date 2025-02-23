@@ -3,16 +3,16 @@ import Card from '../Card.astro'
 import Pulse from '../Pulse.astro'
 ---
 
-<Card colSpan="md:col-span-1" rowSpan="md:row-span-2">
-  <div class="mb-2 flex w-full items-start justify-between">
-    <div class="flex flex-col">
-      <strong><h2 class="text-xl" >Now</h2></strong>
-      <a href="https://sive.rs/nowff" target="_blank">
-        <span class="cursor-pointer text-xs text-gray-500">What's that ?</span>
-      </a>
+<Card 
+  href='https://cv.sanxiaoxing.cn'
+  colSpan="md:col-span-1" rowSpan="md:row-span-2" title='Now'>
+  <br>
+    <div class="flex flex-row justify-between">
+      <span class="cursor-pointer text-ms text-gray-500">点击查看简历</span>
+      <br>
+      <Pulse />
     </div>
-    <br>
-    <Pulse />
-  </div>
+    
+    
   <p class="text-l">目前在寻求新的职业发展机会</p>
 </Card>

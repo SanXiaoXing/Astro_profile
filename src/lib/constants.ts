@@ -9,7 +9,7 @@ export const loaderAnimation = [
 export const LINKS = {
   github: 'https://github.com/SanXiaoXing',
   linkedin: 'https://www.linkedin.com/in/bue221/',
-  mail: 'mailto:yanxing1137@gmail.com',
+  mail: 'mailto:mail@sanxiaoxing.cn',
   instagram: '',
   medium: '',
   discord: '',
