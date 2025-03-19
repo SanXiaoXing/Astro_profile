@@ -1,3 +1,20 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.0.42](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.41...v0.0.42) (2025-03-19)
+
+
+### Features
+
+* 新增隐藏文章 ([ba2a8ea](https://github.com/SanXiaoXing/Astro_profile/commit/ba2a8eade458bdaf42ed915a9ca4cce98476f0c0))
+
+
+### Bug Fixes
+
+* 更新ssh文章内容错误及更新日期错误 ([54ae2d5](https://github.com/SanXiaoXing/Astro_profile/commit/54ae2d584915617e8945fee829c3fb5cc30e3cec))
+* fix Paragraph indentation ([8c69eaf](https://github.com/SanXiaoXing/Astro_profile/commit/8c69eaff142701342ebf246bfdc7f98ce403ba0a))
+
 ## [0.0.41](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.40...v0.0.41) (2024-11-26)
 
 
@@ -340,6 +357,3 @@
 * **globals.cdd:** 增加入场特效 ([b2ed81e](https://github.com/SanXiaoXing/Astro_profile/commit/b2ed81e8bd25bde4d889830be0794d8178181738))
 * **introcard.astro:** 更新界面 ([c3014ca](https://github.com/SanXiaoXing/Astro_profile/commit/c3014ca6dc5a80789851b73fd34bdb4f3fc3b73b))
 * **rss.xml.js:** 增加rss内容 ([71dc77a](https://github.com/SanXiaoXing/Astro_profile/commit/71dc77a2e17ba4b873a301762074e368a98818fa))
-
-
-
