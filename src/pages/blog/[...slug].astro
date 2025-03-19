@@ -1,24 +1,19 @@
 ---
-import { getBlogPosts } from "../../content/config";
+import { getCollection } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
 import TableOfContents from '../../components/blog/utils/TableOfContents.astro';
 import { ViewTransitions } from 'astro:transitions';
 
 export async function getStaticPaths() {
-    const pages = await getBlogPosts();
-
-    const paths = pages.map((page) => {
-        return {
-            params: { slug: page.fileName },
-            props: page,
-        };
-    });
-
-    return paths;
+    const allPosts = await getCollection('blog'); // 获取原始未过滤数据
+    return allPosts.map(page => ({
+        params: { slug: page.slug }, // 直接使用内容集合的slug
+        props: { page }
+    }));
 }
 
-const { slug } = Astro.params; // 删除了lang
-const page = Astro.props;
+const { page } = Astro.props;
+// const page = Astro.props;
 const { Content, headings, remarkPluginFrontmatter } = await page.render();
 
 ---

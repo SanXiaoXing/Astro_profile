@@ -223,114 +223,124 @@ h4 {
 h5 {
 	font-size: 1.2em;
 }
-.headline h1 {
-  font-size: 2em;
-  font-weight: bold;  
-  font-family: "黑体", sans-serif; 
-  position: relative;
-  padding-left: 0rem; /* 可以调整以适应你的布局 */
-  line-height: 2; 
-  counter-reset: h2-counter;
+.headline h1,
+.headline h2,
+.headline h3,
+.headline h4 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 24px;
+  margin-bottom: 16px;
 }
 
-.headline h1::before {
-  content: counter(h1-counter,upper-roman) " ";
-  counter-increment: h1-counter;
-  font-weight: bold;
-  margin-right: 10px;
-  text-transform: uppercase;  /* 转换为大写 */
+.headline h1 {
+  font-size: 2em;
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
 }
 
 .headline h2 {
-  font-weight: bold;  /* 加粗效果 */
-  font-family: "黑体", sans-serif; 
-  position: relative;
-  padding-left: 0rem; /* 可以调整以适应你的布局 */
-  line-height: 2; 
-  counter-reset: h3-counter;
-}
-
-.headline h2::before {
-  content: counter(h1-counter) "." counter(h2-counter) " ";  /* h1.h2 格式 */
-  counter-increment: h2-counter;  /* 每个 h2 递增 h2 计数器 */
-  font-weight: bold;
-  margin-right: 10px;
+  font-size: 1.5em;
 }
 
 .headline h3 {
-  font-family: "黑体", sans-serif; 
-  font-weight: bold;  /* 加粗效果 */
-  position: relative;
-  padding-left: 0rem; /* 可以调整以适应你的布局 */
-  line-height: 2; 
-}
-
-.headline h3::before {
-  content: counter(h1-counter) "." counter(h2-counter) "." counter(h3-counter) " ";  /* h1.h2.h3 格式 */
-  counter-increment: h3-counter;  /* 每个 h3 递增 h3 计数器 */
-  font-weight: bold;
-  margin-right: 10px;
+  font-size: 1.25em;
 }
 
 .headline h4 {
-  font-family: "黑体", sans-serif; 
-  font-weight: bold;  /* 加粗效果 */
-  position: relative;
-  padding-left: 0rem; 
+  font-size: 1em;
 }
 .headline p {
-  text-indent: 2em; /* 段前空两格 */
-  line-height: 1.5; 
-  font-size: 12pt; /* 文字大小为小四 */
+  text-indent: 0; /* 移除段首缩进 */
+  margin-top: 0;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  font-size: 16px; /* GitHub正文大小 */
 }
+
 .headline a {
+  background: linear-gradient(to right, var(--hc) 50%, transparent 50%);
+  background-size: 200% 100%;
+  background-position: right bottom;
+  margin: -0.25rem;
+  padding: 0.25rem;
   color: var(--hc);
   text-decoration: none;
-  transition: 0.2s ease;
-  font-family: var(--font-family-mono)
+  transition: 
+    color 0.3s ease-in-out, 
+    background-position 0.3s ease-in-out;
+  border-radius: 5px;
+  display: inline-block;
 }
+
 .headline a:hover {
-  transition: 0.2s ease;
-  color: var(--orange);
-  text-decoration: underline;
-  text-decoration-style: dashed; /* 设置下划线为虚线 */
+  background-position: left bottom;
+  color: var(--bgc);
 }
-
 .headline blockquote {
-	border-left: 10px solid hsl(var(--primary));
-	padding:0.1rem 1rem;
-	margin: 1rem 0 0 0;
-	background-color: #00000030;
-	border-radius: 10px;
+  border-left: 4px solid hsl(var(--primary));
+	margin: 0.1rem 1rem;
+  padding: 0 16px;
+  margin: 16px 0;
+  background-color: #00000030;
 }
 
-.headline ol {
-  list-style-type: decimal; /* 有序列表样式 */
-  padding-left: 20px; /* 列表内边距 */
-  line-height: 1.5; 
+.headline ol,
+.headline ul {
+  list-style-type: decimal;
+  padding-left: 2em;
+  margin-top: 0;
+  margin-bottom: 16px;
 }
 
 .headline ul {
-  list-style-type: disc; /* 无序列表样式 */
-  padding-left: 20px; /* 列表内边距 */
-  padding-top: 10px;
+  list-style-type: disc;
 }
 
-.headline li {
-  margin-bottom: 10px; /* 列表项下边距 */
-}
-.headline li li li{
-  margin-bottom: 10px; /* 列表项下边距 */
+.headline ul ul {
   list-style-type: circle;
 }
 
-.headline li p {
-  text-indent: 0; /* 去掉缩进 */
+.headline ul ul ul {
+  list-style-type: square;
 }
 
+.headline li {
+  margin-bottom: 0.25em;
+  line-height: 1.5;
+}
+
+.headline li > p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* 代码块样式（GitHub风格） */
+.headline pre {
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  padding: 16px;
+  overflow: auto;
+  line-height: 1.45;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.headline code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 85%;
+  background-color: var(--font-family-mono);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+.headline strong{
+  font-weight: bold;
+}
 strong,
 b {
-	font-weight: 700;
+  font-weight: 800 !important;
 }
 
 p {

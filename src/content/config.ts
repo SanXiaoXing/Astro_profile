@@ -14,6 +14,7 @@ const blog = defineCollection({
 	// Type-check frontmatter using a schema
 	schema: z.object({
 		pin: z.boolean().optional(), //置顶
+		hidden: z.boolean().optional(),
 		title: z.string(),
 		description: z.string(),
 		pubDate: z.coerce.date(),
@@ -27,11 +28,10 @@ const blog = defineCollection({
 
 export const collections = {
 	blog,
-	// docs: defineCollection({ schema: docsSchema() }),
 };
 
 export async function getBlogPosts() {
-	const posts = await getCollection('blog');
+	const posts = await getCollection('blog', ({ data }) => !data.hidden);
 
 	return posts.map((post) => {
 		const fileName = post.id.split('/').pop(); // 提取文件名称部分
