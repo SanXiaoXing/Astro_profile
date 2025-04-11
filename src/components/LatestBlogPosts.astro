@@ -1,6 +1,5 @@
 ---
 import { getBlogPosts } from "../content/config";
-import FormattedDate from "./blog/FormattedDate.astro";
 
 export async function getData() {
   const postf = await getBlogPosts();
@@ -13,66 +12,23 @@ export async function getData() {
 const postf = await getData();
 ---
 
-<ul data-pagefind-ignore="all">
-    {postf.map((post) => (
-      <li>
-        <a href={`/blog/${post.fileName}`}>
-          <p class="title">{post.data.title}</p>
-        </a>
-      </li>
-    ))}
+<ul class="flex-wrap gap-8 list-none m-0 p-0" data-pagefind-ignore="all">
+  {postf.map((post) => (
+    <li class="flex mt-4">
+      <a href={`/blog/${post.fileName}`} class="flex font-mono text-[var(--hc)] no-underline hover:text-[var(--orange)]">
+        <p class="m-0 leading-none">{post.data.title}</p>
+      </a>
+    </li>
+  ))}
 </ul>
 
 <style>
-    main {
-      width: 960px;
-    }
+  @media (max-width: 720px) {
     ul {
-      /* display: flex; */
-      flex-wrap: wrap;
-      gap: 2rem;
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
+      @apply gap-2;
     }
     ul li {
-      display: flex;
-      margin-top: 1rem;
+      @apply block w-full text-center;
     }
-    ul li a {
-      display: flex;
-      font-family: var(--font-family-mono);
-    }
-    .title {
-      margin: 0;
-      line-height: 1;
-    }
-    .date {
-      font-family: var(--font-family-mono);
-      
-      padding-right: 2rem;
-      margin: 0;
-      color: var(--gray);
-    }
-  
-    /* 标题变色: */
-    ul li a:hover {
-      color: var(--orange);
-      text-decoration: none;
-    }
-    ul li a {
-      color: var(--hc);
-      text-decoration: none;
-    }
-    @media (max-width: 720px) {
-      ul {
-        gap: 0.5em;
-      }
-      ul li {
-        display:inherit;
-        width: 100%;
-        text-align: center;
-      }
-  
-    }
-  </style>
+  }
+</style>
