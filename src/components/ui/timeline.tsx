@@ -43,9 +43,23 @@ export const Timeline = () => {
           Changelog from my working life
         </h2>
         <br />
-        <p className="text-neutral-500 text-lg md:text-base max-w-sm">
-          I&apos;ve been working in Beijing for the past 1 years. Here&apos;s
-          a timeline of my working experiences.
+        <p className="text-neutral-500 text-lg md:text-base max-w-md">
+          {(() => {
+            // 计算工作年限
+            const startDate = new Date('2023-07'); // 开始工作的时间
+            const now = new Date();
+            const years = now.getFullYear() - startDate.getFullYear();
+            const months = now.getMonth() - startDate.getMonth();
+            const totalMonths = years * 12 + months;
+            const displayYears = Math.floor(totalMonths / 12);
+            const displayMonths = totalMonths % 12;
+            
+            const timeString = displayYears > 0 
+              ? `${displayYears} year${displayYears > 1 ? 's' : ''} ${displayMonths > 0 ? `and ${displayMonths} month${displayMonths > 1 ? 's' : ''}` : ''}`
+              : `${displayMonths} month${displayMonths > 1 ? 's' : ''}`;
+            
+            return `I've been working in Beijing for ${timeString}. Here's a timeline of my working experiences.`;
+          })()}
         </p>
       </div>
 
@@ -59,19 +73,21 @@ export const Timeline = () => {
               <div className="h-10 absolute left-3 md:left-3 w-10 rounded-full bg-neutral-700 dark:bg-black flex items-center justify-center">
                 <div className="h-4 w-4 rounded-full bg-neutral-600 dark:bg-neutral-800 border border-neutral-400 dark:border-neutral-700 p-2" />
               </div>
-              <h3 className="hidden md:block text-xl md:pl-20 md:text-4xl font-bold text-neutral-500 dark:text-neutral-500 ">
-                {item.start}
+              <h3 className="hidden md:block text-xl md:pl-20 md:text-3xl font-bold text-neutral-500 dark:text-neutral-500 ">
+                {item.start} - {item.end}
               </h3>
             </div>
 
             <div className="relative pl-20 pr-4 md:pl-4 w-full">
-              <h3 className="md:hidden block text-4xl mb-4 text-left font-bold text-neutral-500 dark:text-neutral-500">
-                {item.start}
+              <h3 className="md:hidden block text-2xl mb-4 text-left font-bold text-neutral-500 dark:text-neutral-500">
+                {item.start} - {item.end}
               </h3>
               <div className="font-semibold text-lg text-primary dark:text-neutral-300">
-                {item.position} @ {item.company}
+                {item.position} 
               </div>
               <div className="text-neutral-500 dark:text-neutral-400">
+              @ {item.company}
+                <br />
                 {item.location}
               </div>
 

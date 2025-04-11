@@ -1,12 +1,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<div class="post-comments">
-  <div class="dashed-line"></div>
-  <div class="comment-container">
-    <i class="fa-solid fa-comments fa-beat-fade"></i>&nbsp;&nbsp;&nbsp;
-    <div class="characters">评论</div>
-  </div>
+<div class="flex flex-col items-center w-full">
+  <div class="flex items-center w-full my-5 mt-12"></div>
+  <button id="comment-toggle" class="inline-flex items-center justify-center px-4 py-3 transition-all duration-500 bg-opacity-20 border border-solid rounded-lg cursor-pointer bg-black/20 hover:border-[var(--current-line)] hover:shadow-[0_0_100px_10px_rgba(6,56,238,0.55)] group relative">
+    <i class="fa-solid fa-comments fa-beat-fade text-lg mr-2 text-blue-400 group-hover:text-blue-300"></i>
+    <span class="text-gray-200 group-hover:text-white">展开评论</span>
+    <span id="comment-count" class="hidden absolute -top-2 -right-2 flex items-center justify-center w-5 h-5 text-xs font-bold text-white rounded-full bg-gradient-to-r from-blue-400 to-blue-600 shadow-lg"></span>
+  </button>
   
-  <div class="post-comments-content twikoo" id="comment">
+  <div class="w-full max-w-3xl mt-5 transition-all duration-300 ease-in-out" id="comment">
     <div id="twikoo-comments"></div>
     <script src="//cdn.jsdelivr.net/npm/twikoo@1.6.36/dist/twikoo.all.min.js" is:inline></script>
     <script>
@@ -15,72 +16,118 @@
         el: '#twikoo-comments',
       });
     </script>
+    <script>
+      // 声明全局接口扩展
+      declare global {
+        interface Window {
+          getCommentCount?: () => void;
+        }
+      }
+      // 将getCommentCount函数定义在全局作用域
+      window.getCommentCount = function() {
+        // 获取当前页面URL
+        const currentPath = window.location.pathname;
+        
+        if (window.twikoo && typeof window.twikoo.getCommentsCount === 'function') {
+          window.twikoo.getCommentsCount({
+            envId: 'https://blog-twikoo.sanxiaoxing.cn/',
+            urls: [currentPath],
+            includeReply: true
+          }).then(function (res) {
+            const countBadge = document.getElementById('comment-count');
+            if (countBadge && res.length > 0 && res[0].count > 0) {
+              countBadge.textContent = res[0].count;
+              countBadge.classList.remove('hidden');
+              // 添加动画效果
+              countBadge.classList.add('comment-count-show');
+            }
+          }).catch(function (err) {
+            console.error('获取评论数量失败:', err);
+          });
+        } else {
+          console.warn('twikoo.getCommentsCount 不可用');
+        }
+      };
+      
+      // 页面加载完成后获取评论数量
+      window.addEventListener('load', window.getCommentCount);
+    </script>
   </div>
 </div>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  function initCommentSection() {
     const commentSection = document.getElementById('comment');
+    const commentToggle = document.getElementById('comment-toggle');
+    
+    // 默认隐藏评论区
     if(commentSection) {
-      commentSection.style.display = 'block';
+      commentSection.style.display = 'none';
     }
+    
+    // 添加点击事件监听器
+    if(commentToggle) {
+      commentToggle.addEventListener('click', () => {
+        if(commentSection) {
+          if(commentSection.style.display === 'none') {
+            commentSection.style.display = 'block';
+            commentToggle.querySelector('span:not(#comment-count)').textContent = '收起评论';
+            commentToggle.classList.add('active-comment');
+          } else {
+            commentSection.style.display = 'none';
+            commentToggle.querySelector('span:not(#comment-count)').textContent = '展开评论';
+            commentToggle.classList.remove('active-comment');
+          }
+        }
+      });
+    }
+    
+    // 获取评论数量
+    getCommentCount();
+  }
+  
+  // 页面加载时初始化
+  document.addEventListener('DOMContentLoaded', initCommentSection);
+  
+  // 监听导航事件
+  document.addEventListener('astro:after-swap', () => {
+    initCommentSection();
+    // 页面导航后重新获取评论数量
+    setTimeout(() => {
+      if (typeof window.getCommentCount === 'function') {
+        window.getCommentCount();
+      }
+    }, 300);
   });
 </script>
 
-  <style>
-      .tabs {
-        max-width: 300px;
-        display: flex;
-        align-items: flex-end;
-        flex-wrap: wrap;
-        width: 100%;
-        border-radius: 10px;
-        padding: 0.25rem;
-        background-color: #00000030;
-        color: #a6adba;
-        transition: all .5s;
-        border: #00000030 solid 1px;
-      }
-      .tabs:hover{
-        border: var(--hc) solid 1px;
-        box-shadow: 0px 0px 30px 1px rgba(150, 222, 255, 0.303);
-      }
-      .dashed-line {
-        display: flex;
-        align-items: center;
-        margin: 20px 0;
-        margin-top: 50px; /* 设置评论内容和虚线之间的间距 */
-      }
-
-      .dashed-line::after {
-        content: "";
-        flex: 1;
-        border-bottom: 3px dashed #bbb; /* 设置虚线的颜色和样式 */
-        margin-left: 10px; /* 设置虚线和文字之间的间距 */
-      }
-      .comment-icon {
-        width: 2px; /* SVG 图标的宽度 */
-        height: 2px; /* SVG 图标的高度 */
-        margin-right: 8px; /* SVG 图标与文字之间的间距 */
-      }
-
-      .comment-container {
-        display: inline-flex; /* 设为inline-flex布局 */
-        align-items: center;
-        border: var(--bgc) solid 1px;
-        box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.2);
-        justify-content: center; /* 水平居中 */
-        padding: 10px; /* 边框内边距 */ 
-        background-color: #00000030;
-        border-radius: 10px;
-        transition: .5s all;
-      }
-      .comment-container:hover {
-        transition: all .3s;
-        border: var(--current-line) solid 1px;
-        box-shadow: 0px 0px 100px 10px rgba(6, 56, 238, 0.547);
-      }
-
-      .post-comments-content {
-        margin-top: 20px; /* 设置评论内容和虚线之间的间距 */
-      }
-  </style>
+<style>
+  /* 当按钮处于激活状态时的样式 */
+  .active-comment {
+    @apply border-blue-500 shadow-[0_0_30px_1px_rgba(59,130,246,0.5)] bg-black/30;
+  }
+  
+  /* 评论数量徽章样式 */
+  #comment-count {
+    @apply transition-all duration-300 ease-in-out transform scale-0;
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  }
+  
+  /* 评论数量徽章显示动画 */
+  .comment-count-show {
+    @apply scale-100 !important;
+    animation: pulse-badge 2s infinite;
+  }
+  
+  @keyframes pulse-badge {
+    0% {
+      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 6px rgba(59, 130, 246, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+  }
+</style>
