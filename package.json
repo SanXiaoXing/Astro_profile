@@ -1,9 +1,9 @@
 {
   "name": "@area44/astro-shadcn-ui-template",
-  "version": "0.0.42",
+  "version": "1.1.0",
   "description": "An Astro template for building apps.",
   "author": {
-    "name": "AREA44"
+    "name": "SanXiaoXing"
   },
   "license": "MIT",
   "scripts": {

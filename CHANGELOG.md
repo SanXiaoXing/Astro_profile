@@ -1,3 +1,15 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [1.1.0](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.42...v1.1.0) (2025-04-11)
+
+
+### Features
+
+* enhance comments and add work content section ([223e68f](https://github.com/SanXiaoXing/Astro_profile/commit/223e68f98c668baeeeeb32acf76c30bd29f0c69d))
+* update the LeedCode exercise ([9481272](https://github.com/SanXiaoXing/Astro_profile/commit/9481272415b28166d110f62320ec756f8e531492))
+
 ## [0.0.42](https://github.com/SanXiaoXing/Astro_profile/compare/v0.0.41...v0.0.42) (2025-03-19)
 
 
@@ -355,6 +367,3 @@
 * **globals.cdd:** 增加入场特效 ([b2ed81e](https://github.com/SanXiaoXing/Astro_profile/commit/b2ed81e8bd25bde4d889830be0794d8178181738))
 * **introcard.astro:** 更新界面 ([c3014ca](https://github.com/SanXiaoXing/Astro_profile/commit/c3014ca6dc5a80789851b73fd34bdb4f3fc3b73b))
 * **rss.xml.js:** 增加rss内容 ([71dc77a](https://github.com/SanXiaoXing/Astro_profile/commit/71dc77a2e17ba4b873a301762074e368a98818fa))
-
-
-
