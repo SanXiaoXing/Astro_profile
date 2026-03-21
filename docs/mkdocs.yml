@@ -1,0 +1,53 @@
+site_name: Astro Profile Docs
+site_description: 个人博客项目文档与问题记录
+site_author: SanXiaoXing
+repo_url: https://github.com/SanXiaoXing/Astro_profile
+repo_name: SanXiaoXing/Astro_profile
+
+theme:
+  name: material
+  language: zh
+  palette:
+    # 默认深色模式 (与博客主题一致)
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: orange
+      toggle:
+        icon: material/weather-night
+        name: 切换到浅色模式
+    # 浅色模式
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: orange
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到深色模式
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - 简介: index.md
+  - 更新日志: changelog.md
+  - 问题记录:
+    - 视图过渡与 JS 初始化问题: issues/view-transitions-js-init.md

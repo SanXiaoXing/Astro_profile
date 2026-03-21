@@ -99,7 +99,8 @@
   
   document.addEventListener('DOMContentLoaded', initCommentSection);
   
-  document.addEventListener('astro:after-swap', () => {
+  // 监听 Astro 视图过渡事件
+  document.addEventListener('astro:page-load', () => {
     initCommentSection();
     setTimeout(() => {
       if (typeof window.getCommentCount === 'function') {

@@ -105,48 +105,70 @@ const { title, description } =
     }
   </style>
   <script>
-    // 获取元素
-    const progressWrap = document.querySelector('.progress-wrap');
-    const progressPath = document.querySelector('.progress-wrap path') as SVGPathElement;
-
-    if (progressWrap && progressPath) {
-      const pathLength = progressPath.getTotalLength();
-      
-      // 初始化进度条
-      progressPath.style.transition = 'none';
-      progressPath.style.strokeDasharray = pathLength + ' ' + pathLength;
-      progressPath.style.strokeDashoffset = String(pathLength);
-      progressPath.getBoundingClientRect();
-      progressPath.style.transition = 'stroke-dashoffset 10ms linear';
-
-      // 更新进度条
-      const updateProgress = function () {
-        const scroll = window.scrollY || window.pageYOffset;
-        const height = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = pathLength - (scroll * pathLength / height);
-        progressPath.style.strokeDashoffset = String(progress);
+    declare global {
+      interface Window {
+        _scrollHandler?: () => void;
+        _clickHandler?: (e: Event) => void;
       }
-
-      // 监听滚动事件
-      window.addEventListener('scroll', () => {
-        updateProgress();
-        
-        // 显示/隐藏按钮
-        if (window.pageYOffset > 100) {
-          progressWrap.classList.add('active-progress');
-        } else {
-          progressWrap.classList.remove('active-progress');
-        }
-      });
-
-      // 初始更新一次
-      updateProgress();
-
-      // 点击返回顶部
-      progressWrap.addEventListener("click", (e) => {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
     }
+
+    function initBackToTop() {
+      const progressWrap = document.querySelector('.progress-wrap');
+      const progressPath = document.querySelector('.progress-wrap path') as SVGPathElement;
+
+      if (progressWrap && progressPath) {
+        const pathLength = progressPath.getTotalLength();
+        
+        // 初始化进度条
+        progressPath.style.transition = 'none';
+        progressPath.style.strokeDasharray = pathLength + ' ' + pathLength;
+        progressPath.style.strokeDashoffset = String(pathLength);
+        progressPath.getBoundingClientRect();
+        progressPath.style.transition = 'stroke-dashoffset 10ms linear';
+
+        // 更新进度条
+        const updateProgress = function () {
+          const scroll = window.scrollY || window.pageYOffset;
+          const height = document.documentElement.scrollHeight - window.innerHeight;
+          // 防止除以0
+          const progress = height > 0 ? pathLength - (scroll * pathLength / height) : pathLength;
+          progressPath.style.strokeDashoffset = String(progress);
+        }
+
+        // 移除旧的事件监听器，防止重复绑定
+        const newScrollHandler = () => {
+          updateProgress();
+          
+          if (window.pageYOffset > 100) {
+            progressWrap.classList.add('active-progress');
+          } else {
+            progressWrap.classList.remove('active-progress');
+          }
+        };
+
+        window.removeEventListener('scroll', window._scrollHandler || (() => {}));
+        window._scrollHandler = newScrollHandler;
+        window.addEventListener('scroll', newScrollHandler);
+
+        // 初始更新一次
+        newScrollHandler();
+
+        // 点击返回顶部
+        const clickHandler = (e: Event) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+        
+        progressWrap.removeEventListener('click', window._clickHandler || (() => {}));
+        window._clickHandler = clickHandler;
+        progressWrap.addEventListener("click", clickHandler);
+      }
+    }
+
+    // 页面首次加载时初始化
+    document.addEventListener('DOMContentLoaded', initBackToTop);
+    
+    // Astro ViewTransitions 导航后重新初始化
+    document.addEventListener('astro:page-load', initBackToTop);
   </script>
 </html>
