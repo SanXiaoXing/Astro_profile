@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/twikoo@1.6.36/dist/twikoo.css" />
 <div class="comments-container">
   <div class="divider"></div>
   <button id="comment-toggle" class="comment-btn">
@@ -13,48 +13,108 @@
   
   <div class="comments-wrapper" id="comment">
     <div id="twikoo-comments"></div>
-    <script src="//cdn.jsdelivr.net/npm/twikoo@1.6.36/dist/twikoo.all.min.js" is:inline></script>
-    <script>
-      twikoo.init({
-        envId: 'https://blog-twikoo.sanxiaoxing.cn/',
-        el: '#twikoo-comments',
-      });
-    </script>
-    <script>
-      declare global {
-        interface Window {
-          getCommentCount?: () => void;
-        }
-      }
-      window.getCommentCount = function() {
-        const currentPath = window.location.pathname;
-        
-        if (window.twikoo && typeof window.twikoo.getCommentsCount === 'function') {
-          window.twikoo.getCommentsCount({
-            envId: 'https://blog-twikoo.sanxiaoxing.cn/',
-            urls: [currentPath],
-            includeReply: true
-          }).then(function (res) {
-            const countBadge = document.getElementById('comment-count');
-            if (countBadge && res.length > 0 && res[0].count > 0) {
-              countBadge.textContent = res[0].count;
-              countBadge.classList.remove('hidden');
-              setTimeout(() => {
-                countBadge.classList.add('show');
-              }, 10);
-            }
-          }).catch(function (err) {
-            console.error('获取评论数量失败:', err);
-          });
-        }
-      };
-      
-      window.addEventListener('load', window.getCommentCount);
-    </script>
   </div>
 </div>
 
 <script>
+  declare global {
+    interface Window {
+      twikoo?: {
+        init: (options: { envId: string; el: string }) => void;
+        getCommentsCount?: (options: { envId: string; urls: string[]; includeReply: boolean }) => Promise<Array<{ count: number }>>;
+      };
+      getCommentCount?: () => void;
+      __twikooScriptLoading?: Promise<void>;
+      __commentToggleHandler?: () => void;
+      __twikooCurrentPath?: string;
+    }
+  }
+
+  const TWIKOO_SRC = 'https://cdn.jsdelivr.net/npm/twikoo@1.6.36/dist/twikoo.all.min.js';
+  const TWIKOO_ENV = 'https://blog-twikoo.sanxiaoxing.cn/';
+
+  function loadTwikooScript() {
+    if (window.twikoo) {
+      return Promise.resolve();
+    }
+
+    if (window.__twikooScriptLoading) {
+      return window.__twikooScriptLoading;
+    }
+
+    window.__twikooScriptLoading = new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[data-twikoo-loader="true"]') as HTMLScriptElement | null;
+      if (existing) {
+        if (window.twikoo) {
+          resolve();
+          return;
+        }
+        existing.addEventListener('load', () => resolve(), { once: true });
+        existing.addEventListener('error', () => reject(new Error('Twikoo 脚本加载失败')), { once: true });
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = TWIKOO_SRC;
+      script.async = true;
+      script.dataset.twikooLoader = 'true';
+      script.addEventListener('load', () => resolve(), { once: true });
+      script.addEventListener('error', () => reject(new Error('Twikoo 脚本加载失败')), { once: true });
+      document.body.appendChild(script);
+    });
+
+    return window.__twikooScriptLoading;
+  }
+
+  async function initTwikoo() {
+    const twikooRoot = document.getElementById('twikoo-comments');
+    if (!twikooRoot) {
+      return false;
+    }
+
+    await loadTwikooScript();
+    if (!window.twikoo || typeof window.twikoo.init !== 'function') {
+      return false;
+    }
+
+    twikooRoot.innerHTML = '';
+    window.twikoo.init({
+      envId: TWIKOO_ENV,
+      el: '#twikoo-comments',
+    });
+    window.__twikooCurrentPath = window.location.pathname;
+    return true;
+  }
+
+  window.getCommentCount = function() {
+    const currentPath = window.location.pathname;
+    const countBadge = document.getElementById('comment-count');
+    if (!countBadge) {
+      return;
+    }
+
+    if (window.twikoo && typeof window.twikoo.getCommentsCount === 'function') {
+      window.twikoo.getCommentsCount({
+        envId: TWIKOO_ENV,
+        urls: [currentPath],
+        includeReply: true
+      }).then(function (res) {
+        if (res.length > 0 && res[0].count > 0) {
+          countBadge.textContent = String(res[0].count);
+          countBadge.classList.remove('hidden');
+          setTimeout(() => {
+            countBadge.classList.add('show');
+          }, 10);
+        } else {
+          countBadge.classList.add('hidden');
+          countBadge.classList.remove('show');
+        }
+      }).catch(function (err) {
+        console.error('获取评论数量失败:', err);
+      });
+    }
+  };
+
   function initCommentSection() {
     const commentSection = document.getElementById('comment');
     const commentToggle = document.getElementById('comment-toggle');
@@ -66,47 +126,82 @@
     }
     
     if(commentToggle) {
-      commentToggle.addEventListener('click', () => {
+      if (window.__commentToggleHandler) {
+        commentToggle.removeEventListener('click', window.__commentToggleHandler);
+      }
+
+      const clickHandler = async () => {
         if(commentSection) {
           const isHidden = commentSection.style.display === 'none';
           
           if(isHidden) {
             commentSection.style.display = 'block';
-            // 触发重绘以应用过渡效果
             commentSection.offsetHeight; 
             commentSection.style.opacity = '1';
             commentSection.style.transform = 'translateY(0)';
             
-            commentToggle.querySelector('.btn-text').textContent = '收起评论';
+            const text = commentToggle.querySelector('.btn-text');
+            if (text) {
+              text.textContent = '收起评论';
+            }
             commentToggle.classList.add('active');
+
+            const twikooRoot = document.getElementById('twikoo-comments');
+            const needInit = !twikooRoot || twikooRoot.childElementCount === 0 || window.__twikooCurrentPath !== window.location.pathname;
+
+            if (needInit) {
+              if (text) {
+                text.textContent = '评论加载中...';
+              }
+              await new Promise((resolve) => requestAnimationFrame(() => resolve(undefined)));
+              const ok = await initTwikoo();
+              if (text) {
+                text.textContent = ok ? '收起评论' : '展开评论';
+              }
+              if (!ok) {
+                commentToggle.classList.remove('active');
+              }
+              setTimeout(() => {
+                window.getCommentCount?.();
+              }, 500);
+            }
           } else {
             commentSection.style.opacity = '0';
             commentSection.style.transform = 'translateY(-10px)';
             
             setTimeout(() => {
               commentSection.style.display = 'none';
-            }, 300); // 等待过渡完成
+            }, 300);
             
-            commentToggle.querySelector('.btn-text').textContent = '展开评论';
+            const text = commentToggle.querySelector('.btn-text');
+            if (text) {
+              text.textContent = '展开评论';
+            }
             commentToggle.classList.remove('active');
           }
         }
-      });
+      };
+
+      commentToggle.addEventListener('click', clickHandler);
+      window.__commentToggleHandler = clickHandler;
     }
     
-    getCommentCount();
+    loadTwikooScript().then(() => {
+      setTimeout(() => {
+        window.getCommentCount?.();
+      }, 500);
+    });
   }
   
   document.addEventListener('DOMContentLoaded', initCommentSection);
   
-  // 监听 Astro 视图过渡事件
   document.addEventListener('astro:page-load', () => {
     initCommentSection();
     setTimeout(() => {
       if (typeof window.getCommentCount === 'function') {
         window.getCommentCount();
       }
-    }, 300);
+    }, 500);
   });
 </script>
 

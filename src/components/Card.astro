@@ -18,7 +18,7 @@ const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
 <ShadcnCard
   className={`card-animate transform-y-[-40%] align-start perspective-1200 group relative col-span-1 h-auto w-full flex-none transform justify-start overflow-hidden p-6 shadow-lg transition-all duration-500 ease-in-out hover:border-primary hover:shadow-[0_0_30px_-7px_hsl(20.5,90.2%,48.2%)] backdrop-blur-sm bg-gradient-to-br from-[hsl(var(--card)/0.8)] to-[hsl(var(--card)/0.4)] ${
     colSpan || 'md:col-span-2'
-  } ${rowSpan || ''} ${href ? 'cursor-pointer hover:border-primary' : ''} relative before:absolute before:inset-0 before:rounded-inherit before:bg-gradient-to-br before:from-[hsl(var(--primary)/0.1)] before:to-transparent before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100`}
+  } ${rowSpan || ''} ${href ? 'cursor-pointer hover:border-primary' : ''} relative before:pointer-events-none before:absolute before:inset-0 before:rounded-inherit before:bg-gradient-to-br before:from-[hsl(var(--primary)/0.1)] before:to-transparent before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100`}
 >
   {href ? (
     <a href={href} class={` h-full w-full ${colorText || ''}`}>
