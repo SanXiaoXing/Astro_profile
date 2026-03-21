@@ -23,13 +23,33 @@ const today = new Date();
 		text-align: center;
 		z-index: 10;
 		position: relative;
+		transition: color 0.3s ease;
 	}
 
 	footer a {
 		font-family: var(--font-family-mono);
 		color: var(--hc);
+		position: relative;
+		transition: color 0.3s ease;
 	}
+
+	footer a::after {
+		content: '';
+		position: absolute;
+		bottom: -2px;
+		left: 0;
+		width: 0;
+		height: 1px;
+		background: hsl(var(--primary));
+		transition: width 0.3s ease;
+	}
+
 	footer a:hover {
+		color: hsl(var(--primary));
 		text-decoration: none;
+	}
+
+	footer a:hover::after {
+		width: 100%;
 	}
 </style>

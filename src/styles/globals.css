@@ -39,7 +39,7 @@
     --green: #50fa7b;
     --current-line: #44475a;
 
-    --font-family-base: 
+    --font-family-base:
     'noto-serif',
     'FutureMono',
     ui-monospace,
@@ -47,7 +47,7 @@
       system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
       'Helvetica Neue', Helvetica, Arial, 'Noto Sans', sans-serif,
       'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-      --font-family-mono: 
+      --font-family-mono:
     'FutureMono',
     ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco,
       Consolas, 'Liberation Mono', 'Courier New','noto-serif', monospace;
@@ -70,8 +70,15 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground;
+  }
+  ::selection {
+    background: hsl(var(--primary) / 0.3);
+    color: var(--fontc);
   }
 }
 
@@ -402,30 +409,29 @@ pre:hover {
   box-shadow: 0px 0px 30px 1px rgba(243, 222, 58, 0.303);
 }
 
-/* 滚动条整体样式 */
+figcaption {
+  color: var(--gray);
+  font-size: 1rem;
+  text-align: center;
+}
 ::-webkit-scrollbar {
-	width: 7px; /* 滚动条宽度 */
-  }
-  
-  /* 滚动条轨道样式 */
-  ::-webkit-scrollbar-track {
-	background: var(--bgc); /* 轨道背景色 */
-  }
-  
-  /* 滚动条滑块样式 */
-  ::-webkit-scrollbar-thumb {
-	background: var(--hc); /* 滑块颜色 */
-	border-radius: 10px; /* 滑块边角 */
-  }
-  
-  /* 滚动条鼠标悬停样式 */
-  ::-webkit-scrollbar-thumb:hover {
-	background: hsl(var(--primary)); /* 鼠标悬停时的滑块颜色 */
-  }
-
-  figcaption {
-    color: var(--gray);
-    font-size: 1rem;
-    text-align: center;
-  }
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--hc), hsl(var(--primary)));
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, hsl(var(--primary)), var(--orange));
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hc) var(--background);
+}
 
