@@ -1,0 +1,281 @@
+---
+import { getBlogPosts } from "../content/config";
+import Layout from "../layouts/Layout.astro";
+import FormattedDate from "../components/blog/FormattedDate.astro";
+import { ViewTransitions } from "astro:transitions";
+
+const posts = await getBlogPosts();
+const growthPosts = posts
+  .filter((post) => post.data.tags?.some((tag) => tag === "成长"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const groupedPosts = growthPosts.reduce((groups, post) => {
+  const year = post.data.pubDate.getFullYear().toString();
+  if (!groups[year]) {
+    groups[year] = [];
+  }
+  groups[year].push(post);
+  return groups;
+}, {});
+
+const sortedGroupedPosts = Object.entries(groupedPosts).sort(
+  ([yearA], [yearB]) => parseInt(yearB) - parseInt(yearA)
+);
+---
+
+<Layout title="成长" description="记录成长的足迹">
+  <ViewTransitions />
+
+  <header class="growth-header">
+    <h1 class="growth-title">成长笔记</h1>
+    <p class="growth-subtitle">记录每一次思考与蜕变</p>
+  </header>
+
+  <section class="growth-list">
+    {
+      sortedGroupedPosts.length > 0 ? (
+        sortedGroupedPosts.map(([year, yearPosts]) => (
+          <div class="year-group">
+            <div class="year-label">{year}</div>
+            <ul class="post-list">
+              {yearPosts.map((post) => (
+                <li class="post-item">
+                  <a href={`/blog/${post.fileName}`} class="post-link">
+                    <span class="post-date">
+                      <FormattedDate date={post.data.pubDate} />
+                    </span>
+                    <span class="post-title">{post.data.title}</span>
+                    <svg class="post-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                      <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      ) : (
+        <div class="empty-state">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          <p>暂无成长类文章</p>
+        </div>
+      )
+    }
+  </section>
+
+  <footer class="growth-footer">
+    <a href="/blog" class="back-link">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      返回博客列表
+    </a>
+  </footer>
+</Layout>
+
+<style>
+  .growth-header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-bottom: 1px solid rgba(133, 133, 168, 0.15);
+    margin-bottom: 2rem;
+  }
+
+  .header-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, rgba(155, 219, 238, 0.15), rgba(255, 179, 0, 0.1));
+    border: 1px solid rgba(155, 219, 238, 0.3);
+    border-radius: 16px;
+    color: var(--hc);
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .header-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(155, 219, 238, 0.2);
+  }
+
+  .growth-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--fontc);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-family-base);
+  }
+
+  .growth-subtitle {
+    font-size: 0.95rem;
+    color: var(--gray);
+    margin: 0;
+    font-family: var(--font-family-mono);
+  }
+
+  .growth-list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .year-group {
+    margin-bottom: 2rem;
+  }
+
+  .year-label {
+    font-family: var(--font-family-mono);
+    font-size: 1.75rem;
+    color: var(--gray);
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+    border-left: 3px solid var(--hc);
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .post-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .post-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(145deg, rgba(40, 42, 53, 0.6), rgba(51, 51, 56, 0.4));
+    border: 1px solid rgba(155, 219, 238, 0.15);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+
+  .post-link:hover {
+    background: linear-gradient(145deg, rgba(40, 42, 53, 0.8), rgba(51, 51, 56, 0.6));
+    border-color: rgba(155, 219, 238, 0.4);
+    transform: translateX(4px);
+    box-shadow: 0 4px 20px rgba(155, 219, 238, 0.1);
+  }
+
+  .post-date {
+    font-family: var(--font-family-mono);
+    font-size: 0.85rem;
+    color: var(--gray);
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+
+  .post-title {
+    flex: 1;
+    font-family: var(--font-family-mono);
+    font-size: 0.95rem;
+    color: var(--fontc);
+    transition: color 0.25s ease;
+  }
+
+  .post-link:hover .post-title {
+    color: var(--hc);
+  }
+
+  .post-arrow {
+    color: var(--gray);
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  .post-link:hover .post-arrow {
+    color: var(--orange);
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    color: var(--gray);
+    text-align: center;
+  }
+
+  .empty-state svg {
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  .empty-state p {
+    font-family: var(--font-family-mono);
+    margin: 0;
+  }
+
+  .growth-footer {
+    max-width: 800px;
+    margin: 3rem auto 0;
+    padding: 2rem 1rem;
+    border-top: 1px solid rgba(133, 133, 168, 0.15);
+    text-align: center;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    color: var(--gray);
+    text-decoration: none;
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+    border: 1px solid rgba(133, 133, 168, 0.3);
+    border-radius: 2rem;
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+
+  .back-link:hover {
+    color: var(--hc);
+    border-color: var(--hc);
+    transform: translateX(-4px);
+  }
+
+  @media (max-width: 640px) {
+    .growth-title {
+      font-size: 1.5rem;
+    }
+
+    .post-link {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .post-date {
+      min-width: auto;
+    }
+
+    .post-title {
+      width: calc(100% - 24px);
+    }
+
+    .post-arrow {
+      display: none;
+    }
+
+    .year-label {
+      font-size: 1.25rem;
+    }
+  }
+</style>

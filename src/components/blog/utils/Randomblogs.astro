@@ -2,65 +2,134 @@
 import { getBlogPosts } from "../../../content/config"
 
 export async function getRandomBlogs() {
-  // 洗牌算法
   function getRandomPosts(posts, count) {
     const shuffled = posts.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
   }
 
   const posts = await getBlogPosts();
-  const randomPosts = getRandomPosts(posts, 3); // 随机选取3篇
+  const randomPosts = getRandomPosts(posts, 3);
   return randomPosts;
 }
 
 const randompost = await getRandomBlogs();
 ---
 
-<div class="random">
-    🫵🏻 随便看看
-{randompost.map((post) => (
-    <ul>
-        <li>
-            <a href={`/blog/${post.fileName}`} data-umami-event="Random-article">
-                <p class="title">{post.data.title}</p>
-        </a>    
-        </li>
-    </ul>
-))}
+<div class="random-wrapper">
+  <div class="random-header">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dice-icon">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <circle cx="15.5" cy="15.5" r="1.5"/>
+    </svg>
+    <span>随便看看</span>
+  </div>
+  
+  <div class="random-list">
+    {randompost.map((post) => (
+      <a href={`/blog/${post.fileName}`} class="random-link" data-umami-event="Random-article">
+        <span class="title">{post.data.title}</span>
+        <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </a>    
+    ))}
+  </div>
 </div>
+
 <style>
-    .random {
-        background-color: #00000030;
-        padding: 1rem;
-        border-radius: 10px;
-        transition: .5s all;
-        border: var(--bgc) solid 1px;
-        box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.2);
-        margin-top: 30px;
+  .random-wrapper {
+    background: linear-gradient(145deg, rgba(40, 42, 53, 0.6), rgba(51, 51, 56, 0.4));
+    border: 1px solid rgba(155, 219, 238, 0.15);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .random-wrapper:hover {
+    border-color: rgba(255, 179, 0, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(255, 179, 0, 0.1);
+  }
+
+  .random-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-family-mono);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--fontc);
+    margin-bottom: 1.25rem;
+  }
+
+  .dice-icon {
+    color: var(--orange);
+    transition: transform 0.5s ease;
+  }
+
+  .random-wrapper:hover .dice-icon {
+    transform: rotate(180deg);
+  }
+
+  .random-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .random-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(133, 133, 168, 0.1);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+
+  .title {
+    color: var(--hc);
+    font-family: var(--font-family-base);
+    font-size: 0.95rem;
+    transition: color 0.25s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .arrow-icon {
+    color: var(--gray);
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.25s ease;
+  }
+
+  .random-link:hover {
+    background: rgba(155, 219, 238, 0.1);
+    transform: translateX(4px);
+  }
+
+  .random-link:hover .title {
+    color: var(--orange);
+  }
+
+  .random-link:hover .arrow-icon {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--orange);
+  }
+
+  @media (max-width: 640px) {
+    .random-wrapper {
+      padding: 1.25rem;
     }
-    .random:hover {
-        transition: .5s all;
-        border: var(--orange) solid 1px;
-        box-shadow: 0px 0px 100px 1px rgba(255, 172, 7, 0.2);
+    
+    .arrow-icon {
+      display: none;
     }
-    .random a:hover {
-        text-decoration: none;
-        color: var(--orange);
-    }
-    .random a {
-        text-decoration: none;
-        color: var(--hc);
-    }
-    ul {
-        margin-top: 0.3rem;
-        margin-bottom: 0.3rem
-    }
-    ul li {
-        list-style-type: none;
-    }
-    ul li p {
-    margin-bottom: 0.1rem;
-    margin-top: 0.5rem;
-    text-indent: 2rem; /* 增加了文本缩进 */
   }
 </style>

@@ -1,13 +1,17 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<div class="flex flex-col items-center w-full">
-  <div class="flex items-center w-full my-5 mt-12"></div>
-  <button id="comment-toggle" class="inline-flex items-center justify-center px-4 py-3 transition-all duration-500 bg-opacity-20 border border-solid rounded-lg cursor-pointer bg-black/20 hover:border-[var(--current-line)] hover:shadow-[0_0_100px_10px_rgba(6,56,238,0.55)] group relative">
-    <i class="fa-solid fa-comments fa-beat-fade text-lg mr-2 text-blue-400 group-hover:text-blue-300"></i>
-    <span class="text-gray-200 group-hover:text-white">展开评论</span>
-    <span id="comment-count" class="hidden absolute -top-2 -right-2 flex items-center justify-center w-5 h-5 text-xs font-bold text-white rounded-full bg-gradient-to-r from-blue-400 to-blue-600 shadow-lg"></span>
+<div class="comments-container">
+  <div class="divider"></div>
+  <button id="comment-toggle" class="comment-btn">
+    <div class="btn-content">
+      <svg class="comment-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span class="btn-text">展开评论</span>
+    </div>
+    <span id="comment-count" class="comment-badge hidden"></span>
   </button>
   
-  <div class="w-full max-w-3xl mt-5 transition-all duration-300 ease-in-out" id="comment">
+  <div class="comments-wrapper" id="comment">
     <div id="twikoo-comments"></div>
     <script src="//cdn.jsdelivr.net/npm/twikoo@1.6.36/dist/twikoo.all.min.js" is:inline></script>
     <script>
@@ -17,15 +21,12 @@
       });
     </script>
     <script>
-      // 声明全局接口扩展
       declare global {
         interface Window {
           getCommentCount?: () => void;
         }
       }
-      // 将getCommentCount函数定义在全局作用域
       window.getCommentCount = function() {
-        // 获取当前页面URL
         const currentPath = window.location.pathname;
         
         if (window.twikoo && typeof window.twikoo.getCommentsCount === 'function') {
@@ -38,60 +39,68 @@
             if (countBadge && res.length > 0 && res[0].count > 0) {
               countBadge.textContent = res[0].count;
               countBadge.classList.remove('hidden');
-              // 添加动画效果
-              countBadge.classList.add('comment-count-show');
+              setTimeout(() => {
+                countBadge.classList.add('show');
+              }, 10);
             }
           }).catch(function (err) {
             console.error('获取评论数量失败:', err);
           });
-        } else {
-          console.warn('twikoo.getCommentsCount 不可用');
         }
       };
       
-      // 页面加载完成后获取评论数量
       window.addEventListener('load', window.getCommentCount);
     </script>
   </div>
 </div>
+
 <script>
   function initCommentSection() {
     const commentSection = document.getElementById('comment');
     const commentToggle = document.getElementById('comment-toggle');
     
-    // 默认隐藏评论区
     if(commentSection) {
       commentSection.style.display = 'none';
+      commentSection.style.opacity = '0';
+      commentSection.style.transform = 'translateY(-10px)';
     }
     
-    // 添加点击事件监听器
     if(commentToggle) {
       commentToggle.addEventListener('click', () => {
         if(commentSection) {
-          if(commentSection.style.display === 'none') {
+          const isHidden = commentSection.style.display === 'none';
+          
+          if(isHidden) {
             commentSection.style.display = 'block';
-            commentToggle.querySelector('span:not(#comment-count)').textContent = '收起评论';
-            commentToggle.classList.add('active-comment');
+            // 触发重绘以应用过渡效果
+            commentSection.offsetHeight; 
+            commentSection.style.opacity = '1';
+            commentSection.style.transform = 'translateY(0)';
+            
+            commentToggle.querySelector('.btn-text').textContent = '收起评论';
+            commentToggle.classList.add('active');
           } else {
-            commentSection.style.display = 'none';
-            commentToggle.querySelector('span:not(#comment-count)').textContent = '展开评论';
-            commentToggle.classList.remove('active-comment');
+            commentSection.style.opacity = '0';
+            commentSection.style.transform = 'translateY(-10px)';
+            
+            setTimeout(() => {
+              commentSection.style.display = 'none';
+            }, 300); // 等待过渡完成
+            
+            commentToggle.querySelector('.btn-text').textContent = '展开评论';
+            commentToggle.classList.remove('active');
           }
         }
       });
     }
     
-    // 获取评论数量
     getCommentCount();
   }
   
-  // 页面加载时初始化
   document.addEventListener('DOMContentLoaded', initCommentSection);
   
-  // 监听导航事件
   document.addEventListener('astro:after-swap', () => {
     initCommentSection();
-    // 页面导航后重新获取评论数量
     setTimeout(() => {
       if (typeof window.getCommentCount === 'function') {
         window.getCommentCount();
@@ -101,33 +110,120 @@
 </script>
 
 <style>
-  /* 当按钮处于激活状态时的样式 */
-  .active-comment {
-    @apply border-blue-500 shadow-[0_0_30px_1px_rgba(59,130,246,0.5)] bg-black/30;
+  .comments-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 3rem;
   }
-  
-  /* 评论数量徽章样式 */
-  #comment-count {
-    @apply transition-all duration-300 ease-in-out transform scale-0;
-    background: linear-gradient(135deg, #60a5fa, #3b82f6);
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(133, 133, 168, 0.2), transparent);
+    margin-bottom: 2rem;
   }
-  
-  /* 评论数量徽章显示动画 */
-  .comment-count-show {
-    @apply scale-100 !important;
-    animation: pulse-badge 2s infinite;
+
+  .comment-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(145deg, rgba(40, 42, 53, 0.6), rgba(51, 51, 56, 0.4));
+    border: 1px solid rgba(155, 219, 238, 0.2);
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--gray);
+    font-family: var(--font-family-mono);
+    font-size: 0.95rem;
   }
-  
-  @keyframes pulse-badge {
-    0% {
-      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+
+  .btn-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 1;
+  }
+
+  .comment-icon {
+    color: var(--hc);
+    transition: transform 0.3s ease;
+  }
+
+  .comment-btn:hover {
+    color: var(--fontc);
+    border-color: var(--hc);
+    background: rgba(155, 219, 238, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(155, 219, 238, 0.15);
+  }
+
+  .comment-btn:hover .comment-icon {
+    transform: scale(1.1) rotate(-5deg);
+  }
+
+  .comment-btn.active {
+    background: rgba(155, 219, 238, 0.15);
+    border-color: var(--hc);
+    color: var(--hc);
+    box-shadow: 0 0 20px rgba(155, 219, 238, 0.1);
+  }
+
+  .comment-btn.active .comment-icon {
+    color: var(--orange);
+  }
+
+  .comment-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: var(--orange);
+    color: var(--bgc);
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 12px;
+    transform: scale(0);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 2px 8px rgba(255, 179, 0, 0.4);
+    z-index: 2;
+  }
+
+  .comment-badge.show {
+    transform: scale(1);
+    opacity: 1;
+    animation: bounce-badge 2s infinite;
+  }
+
+  .comments-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 2rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes bounce-badge {
+    0%, 100% {
+      transform: scale(1);
     }
-    70% {
-      box-shadow: 0 0 0 6px rgba(59, 130, 246, 0);
+    50% {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(255, 179, 0, 0.6);
     }
-    100% {
-      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
-    }
+  }
+
+  /* 隐藏原始的 hidden 类 */
+  .hidden {
+    display: none !important;
   }
 </style>

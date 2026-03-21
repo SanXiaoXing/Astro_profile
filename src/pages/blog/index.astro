@@ -2,12 +2,13 @@
 import { getBlogPosts } from "../../content/config";
 import FormattedDate from "../../components/blog/FormattedDate.astro";
 import Layout from "../../layouts/Layout.astro";
-import PageFindSearch from '../../components/PageFind.astro';
-import Dock from "../../components/ui/DockTxt"
-const posts = (await getBlogPosts())
-  ?.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+import PageFindSearch from "../../components/PageFind.astro";
+import { ViewTransitions } from "astro:transitions";
 
-// 根据年份将文章分组并降序排列
+const posts = (await getBlogPosts())
+  ?.filter((post) => !post.data.tags?.some((tag) => tag === "成长"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
 const groupedPosts = posts.reduce((groups, post) => {
   const year = post.data.pubDate.getFullYear().toString();
   if (!groups[year]) {
@@ -17,30 +18,40 @@ const groupedPosts = posts.reduce((groups, post) => {
   return groups;
 }, {});
 
-// 按年份降序排列
-const sortedGroupedPosts = Object.entries(groupedPosts).sort(([yearA], [yearB]) => parseInt(yearB) - parseInt(yearA));
+const sortedGroupedPosts = Object.entries(groupedPosts).sort(
+  ([yearA], [yearB]) => parseInt(yearB) - parseInt(yearA)
+);
 ---
 
 <Layout title="博客" description="Blog">
+  <ViewTransitions />
   <PageFindSearch />
-  <section>
+
+  <header class="blog-header">
+    <h1 class="blog-title">博客</h1>
+    <p class="blog-subtitle">技术沉淀与思考</p>
+  </header>
+
+  <section class="blog-list">
     {
       sortedGroupedPosts.map(([year, yearPosts]) => (
-        <div>
-          <div class="year">{year}</div>
-          <ul>
-            {
-              yearPosts.map((post) => (
-                <li>
-                  <p class="date">
+        <div class="year-group">
+          <div class="year-label">{year}</div>
+          <ul class="post-list">
+            {yearPosts.map((post) => (
+              <li class="post-item">
+                <a href={`/blog/${post.fileName}`} class="post-link">
+                  <span class="post-date">
                     <FormattedDate date={post.data.pubDate} />
-                  </p>
-                  <a href={`/blog/${post.fileName}`}>
-                    <p class="title">{post.data.title}</p>
-                  </a>
-                </li>
-              ))
-            }
+                  </span>
+                  <span class="post-title">{post.data.title}</span>
+                  <svg class="post-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       ))
@@ -49,78 +60,135 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(([yearA], [yearB]) 
 </Layout>
 
 <style>
-  main {
-    width: 960px;
-  }
-  ul {
-    /* display: flex; */
-    flex-wrap: wrap;
-    gap: 2rem;
-    list-style-type: none;
-  }
-  ul li {
-    display: flex;
-    margin-top: 1rem;
-    font-family: var(--font-family-mono);
-  }
-  ul li * {
-    font-family: var(--font-family-mono);
-    text-decoration: none;
-    transition: 0.2s ease;
-  }
-  ul li img {
-    margin-bottom: 0.5rem;
-    border-radius: 12px;
-  }
-  ul li a {
-    display: flex;
-  }
-  ul li h5 {
+  .blog-header {
     text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-bottom: 1px solid rgba(133, 133, 168, 0.15);
+    margin-bottom: 2rem;
   }
-  .year {
-    font-family: var(--font-family-mono);
+
+  .blog-title {
     font-size: 2rem;
-    margin-top: 1rem;
-    color: var(--gray-light);
+    font-weight: 700;
+    color: var(--fontc);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-family-base);
   }
-  .title {
-    margin: 0;
-    line-height: 1;
-  }
-  .date {
-    padding-right: 2rem;
-    margin: 0;
+
+  .blog-subtitle {
+    font-size: 0.95rem;
     color: var(--gray);
+    margin: 0;
+    font-family: var(--font-family-mono);
   }
-  /* 标题变色: */
-  ul li a:hover h5,
-  ul li a:hover .date {
+
+  .blog-list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .year-group {
+    margin-bottom: 2rem;
+  }
+
+  .year-label {
+    font-family: var(--font-family-mono);
+    font-size: 1.75rem;
+    color: var(--gray);
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+    border-left: 3px solid var(--hc);
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .post-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .post-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(145deg, rgba(40, 42, 53, 0.6), rgba(51, 51, 56, 0.4));
+    border: 1px solid rgba(155, 219, 238, 0.15);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+
+  .post-link:hover {
+    background: linear-gradient(145deg, rgba(40, 42, 53, 0.8), rgba(51, 51, 56, 0.6));
+    border-color: rgba(155, 219, 238, 0.4);
+    transform: translateX(4px);
+    box-shadow: 0 4px 20px rgba(155, 219, 238, 0.1);
+  }
+
+  .post-date {
+    font-family: var(--font-family-mono);
+    font-size: 0.85rem;
+    color: var(--gray);
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+
+  .post-title {
+    flex: 1;
+    font-family: var(--font-family-mono);
+    font-size: 0.95rem;
+    color: var(--fontc);
+    transition: color 0.25s ease;
+  }
+
+  .post-link:hover .post-title {
+    color: var(--hc);
+  }
+
+  .post-arrow {
+    color: var(--gray);
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  .post-link:hover .post-arrow {
     color: var(--orange);
+    opacity: 1;
+    transform: translateX(0);
   }
-  ul a:hover img {
-    box-shadow: var(--box-shadow);
+
+  @media (max-width: 640px) {
+    .blog-title {
+      font-size: 1.5rem;
+    }
+
+    .post-link {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .post-date {
+      min-width: auto;
+    }
+
+    .post-title {
+      width: calc(100% - 24px);
+    }
+
+    .post-arrow {
+      display: none;
+    }
+
+    .year-label {
+      font-size: 1.25rem;
+    }
   }
-  @media (max-width: 720px) {
-    ul {
-      gap: 0.5em;
-      display: list-item;
-    }
-    ul li {
-      display: inherit;
-      width: 100%;
-      /* text-align: center; */
-    }
-  }
-  a {
-      color: var(--hc);
-      text-decoration: none;
-      transition: 0.2s ease;
-      font-family: var(--font-family-mono)
-    }
-    a:hover {
-      transition: 0.2s ease;
-      color: var(--orange);
-      text-decoration: underline;
-    }
 </style>

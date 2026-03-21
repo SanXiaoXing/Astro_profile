@@ -4,66 +4,154 @@ import { getCollection } from 'astro:content';
 import { ViewTransitions } from 'astro:transitions';
 
 const blog = await getCollection('blog');
-const categoriesMap = {};
+const categoriesMap: Record<string, number> = {};
 blog.forEach(post => {
   post.data.categories.forEach(category => {
     categoriesMap[category] = (categoriesMap[category] || 0) + 1;
   });
 });
-const sortedcategories = Object.entries(categoriesMap).sort((a, b) => b[1] - a[1]).map(([category]) => category);
 
-const { comments } =
-  Astro.props;
+const sortedCategories = Object.entries(categoriesMap).sort((a, b) => b[1] - a[1]);
+const maxCount = sortedCategories[0]?.[1] || 1;
+const minCount = sortedCategories[sortedCategories.length - 1]?.[1] || 1;
+const maxFontSize = 2;
+const minFontSize = 0.85;
+
+function getFontSize(count: number): number {
+  if (maxCount === minCount) return (maxFontSize + minFontSize) / 2;
+  return minFontSize + ((count - minCount) / (maxCount - minCount)) * (maxFontSize - minFontSize);
+}
+
+function getColor(count: number): string {
+  // 颜色按数量从少到多排列
+  // 青 -> 蓝 -> 紫 -> 黄 -> 橙
+  const colors = ['#8be9fd', '#9bdbee', '#bd93f9', '#f1fa8c', '#ffb300'];
+  const ratio = (count - minCount) / (maxCount - minCount || 1);
+  const baseIndex = Math.floor(ratio * (colors.length - 1));
+  return colors[baseIndex];
+}
 ---
 
-<Layout title="类别" description="Categories"
-  comments={false}
->
-<ViewTransitions />
-  <ul class="category-list">
-    {sortedcategories.map((category) => (
-      <li><a class="category" href={`/categories/${category}`}>{category} <span class="category-count">{categoriesMap[category]}</span></a></li>
+<Layout title="类别" description="Categories" comments={false}>
+  <ViewTransitions />
+
+  <header class="categories-header">
+    <h1 class="categories-title">分类</h1>
+    <p class="categories-subtitle">共 {sortedCategories.length} 个分类</p>
+  </header>
+
+  <div class="category-cloud">
+    {sortedCategories.map(([category, count]) => (
+      <a
+        href={`/categories/${category}`}
+        class="category-item"
+        style={`--font-size: ${getFontSize(count)}rem; --category-color: ${getColor(count)};`}
+      >
+        <span class="category-name">{category}</span>
+        <span class="category-count">{count}</span>
+      </a>
     ))}
-  </ul>
+  </div>
 </Layout>
 
-
 <style>
-  .category {
-    font-family: var(--font-family-mono);
-    color: var(--hc);
-    font-size: 1.2rem;
-    padding: 7px;
-    margin: 10px;
-    border: 1px solid #00000000;
-    border-radius: 10px;
+  .categories-header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-bottom: 1px solid rgba(133, 133, 168, 0.15);
+    margin-bottom: 2rem;
   }
-  .category:hover {
-    border: 1px solid var(--hc);
-    color: var(--orange);
-    background-color: #00000030;
-    /* box-shadow: 0px 0px 30px 1px rgba(150, 222, 255, 0.303); */
+
+  .categories-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--fontc);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-family-base);
   }
-  .category-count {
-    font-size: 0.8rem;
+
+  .categories-subtitle {
+    font-size: 0.9rem;
     color: var(--gray);
-    margin-left: 0.2rem;
+    margin: 0;
+    font-family: var(--font-family-mono);
   }
-  .category-list {
+
+  .category-cloud {
     display: flex;
     flex-wrap: wrap;
-    align-content: flex-start;
-  }
-  a:hover {
-    text-decoration: none;
-  }
-  ul {
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 1rem;
+    max-width: 900px;
+    margin: 0 auto;
     min-height: 50vh;
   }
-  li {
-    padding: 0.5rem;
-    list-style-type: none;
+
+  .category-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size);
+    color: var(--category-color);
+    text-decoration: none;
+    border-radius: 2rem;
+    background: rgba(40, 42, 53, 0.6);
+    border: 1px solid rgba(155, 219, 238, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
   }
 
-  
+  .category-item:hover {
+    transform: scale(1.1) translateY(-2px);
+    background: rgba(40, 42, 53, 0.9);
+    border-color: var(--category-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3),
+                0 0 20px color-mix(in srgb, var(--category-color) 30%, transparent);
+  }
+
+  .category-name {
+    font-weight: 500;
+  }
+
+  .category-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 0.4rem;
+    font-size: calc(var(--font-size) * 0.65);
+    color: var(--gray);
+    background: rgba(133, 133, 168, 0.2);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .category-item:hover .category-count {
+    background: rgba(155, 219, 238, 0.2);
+    color: var(--fontc);
+  }
+
+  @media (max-width: 640px) {
+    .categories-header {
+      padding: 2rem 1rem 1.5rem;
+    }
+
+    .categories-title {
+      font-size: 1.5rem;
+    }
+
+    .category-cloud {
+      gap: 0.75rem;
+      padding: 1.5rem 0.5rem;
+    }
+
+    .category-item {
+      padding: 0.4rem 0.8rem;
+    }
+  }
 </style>

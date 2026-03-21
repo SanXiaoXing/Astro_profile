@@ -4,66 +4,154 @@ import { getCollection } from 'astro:content';
 import { ViewTransitions } from 'astro:transitions';
 
 const blog = await getCollection('blog');
-const tagsMap = {};
+const tagsMap: Record<string, number> = {};
 blog.forEach(post => {
   post.data.tags.forEach(tag => {
     tagsMap[tag] = (tagsMap[tag] || 0) + 1;
   });
 });
-const sortedTags = Object.entries(tagsMap).sort((a, b) => b[1] - a[1]).map(([tag]) => tag);
 
-const { comments } =
-  Astro.props;
+const sortedTags = Object.entries(tagsMap).sort((a, b) => b[1] - a[1]);
+const maxCount = sortedTags[0]?.[1] || 1;
+const minCount = sortedTags[sortedTags.length - 1]?.[1] || 1;
+const maxFontSize = 2;
+const minFontSize = 0.85;
+
+function getFontSize(count: number): number {
+  if (maxCount === minCount) return (maxFontSize + minFontSize) / 2;
+  return minFontSize + ((count - minCount) / (maxCount - minCount)) * (maxFontSize - minFontSize);
+}
+
+function getColor(count: number): string {
+  // 颜色按数量从少到多排列
+  // 青 -> 蓝 -> 紫 -> 黄 -> 橙
+  const colors = ['#8be9fd', '#9bdbee', '#bd93f9', '#f1fa8c', '#ffb300'];
+  const ratio = (count - minCount) / (maxCount - minCount || 1);
+  const baseIndex = Math.floor(ratio * (colors.length - 1));
+  return colors[baseIndex];
+}
 ---
 
-<Layout title="标签" description="Tags"
-  comments={false}
->
-<ViewTransitions />
-  <ul class="tag-list">
-    {sortedTags.map((tag) => (
-      <li><a class="tag" href={`/tags/${tag}`}>#{tag} <span class="tag-count">{tagsMap[tag]}</span></a></li>
+<Layout title="标签" description="Tags" comments={false}>
+  <ViewTransitions />
+
+  <header class="tags-header">
+    <h1 class="tags-title">标签</h1>
+    <p class="tags-subtitle">共 {sortedTags.length} 个标签</p>
+  </header>
+
+  <div class="tag-cloud">
+    {sortedTags.map(([tag, count]) => (
+      <a
+        href={`/tags/${tag}`}
+        class="tag-item"
+        style={`--font-size: ${getFontSize(count)}rem; --tag-color: ${getColor(count)};`}
+      >
+        <span class="tag-name">#{tag}</span>
+        <span class="tag-count">{count}</span>
+      </a>
     ))}
-  </ul>
+  </div>
 </Layout>
 
-
 <style>
-  .tag {
-    font-family: var(--font-family-mono);
-    color: var(--hc);
-    font-size: 1.2rem;
-    padding: 7px;
-    margin: 10px;
-    border: 1px solid #00000000;
-    border-radius: 10px;
+  .tags-header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-bottom: 1px solid rgba(133, 133, 168, 0.15);
+    margin-bottom: 2rem;
   }
-  .tag:hover {
-    border: 1px solid var(--hc);
-    color: var(--orange);
-    background-color: #00000030;
-    /* box-shadow: 0px 0px 30px 1px rgba(150, 222, 255, 0.303); */
+
+  .tags-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--fontc);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-family-base);
   }
-  .tag-count {
-    font-size: 0.8rem;
+
+  .tags-subtitle {
+    font-size: 0.9rem;
     color: var(--gray);
-    margin-left: 0.2rem;
+    margin: 0;
+    font-family: var(--font-family-mono);
   }
-  .tag-list {
+
+  .tag-cloud {
     display: flex;
     flex-wrap: wrap;
-    align-content: flex-start;
-  }
-  a:hover {
-    text-decoration: none;
-  }
-  ul {
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 1rem;
+    max-width: 900px;
+    margin: 0 auto;
     min-height: 50vh;
   }
-  li {
-    padding: 0.5rem;
-    list-style-type: none;
+
+  .tag-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size);
+    color: var(--tag-color);
+    text-decoration: none;
+    border-radius: 2rem;
+    background: rgba(40, 42, 53, 0.6);
+    border: 1px solid rgba(155, 219, 238, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
   }
 
-  
+  .tag-item:hover {
+    transform: scale(1.1) translateY(-2px);
+    background: rgba(40, 42, 53, 0.9);
+    border-color: var(--tag-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3),
+                0 0 20px color-mix(in srgb, var(--tag-color) 30%, transparent);
+  }
+
+  .tag-name {
+    font-weight: 500;
+  }
+
+  .tag-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 0.4rem;
+    font-size: calc(var(--font-size) * 0.65);
+    color: var(--gray);
+    background: rgba(133, 133, 168, 0.2);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .tag-item:hover .tag-count {
+    background: rgba(155, 219, 238, 0.2);
+    color: var(--fontc);
+  }
+
+  @media (max-width: 640px) {
+    .tags-header {
+      padding: 2rem 1rem 1.5rem;
+    }
+
+    .tags-title {
+      font-size: 1.5rem;
+    }
+
+    .tag-cloud {
+      gap: 0.75rem;
+      padding: 1.5rem 0.5rem;
+    }
+
+    .tag-item {
+      padding: 0.4rem 0.8rem;
+    }
+  }
 </style>

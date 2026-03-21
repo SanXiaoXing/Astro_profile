@@ -13,94 +13,149 @@ export async function getData(tag) {
 
 const postf = await getData(tag);
 ---
-<div class="tagtitle">#{tag}</div>
-<ul data-pagefind-ignore="all">
+<div class="tag-header">
+  <div class="tag-badge">#{tag}</div>
+  <p class="tag-count">共 {postf.length} 篇文章</p>
+</div>
+
+<ul class="post-list" data-pagefind-ignore="all">
     {postf.map((post) => (
-      <li>
-        <p class="date">
-          <FormattedDate date={post.data.pubDate} />
-        </p>
-        <a href={`/blog/${post.fileName}`}>
-          <p class="title">{post.data.title}</p>
+      <li class="post-item">
+        <a href={`/blog/${post.fileName}`} class="post-link">
+          <span class="post-date">
+            <FormattedDate date={post.data.pubDate} />
+          </span>
+          <span class="post-title">{post.data.title}</span>
+          <svg class="post-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
         </a>
       </li>
     ))}
 </ul>
+
 <style>
-  main {
-    width: 960px;
-  }
-  .tagtitle {
-    font-size: 2rem;
+  .tag-header {
     text-align: center;
-    font-family: var(--font-family-mono);
-  }
-  ul {
-    /* display: flex; */
-    flex-wrap: wrap;
-    gap: 2rem;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    min-height: 50vh;
-  }
-  ul li {
-    display: flex;
-    margin-top: 1rem;
-  }
-  ul li * {
-    
-    text-decoration: none;
-    transition: 0.2s ease;
+    margin-bottom: 3rem;
   }
 
-  ul li a {
-    display: flex;
+  .tag-badge {
+    display: inline-block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--hc);
     font-family: var(--font-family-mono);
+    background: linear-gradient(135deg, rgba(155, 219, 238, 0.15), rgba(255, 179, 0, 0.05));
+    padding: 0.5rem 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(155, 219, 238, 0.2);
+    margin-bottom: 0.5rem;
   }
 
-  ul li h5{
-    text-align: center;
-  }
-  .title {
-    margin: 0;
-    line-height: 1;
-  }
-  .date {
-    font-family: var(--font-family-mono);
-    
-    padding-right: 2rem;
-    margin: 0;
+  .tag-count {
     color: var(--gray);
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+    margin: 0;
   }
 
-  /* 标题变色: */
-  ul li a:hover h5,
-  ul li a:hover .date {
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 800px;
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .post-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(145deg, rgba(40, 42, 53, 0.6), rgba(51, 51, 56, 0.4));
+    border: 1px solid rgba(155, 219, 238, 0.15);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+
+  .post-link:hover {
+    background: linear-gradient(145deg, rgba(40, 42, 53, 0.8), rgba(51, 51, 56, 0.6));
+    border-color: var(--hc);
+    transform: translateX(4px) translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2),
+                0 0 16px rgba(155, 219, 238, 0.1);
+  }
+
+  .post-date {
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+    color: var(--gray);
+    min-width: 110px;
+    flex-shrink: 0;
+  }
+
+  .post-title {
+    flex: 1;
+    font-family: var(--font-family-base);
+    font-size: 1.05rem;
+    color: var(--fontc);
+    transition: color 0.25s ease;
+    font-weight: 500;
+  }
+
+  .post-link:hover .post-title {
+    color: var(--hc);
+  }
+
+  .post-arrow {
+    color: var(--gray);
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  .post-link:hover .post-arrow {
     color: var(--orange);
+    opacity: 1;
+    transform: translateX(0);
   }
-  ul a:hover img {
-    box-shadow: var(--box-shadow);
-  }
-  @media (max-width: 720px) {
-    ul {
-      gap: 0.5em;
-    }
-    ul li {
-      display:inherit;
-      width: 100%;
-      /* text-align: center; */
+
+  @media (max-width: 640px) {
+    .tag-badge {
+      font-size: 2rem;
     }
 
+    .post-link {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 1rem;
+    }
+
+    .post-date {
+      min-width: auto;
+      font-size: 0.85rem;
+    }
+
+    .post-title {
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    .post-arrow {
+      display: none;
+    }
+
+    .post-link:hover {
+      transform: translateY(-2px);
+    }
   }
-  a {
-      color: var(--hc);
-      text-decoration: none;
-      transition: 0.2s ease;
-      font-family: var(--font-family-mono)
-    }
-    a:hover {
-      transition: 0.2s ease;
-      color: var(--orange);
-    }
 </style>

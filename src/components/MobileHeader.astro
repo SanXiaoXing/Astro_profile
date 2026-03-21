@@ -3,138 +3,213 @@ import HeaderLink from "./HeaderLink.astro";
 
 const homeSlug = "/";
 const blogSlug = "/blog";
+const growthSlug = "/growth";
 const tagSlug = "/tags";
 const aboutSlug = "/about";
 const friendSlug = "/friends";
+const rssSlug = "/rss.xml";
 
 ---
 
 <header>
   <nav>
-    <div class="internal-links">
-      <HeaderLink href={homeSlug}>主页</HeaderLink>
-      <HeaderLink href={blogSlug}>博客</HeaderLink>
-      <HeaderLink href={tagSlug}>标签</HeaderLink>
-      <HeaderLink href={aboutSlug}>关于</HeaderLink>
-      <HeaderLink href={friendSlug}>友联</HeaderLink>
+    <div class="header-home"><a href={homeSlug}>SanXiaoXing</a></div>
+    <div class="nav-right">
+      <a href={rssSlug} class="rss-btn" aria-label="RSS Feed">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 11a9 9 0 0 1 9 9"/>
+          <path d="M4 4a16 16 0 0 1 16 16"/>
+          <circle cx="5" cy="19" r="1"/>
+        </svg>
+      </a>
+      <div class="menu-toggle" id="menu-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6" class="line-top"/>
+          <line x1="4" y1="12" x2="20" y2="12" class="line-mid"/>
+          <line x1="4" y1="18" x2="20" y2="18" class="line-bot"/>
+        </svg>
+      </div>
     </div>
   </nav>
+  <div class="mobile-nav" id="mobile-nav">
+    <div class="nav-links">
+      <HeaderLink href={blogSlug}>博客</HeaderLink>
+      <HeaderLink href={growthSlug}>成长</HeaderLink>
+      <HeaderLink href={tagSlug}>标签</HeaderLink>
+      <HeaderLink href={friendSlug}>友链</HeaderLink>
+    </div>
+  </div>
 </header>
 
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  menuToggle?.addEventListener('click', () => {
+    mobileNav?.classList.toggle('open');
+    menuToggle.classList.toggle('active');
+  });
+
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest('header')) {
+      mobileNav?.classList.remove('open');
+      menuToggle?.classList.remove('active');
+    }
+  });
+</script>
+
 <style>
-
-header {
-  display: none;
-}
-
-/* 移动设备 */
-@media only screen and (max-width: 600px) {
-  /* 在宽度小于等于600px的设备上应用以下样式 */
-  /* 这里可以放置针对移动设备的样式设置 */
   header {
-    z-index: 100;
-    position: relative;
-    display: block;
-  }
-
-  nav a.active {
-    text-decoration: var(--hc);
-  }
-
-  h2 {
     display: none;
   }
-   .mobile-icon {
-    padding-top: 10px;
-   }
-  .language-dropdown {
-    position: relative;
-    display: block;
+
+  @media only screen and (max-width: 600px) {
+    header {
+      display: block;
+      z-index: 100;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(40, 42, 53, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(155, 219, 238, 0.1);
+    }
   }
 
-  .dropdown-content {
-    font-size: 0.8rem;
-    border-radius: 5px;
-    display: none;
-    position: absolute;
-    min-width: 90px;
-    z-index: 1;
-    top: 100%;
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
   }
 
-  .dropdown-content a {
+  .header-home {
+    font-size: 1.25rem;
+  }
+
+  .header-home a {
+    font-family: var(--font-family-base);
+    font-weight: 700;
+    color: var(--fontc);
     text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .header-home a:hover {
+    color: var(--hc);
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rss-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(155, 219, 238, 0.1);
+    border: 1px solid rgba(155, 219, 238, 0.2);
+    color: var(--gray);
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+
+  .rss-btn:hover {
+    color: var(--orange);
+    background: rgba(255, 179, 0, 0.1);
+    border-color: var(--orange);
+  }
+
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(155, 219, 238, 0.1);
+    border: 1px solid rgba(155, 219, 238, 0.2);
+    color: var(--fontc);
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .menu-toggle:hover {
+    background: rgba(155, 219, 238, 0.15);
+    border-color: var(--hc);
+  }
+
+  .menu-toggle.active {
+    background: rgba(155, 219, 238, 0.2);
+  }
+
+  .menu-toggle svg .line-top,
+  .menu-toggle svg .line-mid,
+  .menu-toggle svg .line-bot {
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+
+  .menu-toggle.active svg .line-top {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .menu-toggle.active svg .line-mid {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .menu-toggle.active svg .line-bot {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .mobile-nav {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 1rem;
+    background: rgba(40, 42, 53, 0.98);
+  }
+
+  .mobile-nav.open {
+    max-height: 320px;
+    padding: 0.75rem 1rem 1rem;
+    border-top: 1px solid rgba(155, 219, 238, 0.1);
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .nav-links :global(a) {
     display: block;
-    background-color: #282a34;
+    font-family: var(--font-family-mono);
+    padding: 0.75rem 1rem;
+    color: var(--gray);
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
   }
 
-  .dropdown-content a:hover {
-    background-color: #8c88887f;
+  .nav-links :global(a:hover) {
+    color: var(--fontc);
+    background: rgba(155, 219, 238, 0.1);
   }
 
-  .language-dropdown:hover .dropdown-content {
-    display: block;
+  .nav-links :global(a.active) {
+    color: var(--hc);
+    background: rgba(155, 219, 238, 0.15);
+    font-weight: 600;
   }
-}
-
-/* 根据设备类型来应用样式 */
-@media only screen and (pointer: coarse) {
-  /* 在触摸屏设备上应用以下样式 */
-  /* 这里可以放置针对触摸屏设备的样式设置 */
-}
-
-/* 根据设备方向来应用样式 */
-@media only screen and (orientation: landscape) {
-  /* 在横向模式的设备上应用以下样式 */
-  /* 这里可以放置针对横向模式的样式设置 */
-}
-
-@media only screen and (orientation: portrait) {
-  /* 在纵向模式的设备上应用以下样式 */
-  /* 这里可以放置针对纵向模式的样式设置 */
-}
-
-header {
-  margin: 0;
-  padding: 0 1em;
-  background: var(--bgc);
-}
-
-h2 {
-  margin: 0;
-  font-size: 1em;
-}
-
-h2 a,
-h2 a.active {
-  text-decoration: none;
-}
-
-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-nav a {
-  padding: 1em 0.5em;
-  color: var(--black);
-  text-decoration: none;
-}
-
-nav a.active {
-  text-decoration: var(--hc);
-}
-
-.social-links,
-.social-links a {
-  display: flex;
-}
-
-@media (max-width: 720px) {
-  .social-links {
-    display: none;
-  }
-}
-
 </style>
