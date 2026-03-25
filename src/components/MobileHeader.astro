@@ -42,21 +42,52 @@ const rssSlug = "/rss.xml";
 </header>
 
 <script>
-  const menuToggle = document.getElementById('menu-toggle');
-  const mobileNav = document.getElementById('mobile-nav');
+  function initMobileNav() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
 
-  menuToggle?.addEventListener('click', () => {
-    mobileNav?.classList.toggle('open');
-    menuToggle.classList.toggle('active');
-  });
+    if (menuToggle && mobileNav) {
+      // 切换菜单状态
+      const toggleMenu = (e: Event) => {
+        e.stopPropagation();
+        mobileNav.classList.toggle('open');
+        menuToggle.classList.toggle('active');
+      };
 
-  document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    if (!target.closest('header')) {
-      mobileNav?.classList.remove('open');
-      menuToggle?.classList.remove('active');
+      // 移除旧监听器防止重复绑定
+      menuToggle.removeEventListener('click', (window as any)._toggleMenu || (() => {}));
+      (window as any)._toggleMenu = toggleMenu;
+      menuToggle.addEventListener('click', toggleMenu);
     }
-  });
+  }
+
+  // 点击外部或点击链接时关闭菜单
+  function setupDocumentClick() {
+    const documentClick = (e: Event) => {
+      const target = e.target as HTMLElement;
+      const mobileNav = document.getElementById('mobile-nav');
+      const menuToggle = document.getElementById('menu-toggle');
+      
+      if (mobileNav && menuToggle) {
+        // 如果点击的不是header内部，或者是点击了导航链接，则关闭菜单
+        if (!target.closest('header') || target.closest('.nav-links a')) {
+          mobileNav.classList.remove('open');
+          menuToggle.classList.remove('active');
+        }
+      }
+    };
+
+    document.removeEventListener('click', (window as any)._documentClick || (() => {}));
+    (window as any)._documentClick = documentClick;
+    document.addEventListener('click', documentClick);
+  }
+
+  // 初始加载
+  initMobileNav();
+  setupDocumentClick();
+
+  // 兼容 Astro ViewTransitions 页面切换
+  document.addEventListener('astro:page-load', initMobileNav);
 </script>
 
 <style>
@@ -68,7 +99,8 @@ const rssSlug = "/rss.xml";
     header {
       display: block;
       z-index: 100;
-      position: fixed;
+      position: -webkit-sticky;
+      position: sticky;
       top: 0;
       left: 0;
       right: 0;
@@ -155,7 +187,18 @@ const rssSlug = "/rss.xml";
   .menu-toggle svg .line-mid,
   .menu-toggle svg .line-bot {
     transition: all 0.3s ease;
-    transform-origin: center;
+  }
+
+  .menu-toggle svg .line-top {
+    transform-origin: 12px 6px;
+  }
+
+  .menu-toggle svg .line-mid {
+    transform-origin: 12px 12px;
+  }
+
+  .menu-toggle svg .line-bot {
+    transform-origin: 12px 18px;
   }
 
   .menu-toggle.active svg .line-top {
