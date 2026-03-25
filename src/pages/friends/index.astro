@@ -174,10 +174,14 @@ import MarqueeShow from "../../components/ui/MarqueeDemo";
         width: var(--avatar-size);
         height: var(--avatar-size);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: visible;
       }
 
       .friend-card:hover .friend-avatar {
         --avatar-size: 0px;
+        opacity: 0;
+        margin-right: -1rem;
+        transform: scale(0);
       }
 
       .friend-avatar img {
