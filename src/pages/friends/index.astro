@@ -71,19 +71,47 @@ import MarqueeShow from "../../components/ui/MarqueeDemo";
       <div class="friend-info-card">
         <div class="info-row">
           <span class="info-label">图标</span>
-          <code class="info-value">https://blog.sanxiaoxing.cn/favicon.svg</code>
+          <div class="code-block-wrapper">
+            <code class="info-value">https://blog.sanxiaoxing.cn/favicon.svg</code>
+            <button class="copy-btn" data-copy="https://blog.sanxiaoxing.cn/favicon.svg" aria-label="Copy">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span class="copy-tooltip">复制成功!</span>
+            </button>
+          </div>
         </div>
         <div class="info-row">
           <span class="info-label">名称</span>
-          <code class="info-value">SanXiaoXing</code>
+          <div class="code-block-wrapper">
+            <code class="info-value">SanXiaoXing</code>
+            <button class="copy-btn" data-copy="SanXiaoXing" aria-label="Copy">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span class="copy-tooltip">复制成功!</span>
+            </button>
+          </div>
         </div>
         <div class="info-row">
           <span class="info-label">链接</span>
-          <code class="info-value">https://blog.sanxiaoxing.cn/</code>
+          <div class="code-block-wrapper">
+            <code class="info-value">https://blog.sanxiaoxing.cn/</code>
+            <button class="copy-btn" data-copy="https://blog.sanxiaoxing.cn/" aria-label="Copy">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span class="copy-tooltip">复制成功!</span>
+            </button>
+          </div>
         </div>
         <div class="info-row">
           <span class="info-label">描述</span>
-          <code class="info-value">开心每一天</code>
+          <div class="code-block-wrapper">
+            <code class="info-value">开心每一天</code>
+            <button class="copy-btn" data-copy="开心每一天" aria-label="Copy">
+              <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span class="copy-tooltip">复制成功!</span>
+            </button>
+          </div>
         </div>
       </div>
     </details>
@@ -328,6 +356,25 @@ import MarqueeShow from "../../components/ui/MarqueeDemo";
         color: var(--gray);
       }
 
+      .code-block-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex: 1;
+        background: rgba(155, 219, 238, 0.05);
+        border: 1px solid rgba(133, 133, 168, 0.2);
+        border-radius: 6px;
+        padding: 0.4rem 0.6rem;
+        overflow: hidden;
+        transition: all 0.25s ease;
+        min-width: 0;
+      }
+
+      .code-block-wrapper:hover {
+        border-color: rgba(155, 219, 238, 0.4);
+        background: rgba(155, 219, 238, 0.1);
+      }
+
       .info-value {
         flex: 1;
         font-family: var(--font-family-mono);
@@ -336,9 +383,60 @@ import MarqueeShow from "../../components/ui/MarqueeDemo";
         background: transparent;
         border: none;
         padding: 0;
+        margin: 0;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+      }
+
+      .copy-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        color: var(--gray);
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        margin-left: 0.5rem;
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .copy-btn:hover {
+        color: var(--fontc);
+        background: rgba(133, 133, 168, 0.15);
+      }
+
+      .copy-btn.copied {
+        color: var(--green);
+      }
+
+      .copy-tooltip {
+        position: absolute;
+        right: 120%;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--fontc);
+        color: var(--bgc);
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        pointer-events: none;
+        font-family: var(--font-family-mono);
+        z-index: 10;
+      }
+
+      .copy-btn.copied .copy-tooltip {
+        opacity: 1;
+        visibility: visible;
+        right: 140%;
       }
 
       @media (max-width: 640px) {
@@ -365,3 +463,46 @@ import MarqueeShow from "../../components/ui/MarqueeDemo";
       }
     </style>
   </BlogPost>
+
+<script>
+  function initCopyButtons() {
+    const copyBtns = document.querySelectorAll('.copy-btn');
+    copyBtns.forEach(btn => {
+      // Create a clean clone to avoid duplicate event listeners during view transitions
+      const newBtn = btn.cloneNode(true) as HTMLElement;
+      btn.parentNode?.replaceChild(newBtn, btn);
+      
+      newBtn.addEventListener('click', async () => {
+        const textToCopy = newBtn.getAttribute('data-copy');
+        if (!textToCopy) return;
+
+        try {
+          await navigator.clipboard.writeText(textToCopy);
+          
+          const copyIcon = newBtn.querySelector('.copy-icon') as HTMLElement;
+          const checkIcon = newBtn.querySelector('.check-icon') as HTMLElement;
+          
+          if (copyIcon && checkIcon) {
+            copyIcon.style.display = 'none';
+            checkIcon.style.display = 'block';
+          }
+          
+          newBtn.classList.add('copied');
+          
+          setTimeout(() => {
+            if (copyIcon && checkIcon) {
+              copyIcon.style.display = 'block';
+              checkIcon.style.display = 'none';
+            }
+            newBtn.classList.remove('copied');
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy: ', err);
+        }
+      });
+    });
+  }
+
+  initCopyButtons();
+  document.addEventListener('astro:page-load', initCopyButtons);
+</script>
