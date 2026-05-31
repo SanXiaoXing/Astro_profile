@@ -4,12 +4,12 @@ import { Badge } from '../ui/badge'
 import { STUDIES } from '../../lib/constants'
 ---
 
-<Card colSpan="md:col-span-1" rowSpan="md:row-span-2" title="Study">
-  <div class="mt-2 flex w-full flex-wrap items-center justify-center gap-2">
+<Card colSpan="md:col-span-1" rowSpan="md:row-span-1" title="Study">
+  <div class="mt-3 flex flex-wrap items-center gap-2">
     {
       STUDIES.map((study) => (
         <a href={study.link} target="__blank">
-          <Badge variant="outline">{study.institution}</Badge>
+          <Badge variant="outline" className="border-muted/20 bg-transparent text-xs text-muted-foreground/70 hover:text-primary hover:border-primary/40 transition-colors">{study.institution}</Badge>
         </a>
       ))
     }

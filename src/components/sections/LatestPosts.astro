@@ -1,0 +1,48 @@
+---
+import Card from '../Card.astro'
+import { getBlogPosts } from '../../content/config'
+
+export async function getData() {
+  const postf = await getBlogPosts()
+  return postf
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, 5)
+}
+
+const posts = await getData()
+---
+
+<Card colSpan="md:col-span-1" rowSpan="md:row-span-2" title="Latest Posts">
+  <div class="mt-2 space-y-1">
+    {
+      posts.map((post, i) => (
+        <a
+          href={`/blog/${post.fileName}`}
+          class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-300 hover:bg-white/[0.03]"
+        >
+          <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-mono text-primary/60">
+            {i + 1}
+          </span>
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm text-muted-foreground/80 transition-colors group-hover:text-primary">
+              {post.data.title}
+            </p>
+          </div>
+          <span class="shrink-0 text-[11px] text-muted-foreground/30 font-mono">
+            {new Date(post.data.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          </span>
+        </a>
+      ))
+    }
+  </div>
+  <a
+    href="/blog"
+    class="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground/40 transition-colors hover:text-primary/60"
+  >
+    查看全部文章
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"/>
+      <polyline points="12 5 19 12 12 19"/>
+    </svg>
+  </a>
+</Card>

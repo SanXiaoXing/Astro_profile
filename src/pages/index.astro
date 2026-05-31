@@ -2,11 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import IntroCard from '../components/sections/IntroCard.astro'
 import AboutMe from '../components/sections/AboutMe.astro'
-import Card from '../components/Card.astro'
-import TimeZoneCard from '../components/sections/TimeZoneCard.astro'
+import LatestPosts from '../components/sections/LatestPosts.astro'
 import Now from '../components/sections/Now.astro'
-import ExperienceCard from '../components/sections/ExperienceCard.astro'
-import StudyCard from '../components/sections/StudyCard.astro'
 import CardLink from '../components/Card_link.astro'
 ---
 
@@ -14,58 +11,41 @@ import CardLink from '../components/Card_link.astro'
   title="SanXiaoXing"
   description="SanXiaoXing - Happy everyday"
 >
-<div
-  slot="loader"
-  class="loader bg-darkslate-700 text-neutral-50 text-3xl font-black uppercase flex justify-center items-center w-screen h-screen z-50 fixed top-0 bottom-0 right-0 left-0"
+  <div
+    slot="loader"
+    class="loader flex h-screen w-screen fixed inset-0 z-50 items-center justify-center"
+    style="background: var(--bgc);"
   >
+    <div class="flex flex-col items-center gap-4">
+      <div class="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+      <span class="text-sm text-muted-foreground/50 font-mono">loading...</span>
+    </div>
   </div>
+
   <main
-  class="text-white m-auto p-2 grid gap-2 max-w-6xl overflow-hidden relative w-full sm:p-4 sm:gap-2 md:gap-2 md:p-4 lg:h-screen lg:grid-rows-7 lg:grid-cols-4 lg:gap-4 lg:max-h-[800px]"
-  data-animate-enter
->
-    <IntroCard />
-    <AboutMe />
-    <ExperienceCard />
-    <Now />
-    <StudyCard /> 
+    class="mx-auto w-full max-w-5xl overflow-hidden p-3 sm:p-4 md:p-6"
+    data-animate-enter
+  >
+    <div class="grid gap-3 sm:gap-4 md:grid-cols-3 md:gap-4">
+      <IntroCard />
+      <LatestPosts />
+      <AboutMe />
+      <Now />
+      <CardLink href='/blog' colSpan="md:col-span-1">
+        <span class="text-3xl">Blog</span>
+      </CardLink>
+      <CardLink href='/tags' colSpan="md:col-span-1">
+        <span class="text-3xl">Tags</span>
+      </CardLink>
+    </div>
+    <div class="mt-6 text-center">
+      <p class="text-xs text-muted-foreground/30 font-mono">
+        © 2023 - {new Date().getFullYear()} · Crafted with ♥️ using
+        <a href="https://astro.build/" target="_blank" class="text-primary/40 hover:text-primary/70 transition-colors"> Astro</a>
+        by <a href="https://github.com/SanXiaoXing" target="_blank" class="text-primary/40 hover:text-primary/70 transition-colors">SanXiaoXing</a>
+      </p>
+    </div>
 
-    <CardLink 
-      href='/blog'
-      colSpan="md:col-span-1" rowSpan="md:row-span-1">
-        <div class="text-4xl">Blog</div>
-    </CardLink>
-
-    <Card colSpan="md:col-span-1" rowSpan="md:row-span-2">
-      <div id="show" class="flex h-full flex-col justify-between">
-        <blockquote class="mt-6 border-l-2 pl-6 italic">
-          “Anything one man can imagine, other men can make real.”
-        </blockquote> 
-        <p class="mt-2 text-xs">- Jules Verne</p>
-      </div>
-    </Card>
-    <TimeZoneCard />
-
-    <CardLink 
-      href='/tags'
-      colSpan="md:col-span-1" rowSpan="md:row-span-1">
-        <div class="text-4xl">Tags</div>
-    </CardLink>
-
-    <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
-      <div class="flex justify-center items-center w-full h-full">
-        <div class="text-xs">
-          © 2023 - {new Date().getFullYear()} · Crafted with ♥️ using <a
-            href="https://astro.build/"
-            target="_blank"
-            class="text-red-500">Astro</a
-          > by <a
-          href="https://github.com/SanXiaoXing"
-          target="_blank"
-          class="text-red-500">SanXiaoXing</a
-          >.
-        </div>
-      </div>
-    </Card>
   </main>
 </BaseLayout>
 
@@ -98,48 +78,4 @@ import CardLink from '../components/Card_link.astro'
   }
 </script>
 
-<script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/0.1.0-beta.2/libs/oversea/index.js" is:inline></script>
-<script is:inline>
-  if (typeof window !== 'undefined') {
-    new CozeWebSDK.WebChatClient({
-      config: {
-        bot_id: '7320231897681035270',
-      },
-      componentProps: {
-        title: 'Coze',
-      },
-    });
-  }
-</script>
-
-<style>
-  #show {
-      position: relative; /* 让伪元素可以绝对定位 */
-      overflow: hidden; 
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      flex-direction: column;
-      box-sizing: border-box; /* 确保内边距不会影响元素的总大小 */
-  }
-
-  /* 伪元素样式 */
-  #show::before {
-      content: '';
-      background-image: url('/favicon_bg.svg');
-      background-size: cover;
-      background-position: center;
-      opacity: 0; /* 初始不透明 */
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      transition: opacity 0.5s ease; /* 添加过渡效果 */
-  }
-
-  #show:hover::before {
-      opacity: 0.2; /* 鼠标悬停时透明度变为 0.2，显示一点点 */
-  }
-</style>
 <script defer src="https://umami-one-pi.vercel.app/script.js" data-website-id="ff2a88e9-b998-415a-962f-6ec825f06679"></script>

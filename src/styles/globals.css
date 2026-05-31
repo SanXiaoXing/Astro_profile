@@ -4,68 +4,64 @@
 
 @layer base {
   :root {
-    --background: 235, 14%, 15%;
-    --foreground: 60 9.1% 97.8%;
-    --card: 231, 15%, 18%;
-    --card-foreground: 60 9.1% 97.8%;
-    --popover: 20 14.3% 4.1%;
-    --popover-foreground: 60 9.1% 97.8%;
-    --primary: 20.5 90.2% 48.2%;
-    --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 60 9.1% 97.8%;
-    --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 60 9.1% 97.8%;
-    --destructive: 0 72.2% 50.6%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    --border: 0, 0%, 30%;
-    --input: 12 6.5% 15.1%;
-    --ring: 20.5 90.2% 48.2%;
+    --background: 240 18% 7%;
+    --foreground: 220 20% 92%;
+    --card: 230 15% 16%;
+    --card-foreground: 220 20% 92%;
+    --popover: 240 18% 10%;
+    --popover-foreground: 220 20% 92%;
+    --primary: 210 80% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 250 65% 60%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 230 10% 22%;
+    --muted-foreground: 230 10% 65%;
+    --accent: 38 92% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 230 8% 28%;
+    --input: 230 8% 28%;
+    --ring: 210 80% 60%;
     --radius: 1rem;
-    --hc: #9bdbee;
-    --orange: #ffb300;
-    --purple: #bd93f9;
-    --purple-hover: #bf93f980;
-    --cyan: #8be9fd;
-    --cyan-hover: #8be9fd80;
-    --pink: #ff79c6;
-    --pink-hover: #ff79c680;
-    --white: #f8f8f2;
-    --white-hover: #f8f8f280;
-    --red: #ff5555;
-    --yellow: #f1fa8c;
-    --green: #50fa7b;
-    --current-line: #44475a;
 
-    --font-family-base:
-    'noto-serif',
-    'FutureMono',
-    ui-monospace,
-    'Chinese Quotes', 'Inter var', 'Inter', ui-sans-serif,
-      system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-      'Helvetica Neue', Helvetica, Arial, 'Noto Sans', sans-serif,
-      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-      --font-family-mono:
-    'FutureMono',
-    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco,
-      Consolas, 'Liberation Mono', 'Courier New','noto-serif', monospace;
-    /* --font-family-mono:  'zpix', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco,
-      Consolas, 'Liberation Mono', 'Courier New', monospace; */
-    --bgc-light: #333338;
-    --bgc: #282a35;
-    --fontc: #fdfff2;
-    --accent-dark: #ff7700;
-    --black: 15, 18, 25;
-    --gray: #8585a8;
-    --gray-light: #9898c0;
-    --gray-dark: 34, 41, 57;
+    --glass-bg: hsla(230, 15%, 16%, 0.35);
+    --glass-border: hsla(0, 0%, 100%, 0.06);
+    --glass-shine: hsla(0, 0%, 100%, 0.03);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+
+    --hc: #7dd3fc;
+    --orange: #f5a623;
+    --purple: #a78bfa;
+    --purple-hover: rgba(167, 139, 250, 0.5);
+    --cyan: #67e8f9;
+    --cyan-hover: rgba(103, 232, 249, 0.5);
+    --pink: #f472b6;
+    --pink-hover: rgba(244, 114, 182, 0.5);
+    --white: #f0f0f5;
+    --white-hover: rgba(240, 240, 245, 0.5);
+    --red: #f87171;
+    --yellow: #fde68a;
+    --green: #6ee7b7;
+    --current-line: rgba(255, 255, 255, 0.05);
+
+    --font-family-base: 'EmblemaOne', 'noto-serif', 'FutureMono', ui-monospace, 'Chinese Quotes', 'Inter var', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-family-display: 'EmblemaOne', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-family-mono: 'FutureMono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', 'noto-serif', monospace;
+
+    --bgc-light: rgba(30, 30, 42, 0.8);
+    --bgc: #0a0a12;
+    --fontc: #f0f0f5;
+    --accent-dark: #60a5fa;
+    --black: 10, 10, 18;
+    --gray: #8b8ba0;
+    --gray-light: #a8a8c0;
+    --gray-dark: 20, 20, 30;
     --gray-gradient: rgba(var(--gray-light), 50%), #fff;
-    --box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-      0 16px 32px rgba(var(--gray), 33%);
+    --box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%);
   }
 }
+
 @layer base {
   * {
     @apply border-border;
@@ -99,23 +95,20 @@
 
 @keyframes enter {
   0% {
-      opacity: 0;
-      /* transform: translateY(-30px) */
+    opacity: 0;
   }
-
   to {
-      opacity: 1;
-      transform: none;
+    opacity: 1;
+    transform: none;
   }
 }
 
 @keyframes blurOut {
   from {
-      filter: blur(20px);
+    filter: blur(20px);
   }
-
   to {
-      filter: blur(0px);
+    filter: blur(0px);
   }
 }
 
@@ -128,111 +121,113 @@
   animation-delay: var(--start);
 }
 
-/* Add this to your CSS file (e.g., styles.css) */
-.timezone-text {
-  font-family: "Lobster", Times, "Times New Roman", serif;
-  font-size: 48px;
-  text-align: center;
-}
 @font-face {
-	font-family: 'zpix';
-	src: url('/fonts/VonwaonBitmap-16px.woff2') format('woff');
-	font-weight: 300;
-	font-style: normal;
-	font-display: swap;
+  font-family: 'zpix';
+  src: url('/fonts/VonwaonBitmap-16px.woff2') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-	font-family: 'FutureMono';
-	src: url('/fonts/FutureMono.woff2') format('woff');
-	font-weight: 300;
-	font-style: normal;
-	font-display: swap;
+  font-family: 'FutureMono';
+  src: url('/fonts/FutureMono.woff2') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
 }
+
 @font-face {
-	font-family: 'noto-serif';
-	src: url('/fonts/noto-serif.woff2') format('woff');
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
+  font-family: 'noto-serif';
+  src: url('/fonts/noto-serif.woff2') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
+
+@font-face {
+  font-family: 'EmblemaOne';
+  src: url('/fonts/EmblemaOne-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
-	font-family: var(--font-family-base);
-	margin: 0;
-	padding: 0;
-	text-align: left;
-	background-color: var(--bgc);
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: var(--fontc);
-	font-size: 15px;
-	letter-spacing: 0.7px;
-	position: relative;
-  counter-reset: h1-counter;  /* 定义并初始化计数器 */
+  font-family: var(--font-family-base);
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  background: var(--bgc);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: var(--fontc);
+  font-size: 15px;
+  letter-spacing: 0.7px;
+  position: relative;
+  counter-reset: h1-counter;
 }
 
 body::before {
   content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-background-size: 100%;
-/* background-image: url('bg.webp'); */
-  /* 添加模糊效果 */
-  filter: blur(5px);
-  /* 将遮罩层放置在背景图片前面 */
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 0% 0%, hsla(210, 80%, 60%, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, hsla(250, 65%, 60%, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, hsla(38, 92%, 55%, 0.03) 0%, transparent 60%);
+  pointer-events: none;
   z-index: -1;
-min-height: 100vh;
 }
+
 ::selection {
-  /* background-color: ;  */
-  color: var(--accent-dark); /* 修改选中文字的前景（文字）颜色 */
+  color: var(--accent-dark);
 }
 
 main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 0em 1em;
-	/* padding-top: 10vh; */
+  width: 720px;
+  max-width: calc(100% - 2em);
+  margin: auto;
+  padding: 0em 1em;
 }
 
 main_work {
   width: 920px;
-	margin: auto;
+  margin: auto;
 }
+
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-	font-family: var(--font-family-base);
-	margin: 1rem 0 1rem 0;
-	color: var(--fontc);
-	line-height: 1.5;
+  font-family: var(--font-family-display);
+  margin: 1rem 0 1rem 0;
+  color: var(--fontc);
+  line-height: 1.5;
 }
+
 h1 {
-	font-size: 3em;
-  
+  font-size: 3em;
 }
+
 h2 {
-	font-size: 1.6em;
+  font-size: 1.6em;
 }
+
 h3 {
-	font-size: 1.4em;
+  font-size: 1.4em;
 }
+
 h4 {
-	font-size: 1.3em;
+  font-size: 1.3em;
 }
+
 h5 {
-	font-size: 1.2em;
+  font-size: 1.2em;
 }
-/* ----------------------------------
-   Markdown Content Styling (.headline)
-   ---------------------------------- */
+
 .headline {
   color: var(--fontc);
   line-height: 1.8;
@@ -245,7 +240,7 @@ h5 {
 .headline h4,
 .headline h5,
 .headline h6 {
-  font-family: var(--font-family-base);
+  font-family: var(--font-family-display);
   font-weight: 700;
   line-height: 1.4;
   margin-top: 2.5em;
@@ -267,7 +262,7 @@ h5 {
 
 .headline h2 {
   font-size: 1.75em;
-  border-bottom: 1px solid rgba(133, 133, 168, 0.2);
+  border-bottom: 1px solid rgba(139, 139, 160, 0.2);
   padding-bottom: 0.5em;
   display: flex;
   align-items: center;
@@ -316,7 +311,7 @@ h5 {
   margin: 1.5em 0;
   padding: 1rem 1.5rem;
   border-left: 4px solid var(--hc);
-  background: linear-gradient(90deg, rgba(155, 219, 238, 0.1), transparent);
+  background: linear-gradient(90deg, hsla(210, 80%, 60%, 0.08), transparent);
   border-radius: 0 8px 8px 0;
   color: var(--gray-light);
   font-style: italic;
@@ -367,7 +362,7 @@ h5 {
   max-width: 100%;
   height: auto;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(133, 133, 168, 0.2);
+  border: 1px solid rgba(139, 139, 160, 0.2);
   transition: transform 0.3s ease;
 }
 
@@ -397,32 +392,31 @@ h5 {
   font-family: var(--font-family-mono);
   font-size: 0.85em;
   padding: 0.2em 0.4em;
-  background: rgba(155, 219, 238, 0.15);
+  background: rgba(125, 211, 252, 0.15);
   color: var(--hc);
   border-radius: 6px;
-  border: 1px solid rgba(155, 219, 238, 0.2);
+  border: 1px solid rgba(125, 211, 252, 0.2);
   margin: 0 0.2em;
 }
 
-/* Expressive Code & Pre styling overrides */
 .expressive-code {
   margin: 2em 0;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(133, 133, 168, 0.2);
+  border: 1px solid rgba(139, 139, 160, 0.2);
   transition: all 0.3s ease;
 }
 
 .expressive-code:hover {
-  border-color: rgba(155, 219, 238, 0.4);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(155, 219, 238, 0.1);
+  border-color: rgba(125, 211, 252, 0.4);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(125, 211, 252, 0.1);
 }
 
 .headline pre {
   margin: 0;
   padding: 1.5rem;
-  background: rgba(40, 42, 53, 0.8) !important;
+  background: rgba(15, 15, 25, 0.8) !important;
   border: none;
   border-radius: 0;
 }
@@ -437,7 +431,7 @@ h5 {
   margin: 3em 0;
   border: none;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(133, 133, 168, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(139, 139, 160, 0.3), transparent);
 }
 
 figcaption {
@@ -445,24 +439,28 @@ figcaption {
   font-size: 1rem;
   text-align: center;
 }
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: hsl(var(--background));
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--hc), hsl(var(--primary)));
   border-radius: 4px;
   transition: background 0.3s ease;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, hsl(var(--primary)), var(--orange));
 }
+
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--hc) var(--background);
 }
-

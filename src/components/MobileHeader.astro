@@ -47,21 +47,18 @@ const rssSlug = "/rss.xml";
     const mobileNav = document.getElementById('mobile-nav');
 
     if (menuToggle && mobileNav) {
-      // 切换菜单状态
       const toggleMenu = (e: Event) => {
         e.stopPropagation();
         mobileNav.classList.toggle('open');
         menuToggle.classList.toggle('active');
       };
 
-      // 移除旧监听器防止重复绑定
       menuToggle.removeEventListener('click', (window as any)._toggleMenu || (() => {}));
       (window as any)._toggleMenu = toggleMenu;
       menuToggle.addEventListener('click', toggleMenu);
     }
   }
 
-  // 点击外部或点击链接时关闭菜单
   function setupDocumentClick() {
     const documentClick = (e: Event) => {
       const target = e.target as HTMLElement;
@@ -69,7 +66,6 @@ const rssSlug = "/rss.xml";
       const menuToggle = document.getElementById('menu-toggle');
       
       if (mobileNav && menuToggle) {
-        // 如果点击的不是header内部，或者是点击了导航链接，则关闭菜单
         if (!target.closest('header') || target.closest('.nav-links a')) {
           mobileNav.classList.remove('open');
           menuToggle.classList.remove('active');
@@ -82,11 +78,9 @@ const rssSlug = "/rss.xml";
     document.addEventListener('click', documentClick);
   }
 
-  // 初始加载
   initMobileNav();
   setupDocumentClick();
 
-  // 兼容 Astro ViewTransitions 页面切换
   document.addEventListener('astro:page-load', initMobileNav);
 </script>
 
@@ -99,15 +93,14 @@ const rssSlug = "/rss.xml";
     header {
       display: block;
       z-index: 100;
-      position: -webkit-sticky;
       position: sticky;
       top: 0;
       left: 0;
       right: 0;
-      background: rgba(40, 42, 53, 0.95);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(155, 219, 238, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: hsla(240, 18%, 7%, 0.6);
+      border-bottom: 1px solid hsla(0, 0%, 100%, 0.04);
     }
   }
 
@@ -144,43 +137,43 @@ const rssSlug = "/rss.xml";
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 10px;
-    background: rgba(155, 219, 238, 0.1);
-    border: 1px solid rgba(155, 219, 238, 0.2);
+    background: hsla(230, 15%, 16%, 0.3);
+    border: 1px solid hsla(0, 0%, 100%, 0.04);
     color: var(--gray);
     text-decoration: none;
     transition: all 0.25s ease;
   }
 
   .rss-btn:hover {
-    color: var(--orange);
-    background: rgba(255, 179, 0, 0.1);
-    border-color: var(--orange);
+    color: hsl(var(--accent));
+    background: hsla(38, 92%, 55%, 0.1);
+    border-color: hsl(var(--accent) / 0.3);
   }
 
   .menu-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 10px;
-    background: rgba(155, 219, 238, 0.1);
-    border: 1px solid rgba(155, 219, 238, 0.2);
+    background: hsla(230, 15%, 16%, 0.3);
+    border: 1px solid hsla(0, 0%, 100%, 0.04);
     color: var(--fontc);
     cursor: pointer;
     transition: all 0.25s ease;
   }
 
   .menu-toggle:hover {
-    background: rgba(155, 219, 238, 0.15);
-    border-color: var(--hc);
+    background: hsla(210, 80%, 60%, 0.08);
+    border-color: hsla(210, 80%, 60%, 0.3);
   }
 
   .menu-toggle.active {
-    background: rgba(155, 219, 238, 0.2);
+    background: hsla(210, 80%, 60%, 0.12);
   }
 
   .menu-toggle svg .line-top,
@@ -219,13 +212,12 @@ const rssSlug = "/rss.xml";
     overflow: hidden;
     transition: max-height 0.35s ease, padding 0.35s ease;
     padding: 0 1rem;
-    background: rgba(40, 42, 53, 0.98);
   }
 
   .mobile-nav.open {
     max-height: 320px;
     padding: 0.75rem 1rem 1rem;
-    border-top: 1px solid rgba(155, 219, 238, 0.1);
+    border-top: 1px solid hsla(0, 0%, 100%, 0.04);
   }
 
   .nav-links {
@@ -247,12 +239,12 @@ const rssSlug = "/rss.xml";
 
   .nav-links :global(a:hover) {
     color: var(--fontc);
-    background: rgba(155, 219, 238, 0.1);
+    background: hsla(210, 80%, 60%, 0.08);
   }
 
   .nav-links :global(a.active) {
     color: var(--hc);
-    background: rgba(155, 219, 238, 0.15);
+    background: hsla(210, 80%, 60%, 0.12);
     font-weight: 600;
   }
 </style>

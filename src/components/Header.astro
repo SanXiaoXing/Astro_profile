@@ -39,9 +39,14 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
   header {
     font-size: 1.07rem;
     z-index: 100;
-    position: relative;
+    position: sticky;
+    top: 0;
     margin: 0;
     padding: 0 1em;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: hsla(240, 18%, 7%, 0.6);
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.04);
   }
 
   @media only screen and (max-width: 600px) {
@@ -52,15 +57,17 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
   }
 
   nav {
-    padding: 1em 0.5em;
+    padding: 0.75em 0.5em;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   .header-home {
     display: flex;
-    font-size: 1.5rem;
+    font-size: 1.35rem;
   }
 
   .header-home a {
@@ -69,6 +76,7 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
     color: var(--fontc);
     text-decoration: none;
     transition: color 0.3s ease;
+    letter-spacing: -0.5px;
   }
 
   .header-home a:hover {
@@ -78,32 +86,33 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
   .internal-links {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-    background: rgba(40, 42, 53, 0.6);
-    padding: 0.35rem 0.5rem;
+    gap: 0.15rem;
+    background: hsla(230, 15%, 16%, 0.3);
+    padding: 0.3rem 0.4rem;
     border-radius: 12px;
-    border: 1px solid rgba(155, 219, 238, 0.1);
+    border: 1px solid hsla(0, 0%, 100%, 0.04);
+    backdrop-filter: blur(8px);
   }
 
   .internal-links :global(a) {
     font-family: var(--font-family-mono);
-    padding: 0.5em 1em;
+    padding: 0.45em 1em;
     color: var(--gray);
     text-decoration: none;
     position: relative;
     transition: all 0.25s ease;
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
   .internal-links :global(a:hover) {
     color: var(--fontc);
-    background: rgba(155, 219, 238, 0.1);
+    background: hsla(210, 80%, 60%, 0.08);
   }
 
   .internal-links :global(a.active) {
     color: var(--hc);
-    background: rgba(155, 219, 238, 0.15);
+    background: hsla(210, 80%, 60%, 0.12);
     font-weight: 600;
   }
 
@@ -111,9 +120,9 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    margin-left: 0.25rem;
+    width: 38px;
+    height: 38px;
+    margin-left: 0.15rem;
     color: var(--gray);
     background: transparent;
     border-radius: 8px;
@@ -122,13 +131,13 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
   }
 
   .icon-link:hover {
-    color: var(--orange);
-    background: rgba(255, 179, 0, 0.1);
+    color: hsl(var(--accent));
+    background: hsla(38, 92%, 55%, 0.1);
   }
 
   .icon-link svg {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
 
   @media (max-width: 720px) {

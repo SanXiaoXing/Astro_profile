@@ -1,58 +1,32 @@
 ---
 import Card from '../Card.astro'
-import { Button } from '../ui/button'
 import { EXPERIENCE } from '../../lib/constants'
 ---
 
-<Card 
+<Card
   href='/work'
-  colSpan="md:col-span-1" rowSpan="md:row-span-5" title="About me">
-  <br>
-  <div class="flex flex-col gap-2">
-    <div class="text-sm font-light">
-      Hi, 我是SanXiaoXing, 一个热爱探索技术的在职工作者。
-      <br />
-      <br />
-      我主要使用的语言及工具：
-      <ul class="list-inside list-disc">
-        <li>Java</li>
-        <li>Python</li>
-        <li>SQL</li>
-        <li>Astro</li>
-        <li>Lua</li>
-        <li>C</li>
-      </ul>
+  colSpan="md:col-span-1" rowSpan="md:row-span-1" title="About me">
+  <div class="mt-1 space-y-2">
+    <p class="text-xs text-muted-foreground/80 leading-relaxed line-clamp-2">
+      Hi，我是 SanXiaoXing，热爱探索技术的在职工作者。
+    </p>
+    <div class="flex flex-wrap gap-1.5">
+      <span class="text-muted-foreground/50 font-mono text-[10px] px-1.5 py-0.5 rounded bg-primary/5 border border-primary/10">Java</span>
+      <span class="text-muted-foreground/50 font-mono text-[10px] px-1.5 py-0.5 rounded bg-secondary/5 border border-secondary/10">Python</span>
+      <span class="text-muted-foreground/50 font-mono text-[10px] px-1.5 py-0.5 rounded bg-accent/5 border border-accent/10">SQL</span>
+      <span class="text-muted-foreground/50 font-mono text-[10px] px-1.5 py-0.5 rounded bg-primary/5 border border-primary/10">Astro</span>
     </div>
   </div>
-  <br>
-  <h2 class="z-20 m-0 text-xl font-bold text-orange-500">Experience</h2>
-  <div class="mt-2 space-y-4">
-    {
-      EXPERIENCE.slice(0, 2).map((exp) => (
-        <div>
-          <h3 class="text-lg font-semibold">{exp.position}</h3>
-          <a class="text-sm text-primary" href={exp?.link ?? ''}>
-            {exp.company}
-          </a>
-          <p class="text-sm text-gray-600">
-            {exp.start} - {exp.end}
-          </p>
-        </div>
-      ))
-    }
-    <a href="/work">
-      <Button variant="link" className="pl-0"> View More </Button>
-    </a>
+  <div class="mt-2 pt-2 border-t border-white/5">
+    <div class="space-y-1.5">
+      {
+        EXPERIENCE.slice(0, 1).map((exp) => (
+          <div class="border-l-2 border-primary/20 pl-2">
+            <p class="text-xs font-medium text-foreground/80">{exp.position}</p>
+            <p class="text-[10px] text-muted-foreground/50 font-mono">{exp.company}</p>
+          </div>
+        ))
+      }
+    </div>
   </div>
 </Card>
-<style>
-  .list-inside {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); /* 每行两个项目 */
-      gap: 8px; /* 项目之间的间距，可以自定义 */
-  }
-  .list-inside li {
-      list-style-type: disc; /* 保留项目前的圆点 */
-      margin-left: 10px; /* 调整圆点的位置 */
-  }
-</style>

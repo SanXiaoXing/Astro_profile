@@ -2,108 +2,69 @@
 import Card from '../Card.astro'
 import { Button } from '../ui/button'
 import { LINKS } from '../../lib/constants'
-import { Github, Mail, Rss, Gitlab } from 'lucide-react'
+import { Github, Mail, Rss } from 'lucide-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faGit} from '@fortawesome/free-brands-svg-icons'; // 如果是品牌图标
-import { faHouseSignal } from '@fortawesome/free-solid-svg-icons'; //如果是实心图标
-import { imageConfig } from 'astro:assets';
+import { faGithub, faGit} from '@fortawesome/free-brands-svg-icons';
+import { faHouseSignal } from '@fortawesome/free-solid-svg-icons';
 import { FlipWords } from "../ui/flip-words";
-import MorphingText from "../ui/morphing-text";
 
 const words = ["你好，欢迎来到我的博客", "这是我的开心乐园", "这里记录我的技术成长", "努力向上，天天开心啊！"];
 ---
 
-<Card colSpan="md:col-span-3" rowSpan="md:row-span-3">
-  <div class="flex h-full w-full relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-[hsl(var(--primary)/0.05)] via-transparent to-[hsl(var(--purple)/0.05)] opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
+<Card colSpan="md:col-span-3" rowSpan="md:row-span-2">
+  <div class="flex h-full w-full items-center relative overflow-hidden">
+    <div class="absolute -bottom-8 -right-8 z-0 opacity-20 md:opacity-30">
+      <div
+        class="h-48 w-48 rounded-full"
+        style={{
+          background: 'radial-gradient(circle, hsla(210, 80%, 60%, 0.3), transparent 70%)',
+        }}
+      />
+    </div>
     <img
-      width="300"
-      height="300"
+      width="240"
+      height="240"
       src="/favicon.svg"
-      class="pointer-events-none absolute bottom-[-20px] right-[-110px] z-[1] max-h-[300px] w-auto select-none opacity-50 md:relative md:bottom-auto md:right-auto md:z-auto md:opacity-100 rounded-full animate-float"
-      alt="memoji of andres plaza"
+      class="pointer-events-none absolute -bottom-10 -right-10 z-[1] max-h-[200px] w-auto select-none opacity-20 md:relative md:bottom-auto md:right-auto md:z-auto md:opacity-80 animate-float"
+      alt="avatar"
     />
-    <div class="flex flex-col justify-between gap-4 md:max-h-[300px] relative z-10">
-      <div class="flex h-full flex-col" style={{ justifyContent: 'center', display: 'flex', width: '100%', height: '100%' }}>
-        <h1 class="hometitle relative">
-          <span class="relative inline-block animate-shimmer">SanXiaoXing的博客</span>
+    <div class="flex flex-col justify-between gap-4 relative z-10 md:w-full md:max-w-2xl">
+      <div>
+        <h1 class="text-3xl font-bold tracking-tight md:text-5xl">
+          <span class="text-foreground">SanXiaoXing</span>
+          <span class="ml-2 text-muted-foreground/60 font-mono text-sm md:text-base">的博客</span>
         </h1>
       </div>
-      <div class="h-[10rem] flex justify-center items-center px-1">
-        <FlipWords words={words} duration={2000} className="text-4xl font-simsun" client:load />
+      <div class="h-12 flex items-center">
+        <FlipWords words={words} duration={2500} className="text-lg md:text-xl text-muted-foreground/80 font-light" client:load />
       </div>
-      <div class="flex gap-4 button-group">
+      <div class="flex gap-3">
         <a href={LINKS.github} aria-label="github profile" target="_blank">
-          <Button aria-label="github profile">
-            <FontAwesomeIcon icon={faGithub} className="icon"/>
-            <span class="sr-only">GitHub Profile</span>
+          <Button variant="outline" size="icon" className="h-9 w-9 rounded-full border-muted/30 bg-transparent hover:bg-primary/10 hover:border-primary/40 transition-all duration-300">
+            <FontAwesomeIcon icon={faGithub} className="h-4 w-4 text-muted-foreground hover:text-primary" />
           </Button>
         </a>
         <a href={LINKS.gitee} aria-label="gitee profile" target="_blank">
-          <Button aria-label="gitee profile">
-            <FontAwesomeIcon icon={faGit} className="icon"/>
-            <span class="sr-only">Gitee Profile</span>
+          <Button variant="outline" size="icon" className="h-9 w-9 rounded-full border-muted/30 bg-transparent hover:bg-secondary/10 hover:border-secondary/40 transition-all duration-300">
+            <FontAwesomeIcon icon={faGit} className="h-4 w-4 text-muted-foreground hover:text-secondary" />
           </Button>
         </a>
         <a href={LINKS.homepage} aria-label="homepage profile" target="_blank">
-          <Button aria-label="homepage profile">
-            <FontAwesomeIcon icon={faHouseSignal} className="icon"/>
-            <span class="sr-only">homepage Profile</span>
+          <Button variant="outline" size="icon" className="h-9 w-9 rounded-full border-muted/30 bg-transparent hover:bg-accent/10 hover:border-accent/40 transition-all duration-300">
+            <FontAwesomeIcon icon={faHouseSignal} className="h-4 w-4 text-muted-foreground hover:text-accent" />
           </Button>
         </a>
         <a href={LINKS.mail} aria-label="mail profile" target="_blank">
-          <Button>
-            <Mail />
-            <span class="sr-only">Email contact</span>
+          <Button variant="outline" size="icon" className="h-9 w-9 rounded-full border-muted/30 bg-transparent hover:bg-primary/10 hover:border-primary/40 transition-all duration-300">
+            <Mail className="h-4 w-4 text-muted-foreground hover:text-primary" />
           </Button>
         </a>
         <a href={LINKS.rss} aria-label="rss profile" target="_blank">
-          <Button aria-label="rss profile">
-            <Rss />
-            <span class="sr-only">Rss Profile</span>
+          <Button variant="outline" size="icon" className="h-9 w-9 rounded-full border-muted/30 bg-transparent hover:bg-accent/10 hover:border-accent/40 transition-all duration-300">
+            <Rss className="h-4 w-4 text-muted-foreground hover:text-accent" />
           </Button>
         </a>
       </div>
     </div>
   </div>
 </Card>
-
-<style is:global>
-  @keyframes shimmer {
-    0% { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(3deg); }
-  }
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-  .animate-shimmer {
-    background: linear-gradient(90deg, #FFC328 0%, #ff7700 25%, #FFC328 50%, #E20000 75%, #FFC328 100%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shimmer 12s linear infinite;
-  }
-  .hometitle {
-    font-size: 3rem;
-    font-weight: bold;
-    font-family: 'FutureMono', monospace;
-  }
-  .button-group a {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
-  }
-  .button-group a:hover {
-    transform: translateY(-3px);
-    filter: drop-shadow(0 0 8px hsl(var(--primary) / 0.6));
-  }
-  .icon {
-    width: 1.5rem;
-  }
-  .font-simsun {
-    font-family: 'SimSun', serif;
-  }
-</style>

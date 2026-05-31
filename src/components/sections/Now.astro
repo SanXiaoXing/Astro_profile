@@ -3,16 +3,47 @@ import Card from '../Card.astro'
 import Pulse from '../Pulse.astro'
 ---
 
-<Card 
+<Card
   href='https://cv.sanxiaoxing.cn'
-  colSpan="md:col-span-1" rowSpan="md:row-span-2" title='Now'>
-  <br>
-    <div class="flex flex-row justify-between">
-      <span class="cursor-pointer text-ms text-gray-500">点击查看简历</span>
-      <br>
-      <Pulse />
+  colSpan="md:col-span-1" rowSpan="md:row-span-1" title='Now'>
+  <div class="relative mt-3 space-y-3">
+    <!-- 装饰性背景光晕 -->
+    <div
+      class="pointer-events-none absolute -right-6 -top-6 h-24 w-24 opacity-20"
+      style={{
+        background: 'radial-gradient(circle, hsla(210, 80%, 60%, 0.25), transparent 70%)',
+        filter: 'blur(12px)',
+      }}
+    />
+
+    <!-- 当前状态 -->
+    <div class="relative flex items-center justify-between rounded-lg border border-emerald-500/10 bg-emerald-500/[0.03] px-3 py-2">
+      <div class="flex items-center gap-2.5">
+        <Pulse />
+        <div class="flex flex-col">
+          <span class="text-xs font-medium text-muted-foreground/90">在职北京某科技公司</span>
+          <span class="text-[10px] font-mono text-muted-foreground/40">Software Engineer</span>
+        </div>
+      </div>
     </div>
-    
-    
-  <p class="text-l">在职北京某公司</p>
+   
+
+    <!-- 底部统计 -->
+    <div class="relative flex items-center gap-3 rounded-lg border border-white/[0.03] bg-white/[0.01] px-3 py-1.5">
+      <div class="flex items-center gap-1.5">
+        <span class="text-[10px] font-mono font-medium text-muted-foreground/30">EXP</span>
+        <span class="text-xs font-mono text-muted-foreground/60">3+ 年</span>
+      </div>
+      <div class="h-3 w-px bg-white/5" />
+      <div class="flex items-center gap-1.5">
+        <span class="text-[10px] font-mono font-medium text-muted-foreground/30">LOC</span>
+        <span class="text-xs font-mono text-muted-foreground/60">北京</span>
+      </div>
+      <div class="h-3 w-px bg-white/5" />
+      <div class="flex items-center gap-1.5">
+        <span class="text-[10px] font-mono font-medium text-muted-foreground/30">ROLE</span>
+        <span class="text-xs font-mono text-muted-foreground/60">软件开发</span>
+      </div>
+    </div>
+  </div>
 </Card>

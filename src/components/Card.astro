@@ -16,23 +16,39 @@ const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
 ---
 
 <ShadcnCard
-  className={`card-animate transform-y-[-40%] align-start perspective-1200 group relative col-span-1 h-auto w-full flex-none transform justify-start overflow-hidden p-6 shadow-lg transition-all duration-500 ease-in-out hover:border-primary hover:shadow-[0_0_30px_-7px_hsl(20.5,90.2%,48.2%)] backdrop-blur-sm bg-gradient-to-br from-[hsl(var(--card)/0.8)] to-[hsl(var(--card)/0.4)] ${
+  className={`card-animate group relative col-span-1 h-auto w-full flex-none overflow-hidden p-6 shadow-lg transition-all duration-500 ease-out ${
     colSpan || 'md:col-span-2'
-  } ${rowSpan || ''} ${href ? 'cursor-pointer hover:border-primary' : ''} relative before:pointer-events-none before:absolute before:inset-0 before:rounded-inherit before:bg-gradient-to-br before:from-[hsl(var(--primary)/0.1)] before:to-transparent before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100`}
+  } ${rowSpan || ''} ${href ? 'cursor-pointer' : ''}`}
+  style={{
+    background: 'var(--glass-bg)',
+    backdropFilter: 'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
+    border: '1px solid var(--glass-border)',
+    boxShadow: 'var(--glass-shadow)',
+  }}
 >
+  <div
+    class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+    style={{
+      background: 'linear-gradient(135deg, hsla(210, 80%, 60%, 0.05), transparent 60%)',
+      borderRadius: 'inherit',
+    }}
+  />
   {href ? (
-    <a href={href} class={` h-full w-full ${colorText || ''}`}>
+    <a href={href} class={`relative z-10 flex h-full w-full flex-col ${colorText || ''}`}>
       <SquareArrowOutUpRight
-        className="relative h-6 float-right group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all ease-in-out duration-300 z-20"
-        size={20}
+        className="relative float-right h-6 text-muted-foreground/40 transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-primary"
+        size={18}
       />
       <ContentCard title={title} body={body}>
         <slot />
       </ContentCard>
     </a>
   ) : (
-    <ContentCard title={title} body={body}>
-      <slot />
-    </ContentCard>
+    <div class="relative z-10 flex h-full flex-col">
+      <ContentCard title={title} body={body}>
+        <slot />
+      </ContentCard>
+    </div>
   )}
 </ShadcnCard>
