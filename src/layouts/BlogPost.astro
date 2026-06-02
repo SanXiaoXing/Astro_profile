@@ -5,10 +5,31 @@ import Layout from "./Layout.astro";
 import Hr from"../components/Hr.astro";
 import Comments from"../components/Comments.astro"
 import Random from "../components/blog/utils/Randomblogs.astro"
+import { MessageWithReactions } from "../components/ui/reaction-chip";
+import { getSupabaseAnon } from "../lib/supabase";
+import { aggregateCounts } from "../lib/reactions";
 
 type Props = CollectionEntry<"blog">["data"];
 
 const { title, description, pubDate, updatedDate, heroImage, tags, categories, comments, random } = Astro.props;
+
+const postSlug = Astro.url.pathname;
+let initialCounts: Record<string, number> = {};
+
+try {
+  const supabase = getSupabaseAnon();
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("reactions")
+      .select("emoji")
+      .eq("post_slug", postSlug);
+    if (!error && data) {
+      initialCounts = aggregateCounts(data as Array<{ emoji: string }>);
+    }
+  }
+} catch (err) {
+  console.warn("[reactions] build-time fetch failed:", err);
+}
 ---
 
 <Layout
@@ -83,6 +104,15 @@ const { title, description, pubDate, updatedDate, heroImage, tags, categories, c
 
     <div class="prose headline">
       <slot />
+    </div>
+
+    <div class="reaction-container">
+      <MessageWithReactions
+        client:visible
+        text="觉得这篇文章怎么样？给个反应吧！"
+        postSlug={postSlug}
+        initialCounts={initialCounts}
+      />
     </div>
 
     {random !== false && (
@@ -273,6 +303,12 @@ const { title, description, pubDate, updatedDate, heroImage, tags, categories, c
       margin-top: 4rem;
       padding-top: 2rem;
       border-top: 1px solid rgba(133, 133, 168, 0.15);
+    }
+
+    .reaction-container {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: center;
     }
 
     @media (max-width: 640px) {
