@@ -1,4 +1,6 @@
 const VISITOR_ID_KEY = 'reaction:visitor-id'
+const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL as string | undefined
+const SUPABASE_ANON_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string | undefined
 
 /**
  * 从 localStorage 读取访客 UUID,没有就生成一个并持久化。
@@ -29,7 +31,6 @@ function generateVisitorId(): string | null {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID()
   }
-  // 极简兜底:8 字节随机十六进制
   if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
     const buf = new Uint8Array(16)
     crypto.getRandomValues(buf)
@@ -39,8 +40,75 @@ function generateVisitorId(): string | null {
 }
 
 /**
+ * 专供 Astro build-time (Node.js) 使用的只读聚合查询。
+ * 直接用 fetch + anon key 调 Supabase REST API,避免 createClient
+ * 在 Node 20 下因缺少原生 WebSocket 而报错。
+ */
+export async function fetchBuildTimeCounts(
+  postSlug: string,
+): Promise<Record<string, number>> {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return {}
+
+  try {
+    const url = new URL(`${SUPABASE_URL}/rest/v1/reactions`, SUPABASE_URL)
+    url.searchParams.set('post_slug', `eq.${postSlug}`)
+    url.searchParams.set('select', 'emoji')
+
+    const res = await fetch(url.toString(), {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!res.ok) return {}
+
+    const data: Array<{ emoji: string }> = await res.json()
+    return aggregateCounts(data)
+  } catch {
+    return {}
+  }
+}
+
+/**
+ * 在 React 组件(浏览器端)执行的实时查询:获取当前文章的聚合计数 + 我的当前选择。
+ * 浏览器有原生 WebSocket,所以这里继续使用 @supabase/supabase-js。
+ */
+export async function fetchLiveCounts(
+  supabase: import('@supabase/supabase-js').SupabaseClient,
+  postSlug: string,
+): Promise<Record<string, number>> {
+  const { data, error } = await supabase
+    .from('reactions')
+    .select('emoji')
+    .eq('post_slug', postSlug)
+
+  if (error || !data) return {}
+  return aggregateCounts(data)
+}
+
+/**
+ * 获取当前访客对某篇文章已选的反应(浏览器端)。
+ */
+export async function fetchMySelection(
+  supabase: import('@supabase/supabase-js').SupabaseClient,
+  postSlug: string,
+  visitorId: string,
+): Promise<string | null> {
+  const { data, error } = await supabase
+    .from('reactions')
+    .select('emoji')
+    .eq('post_slug', postSlug)
+    .eq('visitor_id', visitorId)
+    .maybeSingle()
+
+  if (error || !data) return null
+  return data.emoji
+}
+
+/**
  * 把 `{ emoji: count }` 形式的行数据聚合成 `{ emoji: count }`。
- * 提取出来方便 build-time 和 client 复用。
  */
 export function aggregateCounts(
   rows: Array<{ emoji: string }>,

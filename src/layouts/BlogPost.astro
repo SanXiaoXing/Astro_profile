@@ -6,8 +6,7 @@ import Hr from"../components/Hr.astro";
 import Comments from"../components/Comments.astro"
 import Random from "../components/blog/utils/Randomblogs.astro"
 import { MessageWithReactions } from "../components/ui/reaction-chip";
-import { getSupabaseAnon } from "../lib/supabase";
-import { aggregateCounts } from "../lib/reactions";
+import { fetchBuildTimeCounts } from "../lib/reactions";
 
 type Props = CollectionEntry<"blog">["data"];
 
@@ -16,20 +15,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags, categories, c
 const postSlug = Astro.url.pathname;
 let initialCounts: Record<string, number> = {};
 
-try {
-  const supabase = getSupabaseAnon();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from("reactions")
-      .select("emoji")
-      .eq("post_slug", postSlug);
-    if (!error && data) {
-      initialCounts = aggregateCounts(data as Array<{ emoji: string }>);
-    }
-  }
-} catch (err) {
-  console.warn("[reactions] build-time fetch failed:", err);
-}
+initialCounts = await fetchBuildTimeCounts(postSlug);
 ---
 
 <Layout
