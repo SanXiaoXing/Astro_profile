@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
@@ -25,10 +25,10 @@ export function MessageWithReactions({
 }: MessageWithReactionsProps) {
   const [counts, setCounts] = useState<Record<string, number>>(initialCounts)
   const [mySelection, setMySelection] = useState<string | null>(null)
-  const [bump, setBump] = useState(false)
   const [hydrated, setHydrated] = useState(false)
   const [supabase, setSupabase] = useState<SupabaseClient | null>(null)
   const [disabled, setDisabled] = useState(false)
+  const [bumpingEmoji, setBumpingEmoji] = useState<string | null>(null)
   const pendingRef = useRef(false)
 
   useEffect(() => {
@@ -92,9 +92,9 @@ export function MessageWithReactions({
     }
   }, [postSlug])
 
-  const triggerBump = useCallback(() => {
-    setBump(true)
-    window.setTimeout(() => setBump(false), 180)
+  const triggerBump = useCallback((emoji: string) => {
+    setBumpingEmoji(emoji)
+    window.setTimeout(() => setBumpingEmoji(null), 180)
   }, [])
 
   const applyLocal = useCallback(
@@ -126,7 +126,7 @@ export function MessageWithReactions({
 
     setMySelection(next)
     applyLocal(previous, next)
-    if (next) triggerBump()
+    if (next) triggerBump(emoji)
 
     try {
       const visitorId = getOrCreateVisitorId()
@@ -161,124 +161,99 @@ export function MessageWithReactions({
     }
   }
 
-  const visibleCounts = useMemo(() => {
-    return mySelection
-      ? Object.entries(counts).filter(([emoji]) => emoji === mySelection)
-      : []
-  }, [counts, mySelection])
+  const isActuallyDisabled = disabled || !hydrated
 
   return (
-    <div className={cn('flex w-full justify-center p-6', className)}>
+    <div className={cn('flex w-full justify-center', className)}>
       <div
         className={cn(
-          'group relative inline-block max-w-sm',
-          'rounded-lg border border-border bg-card px-3 py-2',
-          'text-sm text-foreground shadow-sm',
+          'relative w-full max-w-md',
+          'rounded-xl border border-white/[0.06]',
+          'bg-card/40 backdrop-blur-sm',
+          'px-5 py-4 sm:px-6 sm:py-5',
+          'shadow-lg shadow-black/10',
         )}
       >
-        <p className="text-pretty">{text}</p>
+        <div className="absolute left-6 right-6 top-0 h-px bg-gradient-to-r from-transparent via-hc/20 to-transparent" />
 
-        <div
-          className="mt-2 flex flex-wrap items-center gap-1.5"
-          aria-live="polite"
-          aria-atomic="false"
-        >
-          {hydrated &&
-            visibleCounts.map(([emoji, count]) => (
-              <span
+        <p className="mb-4 text-center text-sm text-foreground/70">
+          {text}
+        </p>
+
+        <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+          {reactionOptions.map((emoji) => {
+            const count = counts[emoji] ?? 0
+            const isSelected = emoji === mySelection
+            const isBumping = emoji === bumpingEmoji
+
+            return (
+              <button
                 key={emoji}
+                type="button"
+                disabled={isActuallyDisabled}
+                onClick={() => handleSelect(emoji)}
+                aria-pressed={isSelected}
                 className={cn(
-                  'inline-flex items-center gap-1 rounded-full',
-                  'bg-muted px-2 py-0.5 text-xs text-foreground/80 ring-1 ring-border',
-                  'transition-transform duration-200 ease-out',
-                  bump ? 'scale-110' : 'scale-100',
+                  'relative flex min-w-[52px] flex-col items-center gap-0.5',
+                  'rounded-xl px-3 py-2.5',
+                  'transition-all duration-200 ease-out select-none',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+
+                  isSelected
+                    ? [
+                        'bg-primary/10',
+                        'ring-1 ring-primary/30',
+                        'shadow-[0_0_20px_-8px_hsl(var(--primary))]',
+                      ]
+                    : [
+                        'bg-muted/30 hover:bg-muted/50',
+                        'ring-1 ring-transparent hover:ring-border/50',
+                        'active:bg-muted/70',
+                      ],
+
+                  isBumping && 'scale-110',
+
+                  isActuallyDisabled && 'cursor-not-allowed opacity-40',
                 )}
-                aria-label={`${emoji} ${count}`}
-                title={`${emoji} ${count}`}
+                aria-label={`${isSelected ? '已选择 ' : ''}反应 ${emoji}`}
               >
-                <span aria-hidden="true">{emoji}</span>
-                <span className="tabular-nums">{count}</span>
-              </span>
-            ))}
+                <span
+                  className={cn(
+                    'text-xl leading-none transition-transform duration-150',
+                    'hover:scale-110',
+                    isSelected && 'scale-110',
+                  )}
+                  aria-hidden="true"
+                >
+                  {emoji}
+                </span>
+                <span
+                  className={cn(
+                    'text-xs tabular-nums leading-none',
+                    isSelected
+                      ? 'font-medium text-primary'
+                      : 'text-foreground/60',
+                  )}
+                >
+                  {count}
+                </span>
+              </button>
+            )
+          })}
         </div>
 
-        <div
-          className={cn(
-            'pointer-events-none absolute -top-3 right-0 z-10',
-            'translate-y-1 opacity-0',
-            'transition-all duration-200 ease-out',
-            'group-hover:translate-y-0 group-hover:opacity-100 group-hover:pointer-events-auto',
-            'focus-within:translate-y-0 focus-within:opacity-100 focus-within:pointer-events-auto',
-          )}
-        >
-          <ReactionChip
-            onSelect={handleSelect}
-            emojis={reactionOptions}
-            selected={mySelection ?? undefined}
-            disabled={disabled}
-          />
-        </div>
+        {!disabled && hydrated && (
+          <p className="mt-3 text-center text-xs text-foreground/40">
+            {mySelection ? '再次点击可取消反应' : '点击表情参与互动'}
+          </p>
+        )}
+
+        {disabled && (
+          <p className="mt-3 text-center text-xs text-foreground/25">
+            阅读模式下无法记录反应
+          </p>
+        )}
       </div>
-    </div>
-  )
-}
-
-type ReactionChipProps = {
-  onSelect: (emoji: string) => void
-  className?: string
-  emojis?: string[]
-  selected?: string
-  disabled?: boolean
-}
-
-function ReactionChip({
-  onSelect,
-  className,
-  emojis = ['👍', '❤️', '😂', '🎉'],
-  selected,
-  disabled,
-}: ReactionChipProps) {
-  return (
-    <div
-      className={cn(
-        'pointer-events-auto flex items-center gap-1 rounded-full',
-        'bg-card/90 px-2 py-1 shadow-sm ring-1 ring-border backdrop-blur',
-        'transition-shadow',
-        disabled && 'opacity-50',
-        className,
-      )}
-      role="group"
-      aria-label="Add reaction"
-      aria-disabled={disabled}
-    >
-      {emojis.map((em) => {
-        const isActive = selected === em
-        return (
-          <button
-            key={em}
-            type="button"
-            disabled={disabled}
-            onMouseDown={(evt) => evt.preventDefault()}
-            onClick={(evt) => {
-              const btn = evt.currentTarget as HTMLButtonElement
-              onSelect(em)
-              setTimeout(() => btn.blur(), 0)
-            }}
-            aria-pressed={isActive}
-            className={cn(
-              'rounded-full p-1 text-base leading-none',
-              'transition-transform duration-150 ease-out',
-              'hover:scale-110 focus:scale-110 focus:outline-none',
-              'disabled:cursor-not-allowed disabled:hover:scale-100',
-              isActive ? 'bg-muted ring-1 ring-border' : '',
-            )}
-            aria-label={`React with ${em}`}
-            title={`React with ${em}`}
-          >
-            {em}
-          </button>
-        )
-      })}
     </div>
   )
 }

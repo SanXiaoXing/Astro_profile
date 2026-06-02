@@ -292,9 +292,21 @@ initialCounts = await fetchBuildTimeCounts(postSlug);
     }
 
     .reaction-container {
-      margin-top: 3rem;
+      margin-top: 4rem;
+      padding-top: 2rem;
       display: flex;
       justify-content: center;
+      position: relative;
+    }
+
+    .reaction-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(155, 219, 238, 0.3), transparent);
     }
 
     @media (max-width: 640px) {
