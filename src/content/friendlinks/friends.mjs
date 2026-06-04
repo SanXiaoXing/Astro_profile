@@ -62,6 +62,12 @@ const friendLinksZh = [
     link: 'https://longtao.fun',
     description: 'Ewige Wiederkunft',
   },
+  {
+    avatar: 'https://leehenry.top/friends/my-avatar-portrait.jpg',
+    name: '伏枥之间',
+    link: 'https://www.leehenry.top',
+    description: '何妨吟啸且徐行',
+  },
 ];
 
 const friendLinksInvalid = [
