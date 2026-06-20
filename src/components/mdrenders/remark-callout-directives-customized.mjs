@@ -1,5 +1,6 @@
 import { visit } from "unist-util-visit";
 import { fromMarkdown } from "mdast-util-from-markdown";
+import { toString } from "mdast-util-to-string";
 import { h } from "hastscript";
 
 function generate(title, children, hint) {
@@ -95,23 +96,42 @@ const callouts = {
       title: "Quote",
       hint: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4zM18 9a2 2 0 0 1-2 2h-4l-4 4V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4z"/></svg>`,
     },
+    // Aliases
+    warning: {
+      title: "Warning",
+      hint: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true"><path d="M12 9v4m0 4h.01M8.681 4.082C9.351 2.797 10.621 2 12 2s2.649.797 3.319 2.082l6.203 11.904a4.28 4.28 0 0 1-.046 4.019C20.793 21.241 19.549 22 18.203 22H5.797c-1.346 0-2.59-.759-3.273-1.995a4.28 4.28 0 0 1-.046-4.019L8.681 4.082Z"/></svg>`,
+    },
 
 };
 
+// Match Obsidian-style callout syntax: > [!type] or > [!type] Title
+const calloutPattern = /^\[!(\w+)\]\s*(.*)/;
+
 /**
  * adds callouts/admonitions
+ *
+ * Supports two syntaxes:
+ *
+ * 1. Directive syntax:
  * ```
  * :::warn{title="example"}
  * example warning
  * :::
  * ```
  *
- * supports: warn, note, success, danger, tip
+ * 2. Obsidian blockquote syntax:
+ * ```
+ * > [!warning]
+ * > example warning
+ * ```
+ *
+ * supports: warn, note, success, danger, tip, warning, etc.
  * @see {@link callouts} to edit icons
  */
 export default function remarkCalloutDirectives() {
   return (tree) => {
     visit(tree, (node) => {
+      // Handle :::warn directive syntax
       if (node.type === "containerDirective") {
         if (!callouts[node.name]) {
           return;
@@ -130,6 +150,78 @@ export default function remarkCalloutDirectives() {
 
         node.children = generate(
           title || callout.title,
+          node.children,
+          callout.hint
+        );
+
+        const tagName = callout.tagName || "aside";
+        const hast = h(tagName, node.attributes);
+        data.hName = hast.tagName;
+        data.hProperties = hast.properties;
+      }
+
+      // Handle > [!type] blockquote syntax
+      if (node.type === "blockquote") {
+        const firstPara = node.children[0];
+        if (!firstPara || firstPara.type !== "paragraph" || firstPara.children.length === 0) return;
+
+        let calloutName = null;
+        let customTitle = "";
+        let removeCount = 0;
+        const firstNode = firstPara.children[0];
+
+        // Case 1: [!type] parsed as linkReference (e.g. [!warning], [!success])
+        if (firstNode.type === "linkReference") {
+          const idMatch = /^!(\w+)$/.exec(firstNode.identifier);
+          if (idMatch) {
+            calloutName = idMatch[1].toLowerCase();
+            const linkText = toString(firstNode);
+            customTitle = linkText.replace(/^!\w+\s*/, "").trim();
+            removeCount = 1;
+          }
+        }
+        // Case 2: [!type] as plain text (when parser doesn't treat it as link)
+        else if (firstNode.type === "text") {
+          const textMatch = /^\[!(\w+)\]\s*(.*)/.exec(firstNode.value);
+          if (textMatch) {
+            calloutName = textMatch[1].toLowerCase();
+            customTitle = textMatch[2].trim();
+            const remaining = firstNode.value.slice(textMatch[0].length);
+            if (remaining) {
+              firstNode.value = remaining;
+              removeCount = 0;
+            } else {
+              removeCount = 1;
+            }
+          }
+        }
+
+        if (!calloutName || !callouts[calloutName]) return;
+
+        const callout = callouts[calloutName];
+
+        // Remove marker nodes from the first paragraph
+        firstPara.children.splice(0, removeCount);
+
+        // Remove leading soft breaks after the marker
+        while (firstPara.children.length > 0) {
+          const next = firstPara.children[0];
+          if (next.type === "break" || (next.type === "text" && /^\s*$/.test(next.value))) {
+            firstPara.children.shift();
+          } else {
+            break;
+          }
+        }
+
+        // If first paragraph is now empty, remove it entirely
+        if (firstPara.children.length === 0) {
+          node.children.shift();
+        }
+
+        const data = node.data || (node.data = {});
+        node.attributes = { class: `callout callout-${calloutName}` };
+        node.children = generate(
+          customTitle || callout.title,
           node.children,
           callout.hint
         );

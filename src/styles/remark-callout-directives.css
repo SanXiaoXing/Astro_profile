@@ -1,25 +1,32 @@
 :root {
-	--callout-bg-info: hsl(223, 14%, 61%, 0.14);
-	--callout-bg-tip: hsl(146, 76%, 48%, 0.14);
-	--callout-bg-important: rgba(155, 219, 238, 0.375);
-	--callout-bg-warning: hsl(45, 93%, 47%, 0.14);
-	--callout-bg-danger: hsl(350, 89%, 60%, 0.14);
+	--callout-bg-info: hsla(210, 80%, 60%, 0.08);
+	--callout-bg-tip: hsl(146, 76%, 48%, 0.08);
+	--callout-bg-important: hsla(195, 65%, 77%, 0.08);
+	--callout-bg-warning: hsl(45, 93%, 47%, 0.08);
+	--callout-bg-danger: hsl(350, 89%, 60%, 0.08);
+	--callout-border-info: hsla(210, 80%, 60%, 0.6);
+	--callout-border-tip: hsl(146, 76%, 48%, 0.6);
+	--callout-border-important: hsla(195, 65%, 77%, 0.6);
+	--callout-border-warning: hsl(45, 93%, 47%, 0.6);
+	--callout-border-danger: hsl(350, 89%, 60%, 0.6);
 }
 
 .callout {
 	--calloutBackgroundColor: var(--callout-bg-color, var(--callout-bg-info));
-	background-color: var(--calloutBackgroundColor);
-	border-radius: 10px;
-	padding: 16px;
-  margin-bottom: 1rem;
-  font-family: var(--font-family-mono);
+	--calloutBorderColor: var(--callout-border-color, var(--callout-border-info));
+	margin: 1.5em 0;
+	padding: 1rem 1.5rem;
+	border-left: 4px solid var(--calloutBorderColor);
+	background: linear-gradient(90deg, var(--calloutBackgroundColor), transparent);
+	border-radius: 0 8px 8px 0;
+	font-style: italic;
 }
 
 .callout-indicator {
 	display: flex;
 	align-items: center;
-	text-transform: uppercase;
 	font-weight: 600;
+	font-style: normal;
 }
 
 .callout-indicator > svg:first-of-type {
@@ -27,11 +34,10 @@
 	fill: none;
 	stroke: currentColor;
 	stroke-width: 2.5px;
-	width: 24px;
-	height: 24px;
-	min-width: 24px;
-	min-height: 24px;
-
+	width: 20px;
+	height: 20px;
+	min-width: 20px;
+	min-height: 20px;
 }
 .callout-content * {
   margin-bottom: 0;
@@ -48,13 +54,18 @@
 
 .callout-success {
 	--callout-bg-color: var(--callout-bg-tip);
+	--callout-border-color: var(--callout-border-tip);
 }
-.callout-warn {
+.callout-warn,
+.callout-warning {
 	--callout-bg-color: var(--callout-bg-warning);
+	--callout-border-color: var(--callout-border-warning);
 }
 .callout-danger {
 	--callout-bg-color: var(--callout-bg-danger);
+	--callout-border-color: var(--callout-border-danger);
 }
 .callout-tip {
 	--callout-bg-color: var(--callout-bg-important);
+	--callout-border-color: var(--callout-border-important);
 }
