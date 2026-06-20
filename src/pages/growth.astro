@@ -31,12 +31,17 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
     <p class="growth-subtitle">记录每一次思考与蜕变</p>
   </header>
 
-  <section class="growth-list">
+  <section class="growth-list" data-year-timeline>
     {
       sortedGroupedPosts.length > 0 ? (
         sortedGroupedPosts.map(([year, yearPosts]) => (
-          <div class="year-group">
-            <div class="year-label">{year}</div>
+          <div class="year-group" data-year-group>
+            <div class="year-timeline">
+              <div class="year-track" data-year-track></div>
+              <div class="year-label" data-year-label>
+                <span class="year-label-text">{year}</span>
+              </div>
+            </div>
             <ul class="post-list">
               {yearPosts.map((post) => (
                 <li class="post-item">
@@ -77,6 +82,176 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
     </a>
   </footer>
 </Layout>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // 暴露给 View Transitions 用
+  declare global {
+    interface Window {
+      __yearTimelineInit?: () => () => void;
+    }
+  }
+
+  function initYearTimeline() {
+    const root = document.querySelector<HTMLElement>("[data-year-timeline]");
+    if (!root) return () => {};
+
+    const groups = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-year-group]")
+    );
+    if (groups.length === 0) return () => {};
+
+    // 尊重用户的"减少动效"偏好
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (reduceMotion) {
+      // 降级：直接显示静态状态，保留 sticky
+      groups.forEach((group) => {
+        const track = group.querySelector<HTMLElement>("[data-year-track]");
+        const label = group.querySelector<HTMLElement>("[data-year-label]");
+        if (track) track.style.transform = "scaleY(1)";
+        if (label) label.style.opacity = "1";
+      });
+      return () => {};
+    }
+
+    const ctx = gsap.context(() => {
+      // ====== 方案 A：滚动跟随 + 进度填充 ======
+      // 每个 year-group 独立创建时间线，统一管理
+      const localGroupTimelines: gsap.core.Timeline[] = [];
+
+      groups.forEach((group) => {
+        const track = group.querySelector<HTMLElement>("[data-year-track]");
+        const label = group.querySelector<HTMLElement>("[data-year-label]");
+
+        if (!track || !label) return;
+
+        // 1) 初始状态：时间线轨道高度为 0，年份标签从左侧淡入
+        gsap.set(track, { scaleY: 0, transformOrigin: "top center" });
+        gsap.set(label, { x: -24, opacity: 0 });
+
+        // 2) 创建一个 Timeline 关联 ScrollTrigger
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: group,
+            start: "top 85%", // 元素顶部到达视口 85% 时开始
+            end: "top 20%", // 元素顶部到达视口 20% 时结束
+            scrub: 1, // 平滑跟随（1秒延迟，更丝滑）
+            // markers: true, // 调试用，发布前务必删除
+          },
+        });
+
+        // 时间轴入场：轨道从顶部向下展开 + 年份标签从左侧滑入
+        tl.to(track, {
+          scaleY: 1,
+          ease: "power3.out",
+          duration: 0.6,
+        }).to(
+          label,
+          {
+            x: 0,
+            opacity: 1,
+            ease: "power3.out",
+            duration: 0.5,
+          },
+          "<0.1" // 比上一个动画晚 0.1s 开始
+        );
+
+        // 滚动中：年份做轻微的视差跟随（在 1.2 范围内回弹）
+        tl.to(
+          label,
+          {
+            yPercent: -8,
+            ease: "sine.inOut",
+            duration: 0.4,
+          },
+          ">"
+        ).to(label, {
+          yPercent: 0,
+          ease: "sine.inOut",
+          duration: 0.4,
+        });
+
+        localGroupTimelines.push(tl);
+      });
+
+      // 3) 列表项交错入场（强化叙事节奏）
+      const allItems = root.querySelectorAll<HTMLElement>(".post-item");
+      gsap.set(allItems, { y: 16, opacity: 0 });
+      ScrollTrigger.batch(allItems, {
+        start: "top 90%",
+        onEnter: (batch) => {
+          gsap.to(batch, {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+            ease: "power2.out",
+            stagger: 0.06,
+            overwrite: true,
+          });
+        },
+        onEnterBack: (batch) => {
+          gsap.to(batch, {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+            ease: "power2.out",
+            stagger: 0.06,
+            overwrite: true,
+          });
+        },
+      });
+    }, root);
+
+    // 返回清理函数（View Transitions 切换页面时调用）
+    return () => {
+      ctx.revert();
+      // 清理 will-change，避免内存泄漏
+      groups.forEach((group) => {
+        const track = group.querySelector<HTMLElement>("[data-year-track]");
+        const label = group.querySelector<HTMLElement>("[data-year-label]");
+        if (track) track.style.willChange = "";
+        if (label) label.style.willChange = "";
+      });
+      ScrollTrigger.refresh();
+    };
+  }
+
+  // 暴露初始化函数
+  window.__yearTimelineInit = initYearTimeline;
+
+  // 页面首次加载
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      window.__yearTimelineCleanup?.();
+      window.__yearTimelineCleanup = initYearTimeline();
+    });
+  } else {
+    window.__yearTimelineCleanup?.();
+    window.__yearTimelineCleanup = initYearTimeline();
+  }
+
+  // Astro View Transitions 导航后重新初始化
+  document.addEventListener("astro:page-load", () => {
+    window.__yearTimelineCleanup?.();
+    window.__yearTimelineCleanup = initYearTimeline();
+  });
+</script>
+
+<script>
+  // 补充全局类型声明（避免 TS 报错）
+  declare global {
+    interface Window {
+      __yearTimelineCleanup?: () => void;
+    }
+  }
+</script>
 
 <style>
   .growth-header {
@@ -128,15 +303,48 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
 
   .year-group {
     margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .year-timeline {
+    position: relative;
+    min-height: 100%;
+  }
+
+  .year-track {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(133, 133, 168, 0.15);
+    transform-origin: top center;
+    will-change: transform;
   }
 
   .year-label {
+    position: sticky;
+    top: 5rem;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem 0.5rem 0;
+    background: linear-gradient(90deg, hsl(var(--background) / 0.92) 70%, transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    will-change: transform, opacity;
+  }
+
+  .year-label-text {
     font-family: var(--font-family-mono);
     font-size: 1.75rem;
     color: var(--gray);
-    margin-bottom: 1rem;
     padding-left: 0.5rem;
     border-left: 3px solid var(--hc);
+    line-height: 1.2;
   }
 
   .post-list {
@@ -274,8 +482,17 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
       display: none;
     }
 
-    .year-label {
+    .year-label-text {
       font-size: 1.25rem;
+    }
+
+    .year-group {
+      grid-template-columns: 60px 1fr;
+      gap: 1rem;
+    }
+
+    .year-label {
+      top: 4rem;
     }
   }
 </style>

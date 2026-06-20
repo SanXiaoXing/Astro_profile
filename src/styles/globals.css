@@ -434,6 +434,53 @@ h5 {
   background: linear-gradient(90deg, transparent, rgba(139, 139, 160, 0.3), transparent);
 }
 
+.headline table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5em 0;
+  font-size: 0.95em;
+  border-radius: 8px;
+  border: 1px solid rgba(139, 139, 160, 0.25);
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+.headline thead {
+  background: rgba(125, 211, 252, 0.08);
+}
+
+.headline th,
+.headline td {
+  padding: 0.6em 1em;
+  border-bottom: 1px solid rgba(139, 139, 160, 0.25);
+  border-right: 1px solid rgba(139, 139, 160, 0.25);
+  line-height: 1.6;
+}
+
+.headline th:last-child,
+.headline td:last-child {
+  border-right: none;
+}
+
+.headline tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.headline th {
+  font-weight: 700;
+  color: var(--hc);
+  border-bottom: 2px solid rgba(125, 211, 252, 0.3);
+}
+
+.headline tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.headline tbody tr:hover {
+  background: rgba(125, 211, 252, 0.06);
+}
+
 figcaption {
   color: var(--gray);
   font-size: 1rem;

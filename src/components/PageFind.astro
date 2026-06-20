@@ -1,7 +1,89 @@
-<div id="search" class="ml-3 p-4 -mt-8"></div>
+<div id="search" class="ml-3 p-4 -mt-8">
+	<div class="pagefind-idle" data-pagefind-idle>
+		<svg
+			class="pagefind-idle-icon"
+			xmlns="http://www.w3.org/2000/svg"
+			width="22"
+			height="22"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="1.8"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			aria-hidden="true"
+		>
+			<circle cx="11" cy="11" r="7"></circle>
+			<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+		</svg>
+		<p class="pagefind-idle-hint">输入关键词开始搜索</p>
+	</div>
+</div>
+
+<style>
+	.pagefind-idle {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 12px;
+		padding: 48px 20px 32px;
+		color: var(--gray);
+		font-family: var(--font-family-mono);
+		font-size: 12px;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		opacity: 0.55;
+		text-align: center;
+	}
+
+	.pagefind-idle-icon {
+		opacity: 0.5;
+	}
+</style>
 
 <script>
-	window.addEventListener('DOMContentLoaded', (event) => {
-		new PagefindUI({ element: '#search', showImages: false});
-	});
+	function initPagefind() {
+		const root = document.getElementById('search');
+		if (!root) return;
+
+		// Hide the idle hint as soon as Pagefind mounts its UI
+		const idle = root.querySelector<HTMLElement>('[data-pagefind-idle]');
+		if (idle) {
+			const observer = new MutationObserver(() => {
+				const pfForm = root.querySelector('.pagefind-ui__form');
+				if (pfForm) {
+					idle.style.display = 'none';
+					observer.disconnect();
+				}
+			});
+			observer.observe(root, { childList: true, subtree: true });
+			// Safety net in case the form never mounts
+			setTimeout(() => observer.disconnect(), 8000);
+		}
+
+		// Avoid double-initialization across view transitions
+		if (root.querySelector('.pagefind-ui__form')) return;
+
+		// @ts-ignore - PagefindUI is loaded from the global script tag
+		new PagefindUI({
+			element: '#search',
+			showImages: false,
+			showSubResults: true,
+			resetStyles: false,
+			autofocus: false,
+			excerptLength: 32,
+		});
+	}
+
+	function bootPagefind() {
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initPagefind, { once: true });
+		} else {
+			initPagefind();
+		}
+	}
+
+	bootPagefind();
+	document.addEventListener('astro:page-load', bootPagefind);
 </script>
