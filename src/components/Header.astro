@@ -1,5 +1,6 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
+import ThemeToggle from "./ThemeToggle.astro";
 
 const homeSlug = `/`;
 const blogSlug = `/blog`;
@@ -31,6 +32,9 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
           <circle cx="5" cy="19" r="1"/>
         </svg>
       </a>
+      <div class="theme-toggle-wrapper">
+        <ThemeToggle />
+      </div>
     </div>
   </nav>
 </header>
@@ -45,8 +49,8 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
     padding: 0 1em;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    background: hsla(240, 18%, 7%, 0.6);
-    border-bottom: 1px solid hsla(0, 0%, 100%, 0.04);
+    background: var(--glass-bg);
+    border-bottom: 1px solid var(--glass-border);
   }
 
   @media only screen and (max-width: 600px) {
@@ -87,10 +91,10 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
     display: flex;
     align-items: center;
     gap: 0.15rem;
-    background: hsla(230, 15%, 16%, 0.3);
+    background: var(--glass-bg);
     padding: 0.3rem 0.4rem;
     border-radius: 12px;
-    border: 1px solid hsla(0, 0%, 100%, 0.04);
+    border: 1px solid var(--glass-border);
     backdrop-filter: blur(8px);
   }
 
@@ -138,6 +142,18 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
   .icon-link svg {
     width: 18px;
     height: 18px;
+  }
+
+  .theme-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: 0.25rem;
+    padding-left: 0.25rem;
+    border-left: 1px solid hsla(0, 0%, 100%, 0.1);
+  }
+
+  html.light .theme-toggle-wrapper {
+    border-left-color: rgba(0, 0, 0, 0.1);
   }
 
   @media (max-width: 720px) {

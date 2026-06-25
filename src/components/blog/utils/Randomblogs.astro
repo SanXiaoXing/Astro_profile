@@ -40,17 +40,17 @@ const randompost = await getRandomBlogs();
 
 <style>
   .random-wrapper {
-    background: linear-gradient(145deg, rgba(40, 42, 53, 0.6), rgba(51, 51, 56, 0.4));
-    border: 1px solid rgba(155, 219, 238, 0.15);
-    border-radius: 16px;
+    background: hsl(var(--card) / 0.6);
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 10px;
     padding: 1.5rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s ease;
   }
 
   .random-wrapper:hover {
-    border-color: rgba(255, 179, 0, 0.4);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
-                0 0 20px rgba(255, 179, 0, 0.1);
+    background: hsl(var(--card) / 0.8);
+    border-color: hsl(var(--primary) / 0.4);
+    box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
   }
 
   .random-header {
@@ -84,7 +84,8 @@ const randompost = await getRandomBlogs();
     align-items: center;
     justify-content: space-between;
     padding: 0.75rem 1rem;
-    background: rgba(133, 133, 168, 0.1);
+    background: hsl(var(--primary) / 0.08);
+    border: 1px solid hsl(var(--primary) / 0.1);
     border-radius: 10px;
     text-decoration: none;
     transition: all 0.25s ease;
@@ -109,7 +110,8 @@ const randompost = await getRandomBlogs();
   }
 
   .random-link:hover {
-    background: rgba(155, 219, 238, 0.1);
+    background: hsl(var(--primary) / 0.15);
+    border-color: hsl(var(--primary) / 0.25);
     transform: translateX(4px);
   }
 

@@ -40,26 +40,77 @@ function getColor(count: number): string {
     <p class="categories-subtitle">共 {sortedCategories.length} 个分类</p>
   </header>
 
-  <div class="category-cloud">
+  <div class="categories-toolbar">
+    <div class="search-box">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="text"
+        id="category-filter"
+        class="search-input"
+        placeholder="搜索分类..."
+        autocomplete="off"
+      />
+    </div>
+  </div>
+
+  <div class="category-cloud" data-category-cloud>
     {sortedCategories.map(([category, count]) => (
       <a
         href={`/categories/${category}`}
         class="category-item"
+        data-name={category.toLowerCase()}
         style={`--font-size: ${getFontSize(count)}rem; --category-color: ${getColor(count)};`}
       >
         <span class="category-name">{category}</span>
         <span class="category-count">{count}</span>
       </a>
     ))}
+    <p class="no-results" data-no-results>没有匹配的分类</p>
   </div>
 </Layout>
+
+<script>
+  function initCategoryFilter() {
+    const input = document.getElementById('category-filter') as HTMLInputElement | null;
+    const cloud = document.querySelector('[data-category-cloud]');
+    if (!input || !cloud) return;
+
+    const items = Array.from(cloud.querySelectorAll<HTMLElement>('.category-item'));
+    const noResults = cloud.querySelector<HTMLElement>('[data-no-results]');
+
+    function filter() {
+      const query = input.value.trim().toLowerCase();
+      let visible = 0;
+
+      items.forEach(item => {
+        const name = item.dataset.name || '';
+        const match = name.includes(query);
+        item.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+
+      if (noResults) {
+        noResults.style.display = visible === 0 && query ? 'block' : 'none';
+      }
+    }
+
+    input.addEventListener('input', filter);
+    filter();
+  }
+
+  initCategoryFilter();
+  document.addEventListener('astro:page-load', initCategoryFilter);
+</script>
 
 <style>
   .categories-header {
     text-align: center;
     padding: 3rem 1rem 2rem;
     border-bottom: 1px solid rgba(133, 133, 168, 0.15);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   .categories-title {
@@ -77,16 +128,58 @@ function getColor(count: number): string {
     font-family: var(--font-family-mono);
   }
 
+  .categories-toolbar {
+    max-width: 900px;
+    margin: 0 auto 1rem;
+    padding: 0 1rem;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: hsl(var(--card) / 0.6);
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 10px;
+    transition: all 0.25s ease;
+  }
+
+  .search-box:focus-within {
+    background: hsl(var(--card) / 0.8);
+    border-color: hsl(var(--primary) / 0.4);
+    box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
+  }
+
+  .search-box svg {
+    color: var(--gray);
+    flex-shrink: 0;
+  }
+
+  .search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--fontc);
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+  }
+
+  .search-input::placeholder {
+    color: var(--gray);
+  }
+
   .category-cloud {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    padding: 2rem 1rem;
+    padding: 1rem 1rem 2rem;
     max-width: 900px;
     margin: 0 auto;
-    min-height: 50vh;
+    min-height: 30vh;
   }
 
   .category-item {
@@ -99,18 +192,17 @@ function getColor(count: number): string {
     color: var(--category-color);
     text-decoration: none;
     border-radius: 2rem;
-    background: rgba(40, 42, 53, 0.6);
-    border: 1px solid rgba(155, 219, 238, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: hsl(var(--card) / 0.6);
+    border: 1px solid hsl(var(--primary) / 0.15);
+    transition: all 0.25s ease;
     cursor: pointer;
   }
 
   .category-item:hover {
     transform: scale(1.1) translateY(-2px);
-    background: rgba(40, 42, 53, 0.9);
+    background: hsl(var(--card) / 0.8);
     border-color: var(--category-color);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3),
-                0 0 20px color-mix(in srgb, var(--category-color) 30%, transparent);
+    box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
   }
 
   .category-name {
@@ -136,6 +228,16 @@ function getColor(count: number): string {
     color: var(--fontc);
   }
 
+  .no-results {
+    display: none;
+    width: 100%;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--gray);
+    font-family: var(--font-family-mono);
+    font-size: 0.95rem;
+  }
+
   @media (max-width: 640px) {
     .categories-header {
       padding: 2rem 1rem 1.5rem;
@@ -147,11 +249,15 @@ function getColor(count: number): string {
 
     .category-cloud {
       gap: 0.75rem;
-      padding: 1.5rem 0.5rem;
+      padding: 1rem 0.5rem 1.5rem;
     }
 
     .category-item {
       padding: 0.4rem 0.8rem;
+    }
+
+    .search-box {
+      padding: 0.625rem 0.875rem;
     }
   }
 </style>

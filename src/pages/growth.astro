@@ -24,8 +24,6 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
 ---
 
 <Layout title="成长" description="记录成长的足迹">
-  <ViewTransitions />
-
   <header class="growth-header">
     <h1 class="growth-title">成长笔记</h1>
     <p class="growth-subtitle">记录每一次思考与蜕变</p>
@@ -362,8 +360,8 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.25rem;
-    background: linear-gradient(145deg, rgba(40, 42, 53, 0.6), rgba(51, 51, 56, 0.4));
-    border: 1px solid rgba(155, 219, 238, 0.15);
+    background: hsl(var(--card) / 0.6);
+    border: 1px solid hsl(var(--primary) / 0.15);
     border-radius: 10px;
     text-decoration: none;
     transition: all 0.25s ease;
@@ -371,10 +369,10 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
   }
 
   .post-link:hover {
-    background: linear-gradient(145deg, rgba(40, 42, 53, 0.8), rgba(51, 51, 56, 0.6));
-    border-color: rgba(155, 219, 238, 0.4);
+    background: hsl(var(--card) / 0.8);
+    border-color: hsl(var(--primary) / 0.4);
     transform: translateX(4px);
-    box-shadow: 0 4px 20px rgba(155, 219, 238, 0.1);
+    box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
   }
 
   .post-date {

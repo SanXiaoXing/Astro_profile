@@ -25,7 +25,20 @@ const { title, description } = Astro.props;
       <slot />
     </main>
     <Footer />
-    <Toaster client:load theme="dark" position="bottom-right" richColors />
+    <Toaster client:load position="bottom-right" richColors />
+    <script>
+      // 监听主题变化以更新 Toaster
+      const updateToaster = () => {
+        const isLight = document.documentElement.classList.contains('light');
+        const toaster = document.querySelector('[data-sonner-toaster]');
+        if (toaster) {
+          toaster.setAttribute('data-theme', isLight ? 'light' : 'dark');
+        }
+      };
+      
+      window.addEventListener('theme-change', updateToaster);
+      document.addEventListener('astro:page-load', updateToaster);
+    </script>
     <BackToTop />
   </body>
 </html>

@@ -1,0 +1,48 @@
+---
+/**
+ * Theme initialization script to prevent FOUC and handle Astro View Transitions.
+ * This script is intended to be included in the <head> of all layouts.
+ */
+---
+
+<script is:inline>
+  (function() {
+    const applyTheme = (doc = document) => {
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      })();
+      
+      if (theme === 'light') {
+        doc.documentElement.classList.add('light');
+      } else {
+        doc.documentElement.classList.remove('light');
+      }
+      
+      doc.documentElement.setAttribute('data-theme', theme);
+    };
+
+    // Initialize theme immediately to prevent FOUC
+    applyTheme();
+
+    // Re-apply theme after View Transitions swap
+    document.addEventListener('astro:after-swap', () => applyTheme());
+    
+    // Apply theme to new document before swap to prevent flicker
+    document.addEventListener('astro:before-swap', (ev) => {
+      applyTheme(ev.newDocument);
+    });
+
+    // Handle storage changes in other tabs
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'theme') {
+        applyTheme();
+      }
+    });
+  })();
+</script>

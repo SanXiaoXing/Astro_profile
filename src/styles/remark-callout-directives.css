@@ -69,3 +69,16 @@
 	--callout-bg-color: var(--callout-bg-important);
 	--callout-border-color: var(--callout-border-important);
 }
+
+html.light {
+	--callout-bg-info: hsla(199, 89%, 48%, 0.08);
+	--callout-bg-tip: hsla(146, 70%, 40%, 0.08);
+	--callout-bg-important: hsla(195, 60%, 50%, 0.08);
+	--callout-bg-warning: hsla(45, 90%, 42%, 0.08);
+	--callout-bg-danger: hsla(350, 80%, 50%, 0.08);
+	--callout-border-info: hsla(199, 89%, 48%, 0.55);
+	--callout-border-tip: hsla(146, 70%, 40%, 0.55);
+	--callout-border-important: hsla(195, 60%, 50%, 0.55);
+	--callout-border-warning: hsla(45, 90%, 42%, 0.55);
+	--callout-border-danger: hsla(350, 80%, 50%, 0.55);
+}

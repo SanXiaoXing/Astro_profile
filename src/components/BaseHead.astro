@@ -4,6 +4,8 @@
 import "../styles/globals.css";
 import "../styles/search.css";
 import "../styles/remark-callout-directives.css";
+import { ViewTransitions } from 'astro:transitions';
+import ThemeScript from "./ThemeScript.astro";
 interface Props {
     title: string;
     description: string;
@@ -20,6 +22,7 @@ const {
 ---
 
 <!-- Global Metadata -->
+<ViewTransitions />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -67,3 +70,4 @@ const {
 
 <!-- pagefind -->
 <script src="/pagefind/pagefind-ui.js" is:inline></script>
+<ThemeScript />

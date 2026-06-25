@@ -60,6 +60,42 @@
     --gray-gradient: rgba(var(--gray-light), 50%), #fff;
     --box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%);
   }
+
+  html.light {
+    --background: 40 30% 96%;
+    --foreground: 240 10% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 12%;
+    --primary: 210 80% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 250 50% 50%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 40 20% 90%;
+    --muted-foreground: 240 5% 45%;
+    --accent: 38 90% 35%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 15% 85%;
+    --input: 40 15% 85%;
+    --ring: 210 80% 45%;
+
+    --glass-bg: hsla(40, 30% , 96%, 0.6);
+    --glass-border: hsla(0, 0%, 0%, 0.08);
+    --glass-shine: hsla(0, 0%, 100%, 0.4);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+    --bgc: #f9f7f2;
+    --fontc: #1a1a1c;
+    --hc: #0369a1;
+    --gray: #64748b;
+    --gray-light: #94a3b8;
+    --current-line: rgba(0, 0, 0, 0.05);
+    --box-shadow: 0 2px 6px rgba(100, 116, 139, 0.12), 0 8px 24px rgba(100, 116, 139, 0.15);
+  }
+
 }
 
 @layer base {
@@ -169,16 +205,30 @@ body {
 }
 
 body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 0% 0%, hsla(210, 80%, 60%, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 100% 100%, hsla(250, 65%, 60%, 0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 50% 50%, hsla(38, 92%, 55%, 0.03) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: -1;
-}
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 0% 0%, hsla(var(--primary), 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 100% 100%, hsla(var(--secondary), 0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, hsla(var(--accent), 0.03) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Theme Transition */
+  .theme-transition,
+  .theme-transition *,
+  .theme-transition *:before,
+  .theme-transition *:after {
+    transition: background-color 0.3s ease-in-out,
+                border-color 0.3s ease-in-out,
+                color 0.3s ease-in-out,
+                fill 0.3s ease-in-out,
+                stroke 0.3s ease-in-out,
+                box-shadow 0.3s ease-in-out,
+                opacity 0.3s ease-in-out !important;
+  }
 
 ::selection {
   color: var(--accent-dark);
