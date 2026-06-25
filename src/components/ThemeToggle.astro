@@ -6,8 +6,8 @@
 
 <button
   type="button"
-  id="theme-toggle"
   class="theme-toggle"
+  data-theme-toggle
   aria-label="切换主题"
   title="切换主题"
 >
@@ -50,11 +50,25 @@
 </button>
 
 <script>
+  import { gsap } from 'gsap'
+
+  const THEME_VARS = [
+    '--bgc',
+    '--fontc',
+    '--hc',
+    '--gray',
+    '--glass-bg',
+    '--glass-border',
+    '--current-line',
+  ]
+
+  let isAnimating = false
+
   function updateThemeToggleIcon() {
-    const btn = document.getElementById('theme-toggle')
-    if (!btn) return
     const isLight = document.documentElement.classList.contains('light')
-    btn.setAttribute('data-theme', isLight ? 'light' : 'dark')
+    document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+      btn.setAttribute('data-theme', isLight ? 'light' : 'dark')
+    })
   }
 
   function enableTransition() {
@@ -65,25 +79,148 @@
     }, 400)
   }
 
-  function initThemeToggle() {
-    const btn = document.getElementById('theme-toggle')
-    if (!btn) return
+  function getTheme() {
+    return document.documentElement.classList.contains('light') ? 'light' : 'dark'
+  }
 
+  function setTheme(theme) {
+    const html = document.documentElement
+    html.classList.toggle('light', theme === 'light')
+    html.setAttribute('data-theme', theme)
+  }
+
+  function readThemeVars(vars) {
+    const styles = getComputedStyle(document.documentElement)
+    return Object.fromEntries(vars.map((name) => [name, styles.getPropertyValue(name).trim()]))
+  }
+
+  function readThemeVarsFor(theme, vars) {
+    const html = document.documentElement
+    const wasLight = html.classList.contains('light')
+
+    html.classList.toggle('light', theme === 'light')
+    const values = readThemeVars(vars)
+    html.classList.toggle('light', wasLight)
+
+    return values
+  }
+
+  function clearInlineThemeVars(vars) {
+    vars.forEach((name) => document.documentElement.style.removeProperty(name))
+  }
+
+  function getButtonCenter(btn) {
+    const rect = btn.getBoundingClientRect()
+    const x = rect.left + rect.width / 2
+    const y = rect.top + rect.height / 2
+    return { x, y }
+  }
+
+  function getMaxRadius(x, y) {
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    const maxX = Math.max(x, vw - x)
+    const maxY = Math.max(y, vh - y)
+    return Math.ceil(Math.hypot(maxX, maxY))
+  }
+
+  function canUseClipPath() {
+    if (!('CSS' in window) || typeof CSS.supports !== 'function') return false
+    return (
+      CSS.supports('clip-path: circle(10px at 10px 10px)') ||
+      CSS.supports('-webkit-clip-path: circle(10px at 10px 10px)')
+    )
+  }
+
+  function applyThemeInstant(nextTheme) {
+    setTheme(nextTheme)
+    try {
+      localStorage.setItem('theme', nextTheme)
+    } catch {}
+    updateThemeToggleIcon()
+    enableTransition()
+    window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: nextTheme } }))
+  }
+
+  function initThemeToggle() {
     updateThemeToggleIcon()
 
-    btn.addEventListener('click', () => {
-      const html = document.documentElement
-      const isLight = html.classList.toggle('light')
+    document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+      if (!(btn instanceof HTMLButtonElement)) return
+      if (btn.dataset.bound === '1') return
+      btn.dataset.bound = '1'
 
-      try {
-        localStorage.setItem('theme', isLight ? 'light' : 'dark')
-      } catch (e) {
-        // ignore
-      }
+      btn.addEventListener('click', () => {
+        if (isAnimating) return
 
-      updateThemeToggleIcon()
-      enableTransition()
-      window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: isLight ? 'light' : 'dark' } }))
+        const currentTheme = getTheme()
+        const nextTheme = currentTheme === 'light' ? 'dark' : 'light'
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        if (reduceMotion || !canUseClipPath()) {
+          applyThemeInstant(nextTheme)
+          return
+        }
+
+        let overlay
+        let tl
+
+        try {
+          isAnimating = true
+          btn.style.pointerEvents = 'none'
+
+          const { x, y } = getButtonCenter(btn)
+          const radius = getMaxRadius(x, y)
+
+          const fromVars = readThemeVars(THEME_VARS)
+          const toVars = readThemeVarsFor(nextTheme, THEME_VARS)
+
+          overlay = document.createElement('div')
+          overlay.setAttribute('data-theme-overlay', '')
+          overlay.style.position = 'fixed'
+          overlay.style.inset = '0'
+          overlay.style.zIndex = '9999'
+          overlay.style.pointerEvents = 'none'
+          overlay.style.background = fromVars['--bgc'] || getComputedStyle(document.body).backgroundColor
+          overlay.style.willChange = 'clip-path'
+          overlay.style.clipPath = `circle(${radius}px at ${x}px ${y}px)`
+          overlay.style.webkitClipPath = `circle(${radius}px at ${x}px ${y}px)`
+          document.body.appendChild(overlay)
+
+          tl = gsap.timeline({
+            defaults: { duration: 0.7, ease: 'power2.inOut' },
+            onComplete: () => {
+              setTheme(nextTheme)
+              try {
+                localStorage.setItem('theme', nextTheme)
+              } catch {}
+
+              clearInlineThemeVars(THEME_VARS)
+              overlay?.remove()
+              updateThemeToggleIcon()
+              window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: nextTheme } }))
+              isAnimating = false
+              btn.style.pointerEvents = ''
+            },
+            onInterrupt: () => {
+              clearInlineThemeVars(THEME_VARS)
+              overlay?.remove()
+              applyThemeInstant(nextTheme)
+              isAnimating = false
+              btn.style.pointerEvents = ''
+            },
+          })
+
+          tl.to(overlay, { clipPath: `circle(0px at ${x}px ${y}px)`, webkitClipPath: `circle(0px at ${x}px ${y}px)` }, 0)
+          tl.to(document.documentElement, { ...toVars }, 0)
+        } catch {
+          clearInlineThemeVars(THEME_VARS)
+          overlay?.remove()
+          applyThemeInstant(nextTheme)
+          isAnimating = false
+          btn.style.pointerEvents = ''
+        }
+      })
     })
   }
 
