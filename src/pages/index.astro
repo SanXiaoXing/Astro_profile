@@ -4,7 +4,7 @@ import IntroCard from '../components/sections/IntroCard.astro'
 import AboutMe from '../components/sections/AboutMe.astro'
 import LatestPosts from '../components/sections/LatestPosts.astro'
 import Now from '../components/sections/Now.astro'
-import CardLink from '../components/Card_link.astro'
+import Card from '../components/Card.astro'
 ---
 
 <BaseLayout
@@ -31,12 +31,12 @@ import CardLink from '../components/Card_link.astro'
       <LatestPosts />
       <AboutMe />
       <Now />
-      <CardLink href='/blog' colSpan="md:col-span-1">
+      <Card href='/blog' colSpan="md:col-span-1" variant="gradient">
         <span class="text-3xl">Blog</span>
-      </CardLink>
-      <CardLink href='/tags' colSpan="md:col-span-1">
+      </Card>
+      <Card href='/tags' colSpan="md:col-span-1" variant="gradient">
         <span class="text-3xl">Tags</span>
-      </CardLink>
+      </Card>
     </div>
     <div class="mt-6 text-center">
       <p class="text-xs text-muted-foreground/30 font-mono">

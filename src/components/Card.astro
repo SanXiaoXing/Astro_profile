@@ -1,4 +1,9 @@
 ---
+/**
+ * ponytail: 合并 Card.astro 和 Card_link.astro 为单一组件
+ * variant="gradient" 使用 gradient text 样式
+ * variant="default" (或不设置) 使用普通文本和箭头图标
+ */
 import ContentCard from './ContentCard.astro'
 import { Card as ShadcnCard } from './ui/card'
 import { SquareArrowOutUpRight } from 'lucide-react'
@@ -10,9 +15,10 @@ interface Props {
   rowSpan?: string
   href?: string
   colorText?: string
+  variant?: 'gradient' | 'default'
 }
 
-const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
+const { title, body, colSpan, rowSpan, href, colorText, variant = 'default' } = Astro.props
 ---
 
 <ShadcnCard
@@ -30,20 +36,33 @@ const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
   <div
     class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
     style={{
-      background: 'linear-gradient(135deg, hsla(210, 80%, 60%, 0.05), transparent 60%)',
+      background: variant === 'gradient'
+        ? 'linear-gradient(135deg, hsla(210, 80%, 60%, 0.06), hsla(250, 65%, 60%, 0.04) 60%, transparent 80%)'
+        : 'linear-gradient(135deg, hsla(210, 80%, 60%, 0.05), transparent 60%)',
       borderRadius: 'inherit',
     }}
   />
   {href ? (
-    <a href={href} class={`relative z-10 flex h-full w-full flex-col ${colorText || ''}`}>
-      <SquareArrowOutUpRight
-        className="relative float-right h-6 text-muted-foreground/40 transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-primary"
-        size={18}
-      />
-      <ContentCard title={title} body={body}>
-        <slot />
-      </ContentCard>
-    </a>
+    variant === 'gradient' ? (
+      <a
+        href={href}
+        class={`relative z-10 flex h-full w-full items-center justify-center text-center ${colorText || ''}`}
+      >
+        <div class="moving-gradient-text">
+          <slot />
+        </div>
+      </a>
+    ) : (
+      <a href={href} class={`relative z-10 flex h-full w-full flex-col ${colorText || ''}`}>
+        <SquareArrowOutUpRight
+          className="relative float-right h-6 text-muted-foreground/40 transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-primary"
+          size={18}
+        />
+        <ContentCard title={title} body={body}>
+          <slot />
+        </ContentCard>
+      </a>
+    )
   ) : (
     <div class="relative z-10 flex h-full flex-col">
       <ContentCard title={title} body={body}>
@@ -52,3 +71,30 @@ const { title, body, colSpan, rowSpan, href, colorText } = Astro.props
     </div>
   )}
 </ShadcnCard>
+
+<style>
+  .moving-gradient-text {
+    font-family: 'EmblemaOne', 'FutureMono', monospace;
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--hc), var(--purple), var(--hc));
+    background-size: 200% 200%;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    animation: gradient-shift 6s ease infinite;
+  }
+
+  .moving-gradient-text:hover {
+    background: linear-gradient(135deg, hsl(var(--accent)), var(--hc), hsl(var(--accent)));
+    background-size: 200% 200%;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    animation: gradient-shift 4s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+</style>
