@@ -1,0 +1,160 @@
+---
+import Layout from "../layouts/Layout.astro";
+import MastodonFeed from "../components/MastodonFeed";
+---
+
+<Layout title="Mastodon" description="SanXiaoXing 的长毛象嘟文">
+  <header class="masto-header">
+    <div class="header-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 640 640" fill="currentColor">
+        <!-- Font Awesome Mastodon logo -->
+        <path d="M529 243.1C529 145.9 465.3 117.4 465.3 117.4C402.8 88.7 236.7 89 174.8 117.4C174.8 117.4 111.1 145.9 111.1 243.1C111.1 358.8 104.5 502.5 216.7 532.2C257.2 542.9 292 545.2 320 543.6C370.8 540.8 399.3 525.5 399.3 525.5L397.6 488.6C397.6 488.6 361.3 500 320.5 498.7C280.1 497.3 237.5 494.3 230.9 444.7C230.3 440.1 230 435.4 230 430.8C315.6 451.7 388.7 439.9 408.7 437.5C464.8 430.8 513.7 396.2 519.9 364.6C529.7 314.8 528.9 243.1 528.9 243.1zM453.9 368.3L407.3 368.3L407.3 254.1C407.3 204.4 343.3 202.5 343.3 261L343.3 323.5L297 323.5L297 261C297 202.5 233 204.4 233 254.1L233 368.3L186.3 368.3C186.3 246.2 181.1 220.4 204.7 193.3C230.6 164.4 284.5 162.5 308.5 199.4L320.1 218.9L331.7 199.4C355.8 162.3 409.8 164.6 435.5 193.3C459.2 220.6 453.9 246.3 453.9 368.3L453.9 368.3z"/>
+      </svg>
+    </div>
+    <h1 class="masto-title">Mastodon 嘟文</h1>
+    <p class="masto-subtitle">来自 <a href="https://m.cmx.im/@SanXiaoXing" target="_blank" rel="noopener noreferrer">@SanXiaoXing@m.cmx.im</a> 的原创发布</p>
+  </header>
+
+  <section class="masto-feed">
+    <MastodonFeed client:load />
+  </section>
+
+  <footer class="masto-footer">
+    <!-- <a href="/" class="back-link">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      返回首页
+    </a> -->
+  </footer>
+</Layout>
+
+<style>
+  .masto-header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-bottom: 1px solid rgba(133, 133, 168, 0.15);
+    margin-bottom: 2rem;
+  }
+
+  .header-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, rgba(155, 219, 238, 0.15), rgba(167, 139, 250, 0.1));
+    border: 1px solid rgba(155, 219, 238, 0.3);
+    border-radius: 16px;
+    color: var(--hc);
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .header-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(155, 219, 238, 0.2);
+  }
+
+  .masto-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--fontc);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-family-base);
+  }
+
+  .masto-subtitle {
+    font-size: 0.95rem;
+    color: var(--gray);
+    margin: 0;
+    font-family: var(--font-family-mono);
+  }
+
+  .masto-subtitle a {
+    color: var(--hc);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .masto-subtitle a:hover {
+    text-decoration: underline;
+  }
+
+  .masto-feed {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .masto-footer {
+    max-width: 720px;
+    margin: 3rem auto 0;
+    padding: 2rem 1rem;
+    border-top: 1px solid rgba(133, 133, 168, 0.15);
+    text-align: center;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    color: var(--gray);
+    text-decoration: none;
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+    border: 1px solid rgba(133, 133, 168, 0.3);
+    border-radius: 2rem;
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+
+  .back-link:hover {
+    color: var(--hc);
+    border-color: var(--hc);
+    transform: translateX(-4px);
+  }
+
+  @media (max-width: 640px) {
+    .masto-title {
+      font-size: 1.5rem;
+    }
+    .masto-header {
+      padding: 2rem 1rem 1.5rem;
+    }
+  }
+
+  /* Mastodon content typography */
+  :global(.prose-masto p) {
+    margin: 0.6em 0;
+    line-height: 1.8;
+  }
+  :global(.prose-masto p:first-child) {
+    margin-top: 0;
+  }
+  :global(.prose-masto p:last-child) {
+    margin-bottom: 0;
+  }
+  :global(.prose-masto a) {
+    color: var(--hc);
+    text-decoration: none;
+    border-bottom: 1px solid hsl(var(--primary) / 0.2);
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  :global(.prose-masto a:hover) {
+    border-color: var(--hc);
+  }
+  :global(.prose-masto .invisible) {
+    font-size: 0;
+    line-height: 0;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+  :global(.prose-masto .ellipsis::after) {
+    content: "...";
+  }
+</style>
