@@ -1,32 +1,15 @@
 ---
 import Card from '../Card.astro'
-import { EXPERIENCE } from '../../lib/constants'
 ---
 
 <Card
-  href='/work'
+  href='/about'
   colSpan="md:col-span-1" rowSpan="md:row-span-1" title="About me">
-  <div class="mt-1 space-y-2">
-    <p class="text-xs text-muted-foreground/80 leading-relaxed line-clamp-2">
-      Hi，我是 SanXiaoXing，热爱探索技术的在职工作者。
+  <div class="flex h-full flex-1 flex-col items-center justify-center text-center gap-3">
+    <p class="text-sm text-foreground/85 leading-relaxed">
+      <span class="whitespace-nowrap">Build. Learn. Reflect. Repeat.</span>
+      <br />
+      <span class="whitespace-nowrap">把想法变成系统，把经验沉淀成知识。</span>
     </p>
-    <div class="flex flex-wrap gap-1.5">
-      <span class="text-muted-foreground/50 font-mono text-[10px] px-1.5 py-0.5 rounded bg-primary/5 border border-primary/10">Java</span>
-      <span class="text-muted-foreground/50 font-mono text-[10px] px-1.5 py-0.5 rounded bg-secondary/5 border border-secondary/10">Python</span>
-      <span class="text-muted-foreground/50 font-mono text-[10px] px-1.5 py-0.5 rounded bg-accent/5 border border-accent/10">SQL</span>
-      <span class="text-muted-foreground/50 font-mono text-[10px] px-1.5 py-0.5 rounded bg-primary/5 border border-primary/10">Astro</span>
-    </div>
-  </div>
-  <div class="mt-2 pt-2 border-t border-white/5">
-    <div class="space-y-1.5">
-      {
-        EXPERIENCE.slice(0, 1).map((exp) => (
-          <div class="border-l-2 border-primary/20 pl-2">
-            <p class="text-xs font-medium text-foreground/80">{exp.position}</p>
-            <p class="text-[10px] text-muted-foreground/50 font-mono">{exp.company}</p>
-          </div>
-        ))
-      }
-    </div>
   </div>
 </Card>
