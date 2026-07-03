@@ -9,7 +9,8 @@ import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-s
 import sitemap from '@astrojs/sitemap';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 
-import remarkRemoveObsidianLinks from './src/components/mdrenders/remark-remove-obsidian-links' 
+import remarkRemoveObsidianLinks from './src/components/mdrenders/remark-remove-obsidian-links'
+import remarkChatDirective from './src/components/mdrenders/remark-chat-directive.mjs'
 
 import expressiveCode from "astro-expressive-code";
 
@@ -47,7 +48,7 @@ export default defineConfig({
     }
   },
   markdown: {
-    remarkPlugins: [remarkRemoveObsidianLinks ,remarkFigureCaption,remarkDirective, remarkCalloutDirectives, remarkReadingTime],
+    remarkPlugins: [remarkRemoveObsidianLinks ,remarkFigureCaption,remarkDirective, remarkCalloutDirectives, remarkChatDirective, remarkReadingTime],
   },
 
 })

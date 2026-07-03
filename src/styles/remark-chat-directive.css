@@ -1,0 +1,101 @@
+/* :::chat{role="user|assistant"} 对话气泡样式
+ * ChatGPT 风格：assistant 靠左、user 靠右，头像 + 气泡。
+ * 颜色全部走全局 CSS 变量，深浅色自动跟随主题。
+ */
+
+.chat-msg {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+  align-items: flex-start;
+}
+
+.chat-msg .chat-avatar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.chat-msg .chat-avatar svg {
+  width: 18px;
+  height: 18px;
+}
+
+.chat-msg .chat-bubble {
+  max-width: 80%;
+  padding: 0.7rem 1rem;
+  border-radius: 14px;
+  line-height: 1.65;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+.chat-msg .chat-bubble > *:first-child {
+  margin-top: 0;
+}
+
+.chat-msg .chat-bubble > *:last-child {
+  margin-bottom: 0;
+}
+
+.chat-msg .chat-bubble pre {
+  margin: 0.6rem 0;
+}
+
+/* 气泡内的代码块：去掉 expressive-code 的边框/阴影/圆角，只保留代码本身 */
+.chat-bubble .expressive-code {
+  margin: 0.6rem 0;
+  border: none;
+  border-radius: 6px;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.chat-bubble .expressive-code:hover {
+  border: none;
+  box-shadow: none;
+}
+
+/* assistant：靠左，OpenAI 绿头像，无气泡（纯文本，对齐真实 ChatGPT UI） */
+.chat-assistant .chat-avatar {
+  background: #10a37f;
+  color: #fff;
+}
+
+.chat-assistant .chat-bubble {
+  background: rgba(133, 133, 168, 0.1);
+  color: var(--fontc);
+  border-top-left-radius: 4px;
+}
+
+/* user：靠右，头像跟随主色，气泡用主色淡填 */
+.chat-user {
+  flex-direction: row-reverse;
+}
+
+.chat-user .chat-avatar {
+  background: var(--hc);
+  color: #000;
+}
+
+.chat-user .chat-bubble {
+  background: rgba(125, 211, 252, 0.16);
+  color: var(--fontc);
+  border-top-right-radius: 4px;
+}
+
+html.light .chat-user .chat-bubble {
+  background: rgba(3, 105, 161, 0.1);
+}
+
+/* 移动端：气泡再窄一点，但保持可读 */
+@media (max-width: 640px) {
+  .chat-msg .chat-bubble {
+    max-width: 85%;
+  }
+}
