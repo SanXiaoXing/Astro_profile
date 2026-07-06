@@ -7,6 +7,7 @@ import Comments from"../components/Comments.astro"
 import Random from "../components/blog/utils/Randomblogs.astro"
 import { MessageWithReactions } from "../components/ui/reaction-chip";
 import { fetchBuildTimeCounts } from "../lib/reactions";
+import ChatBubbleOptimizer from "../components/ChatBubbleOptimizer.astro";
 
 type Props = CollectionEntry<"blog">["data"];
 
@@ -91,6 +92,8 @@ initialCounts = await fetchBuildTimeCounts(postSlug);
     <div class="prose headline">
       <slot />
     </div>
+
+    <ChatBubbleOptimizer />
 
     <div class="reaction-container">
       <MessageWithReactions
