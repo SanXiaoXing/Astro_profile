@@ -1,11 +1,14 @@
 ---
 import { WORK } from '../lib/constants'
+import { getWorkExperiences } from '../content/config'
 import BaseLayout from '../layouts/LayoutWork.astro'
 import { ViewTransitions } from 'astro:transitions'
 import Timeline from "../components/ui/timeline"
+
+const experiences = await getWorkExperiences()
 ---
 
 <BaseLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
   <ViewTransitions />
-  <Timeline client:load/>
+  <Timeline client:load experiences={experiences}/>
 </BaseLayout>

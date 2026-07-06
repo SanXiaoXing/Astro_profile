@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import { getWorkExperiences } from '../content/config'
 import { WorkLink } from '../components/work-link'
+
+const experiences = await getWorkExperiences()
 ---
 
 <Layout title="关于我" description="关于 SanXiaoXing 的介绍">
@@ -23,7 +26,7 @@ import { WorkLink } from '../components/work-link'
         </p>
       </div>
 
-      <WorkLink client:load href="/work" enText="Work Experience" />
+      <WorkLink client:load href="/work" enText="Work Experience" experiences={experiences} />
     </section>
   </article>
 </Layout>

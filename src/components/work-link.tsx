@@ -2,23 +2,41 @@
 
 import React, { useState } from "react";
 import { TextRoll } from "./ui/text-roll";
-import { EXPERIENCE } from "@/lib/constants";
+
+interface TaskDetail {
+  subtitle?: string;
+  subdetails?: string[];
+}
+
+interface Task {
+  title: string;
+  details: (string | TaskDetail)[];
+}
+
+interface ExperienceItem {
+  company: string;
+  location: string;
+  position: string;
+  start: string;
+  end: string;
+  link: string;
+  tasks: Task[];
+}
 
 interface WorkLinkProps {
   href: string;
   enText: string;
+  experiences: ExperienceItem[];
 }
-
-type ExperienceItem = (typeof EXPERIENCE)[number];
-
-const previewItems = [...EXPERIENCE]
-  .sort((a, b) => b.start.localeCompare(a.start))
-  .slice(0, 3);
 
 const formatDuration = ({ start, end }: ExperienceItem) => `${start} - ${end}`;
 
-export const WorkLink: React.FC<WorkLinkProps> = ({ href, enText }) => {
+export const WorkLink: React.FC<WorkLinkProps> = ({ href, enText, experiences }) => {
   const [hovered, setHovered] = useState(false);
+
+  const previewItems = [...experiences]
+    .sort((a, b) => b.start.localeCompare(a.start))
+    .slice(0, 3);
 
   return (
     <div className="about-work">

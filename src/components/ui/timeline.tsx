@@ -5,11 +5,34 @@ import {
   motion,
 } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
-import { EXPERIENCE } from "@/lib/constants";
+
+interface TaskDetail {
+  subtitle?: string;
+  subdetails?: string[];
+}
+
+interface Task {
+  title: string;
+  details: (string | TaskDetail)[];
+}
+
+interface ExperienceItem {
+  company: string;
+  location: string;
+  position: string;
+  start: string;
+  end: string;
+  link: string;
+  tasks: Task[];
+}
 
 interface TimelineItemProps {
-  item: typeof EXPERIENCE[number];
+  item: ExperienceItem;
   index: number;
+}
+
+interface TimelineProps {
+  experiences: ExperienceItem[];
 }
 
 const TimelineItem = ({ item, index }: TimelineItemProps) => {
@@ -98,7 +121,7 @@ const TimelineItem = ({ item, index }: TimelineItemProps) => {
                             <div className="space-y-2">
                               <strong className="font-medium text-[var(--fontc)] block">{detail.subtitle}</strong>
                               <ul className="space-y-2 pl-4 border-l border-[var(--current-line)]/50">
-                                {detail.subdetails.map((subdetail, subIndex) => (
+                                {detail.subdetails?.map((subdetail, subIndex) => (
                                   <li key={subIndex} className="relative before:content-[''] before:absolute before:-left-4 before:top-2.5 before:w-2 before:h-[1px] before:bg-[var(--hc)]/30 hover:before:bg-[var(--orange)] hover:text-[var(--fontc)] transition-all duration-300">
                                     {subdetail}
                                   </li>
@@ -190,7 +213,7 @@ const TimelineItem = ({ item, index }: TimelineItemProps) => {
   );
 };
 
-export const Timeline = () => {
+export const Timeline = ({ experiences }: TimelineProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
@@ -219,7 +242,7 @@ export const Timeline = () => {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-64 bg-[var(--hc)]/10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto py-20 px-4 md:px-8 lg:px-10 relative z-10">
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -227,26 +250,26 @@ export const Timeline = () => {
         >
           Work Experience
         </motion.h2>
-        
-        <motion.p 
+
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           className="text-[var(--gray-light)] text-lg md:text-xl max-w-xl font-light leading-relaxed"
         >
           {(() => {
-            const startDate = new Date('2023-07'); 
+            const startDate = new Date('2023-07');
             const now = new Date();
             const years = now.getFullYear() - startDate.getFullYear();
             const months = now.getMonth() - startDate.getMonth();
             const totalMonths = years * 12 + months;
             const displayYears = Math.floor(totalMonths / 12);
             const displayMonths = totalMonths % 12;
-            
-            const timeString = displayYears > 0 
+
+            const timeString = displayYears > 0
               ? `${displayYears} year${displayYears > 1 ? 's' : ''} ${displayMonths > 0 ? `and ${displayMonths} month${displayMonths > 1 ? 's' : ''}` : ''}`
               : `${displayMonths} month${displayMonths > 1 ? 's' : ''}`;
-            
+
             return `I've been working in Beijing for ${timeString}. Here is a timeline of my professional journey.`;
           })()}
         </motion.p>
@@ -270,7 +293,7 @@ export const Timeline = () => {
         </div>
 
         <div className="flex flex-col gap-10 md:gap-20">
-          {EXPERIENCE.map((item, index) => (
+          {experiences.map((item, index) => (
             <TimelineItem key={index} item={item} index={index} />
           ))}
         </div>

@@ -26,8 +26,20 @@ const blog = defineCollection({
 	}),
 });
 
+const work = defineCollection({
+	schema: z.object({
+		company: z.string(),
+		location: z.string(),
+		position: z.string(),
+		start: z.string(),
+		end: z.string(),
+		link: z.string().optional(),
+	}),
+});
+
 export const collections = {
 	blog,
+	work,
 };
 
 export async function getBlogPosts() {
@@ -35,7 +47,7 @@ export async function getBlogPosts() {
 
 	return posts.map((post) => {
 		const fileName = post.id.split('/').pop(); // 提取文件名称部分
-        const datePart = fileName.split('.')[0]; // 获取日期部分
+        const datePart = fileName?.split('.')[0]; // 获取日期部分
 		const blog_slug = post.slug.split('/')[0];
 		return {
 			...post,
@@ -44,4 +56,111 @@ export async function getBlogPosts() {
 			title: post.data.title
 		}
 	})
+}
+
+export async function getWorkExperiences() {
+	const experiences = await getCollection('work');
+
+	return experiences
+		.sort((a, b) => b.data.start.localeCompare(a.data.start))
+		.map((exp) => ({
+			company: exp.data.company,
+			location: exp.data.location,
+			position: exp.data.position,
+			start: exp.data.start,
+			end: exp.data.end,
+			link: exp.data.link || '',
+			tasks: parseTasksFromMarkdown(exp.body || ''),
+		}));
+}
+
+// 从 markdown body 解析 tasks 结构
+function parseTasksFromMarkdown(body: string) {
+	const tasks: any[] = [];
+	const lines = body.split('\n');
+
+	let currentTask: any = null;
+	let currentSubtask: any = null;
+	let currentDetails: string[] = [];
+	let currentSubdetails: string[] = [];
+
+	for (const line of lines) {
+		const trimmed = line.trim();
+
+		// ## 标题：主任务
+		if (trimmed.startsWith('## ') && !trimmed.startsWith('### ')) {
+			// 保存之前的任务
+			if (currentTask) {
+				if (currentSubtask) {
+					currentSubtask.subdetails = currentSubdetails;
+					currentTask.details.push(currentSubtask);
+				}
+				if (currentDetails.length > 0) {
+					currentTask.details.push(...currentDetails);
+				}
+				tasks.push(currentTask);
+			}
+
+			// 开始新任务
+			currentTask = {
+				title: trimmed.replace('## ', '').trim() + ':',
+				details: [],
+			};
+			currentSubtask = null;
+			currentDetails = [];
+			currentSubdetails = [];
+		}
+		// ### 标题：子任务
+		else if (trimmed.startsWith('### ')) {
+			// 保存之前的子任务
+			if (currentSubtask && currentSubdetails.length > 0) {
+				currentSubtask.subdetails = currentSubdetails;
+				currentTask?.details.push(currentSubtask);
+			}
+			// 保存之前的详情
+			if (currentDetails.length > 0) {
+				currentTask?.details.push(...currentDetails);
+			}
+
+			// 开始新子任务
+			currentSubtask = {
+				subtitle: trimmed.replace('### ', '').trim() + ':',
+				subdetails: [],
+			};
+			currentDetails = [];
+			currentSubdetails = [];
+		}
+		// 列表项
+		else if (trimmed.startsWith('- ')) {
+			const detail = trimmed.replace('- ', '').trim();
+			if (currentSubtask) {
+				currentSubdetails.push(detail + ';');
+			} else {
+				currentDetails.push(detail + ';');
+			}
+		}
+		// 普通段落文本（可能作为详情的一部分）
+		else if (trimmed && !trimmed.startsWith('#') && currentTask) {
+			// 如果有文本段落，也作为详情添加
+			if (currentSubtask) {
+				currentSubdetails.push(trimmed + ';');
+			} else {
+				currentDetails.push(trimmed + ';');
+			}
+		}
+	}
+
+	// 保存最后一个任务
+	if (currentTask) {
+		if (currentSubtask) {
+			currentSubtask.subdetails = currentSubdetails;
+			currentTask.details.push(currentSubtask);
+		}
+		if (currentDetails.length > 0) {
+			currentTask.details.push(...currentDetails);
+		}
+		tasks.push(currentTask);
+	}
+
+	return tasks;
 }
