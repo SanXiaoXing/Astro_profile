@@ -15,7 +15,12 @@ const grouppedHeadings = headings.reduce((array, heading) => {
   if (heading.depth === 1) {
     array.push({ ...heading, subheadings: [] });
   } else if (heading.depth === 2) {
-    array.at(-1)?.subheadings.push(heading);
+    const last = array.at(-1);
+    if (last && last.depth === 1) {
+      last.subheadings.push(heading);
+    } else {
+      array.push({ ...heading, subheadings: [] });
+    }
   }
   return array;
 }, [] as HeadingWithSubheadings[]);
