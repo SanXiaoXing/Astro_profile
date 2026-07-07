@@ -12,63 +12,70 @@ blog.forEach(post => {
 });
 
 const sortedCategories = Object.entries(categoriesMap).sort((a, b) => b[1] - a[1]);
+const totalPosts = sortedCategories.reduce((sum, [, c]) => sum + c, 0);
+
+// Wider tier-based sizing — the contrast between min and max now reads
+// as a deliberate visual hierarchy, not a typo.
 const maxCount = sortedCategories[0]?.[1] || 1;
 const minCount = sortedCategories[sortedCategories.length - 1]?.[1] || 1;
-const maxFontSize = 2;
-const minFontSize = 0.85;
+const maxFontSize = 2.4;
+const minFontSize = 0.9;
 
 function getFontSize(count: number): number {
   if (maxCount === minCount) return (maxFontSize + minFontSize) / 2;
   return minFontSize + ((count - minCount) / (maxCount - minCount)) * (maxFontSize - minFontSize);
 }
-
-function getColor(count: number): string {
-  // 颜色按数量从少到多排列
-  // 青 -> 蓝 -> 紫 -> 黄 -> 橙
-  const colors = ['#8be9fd', '#9bdbee', '#bd93f9', '#f1fa8c', '#ffb300'];
-  const ratio = (count - minCount) / (maxCount - minCount || 1);
-  const baseIndex = Math.floor(ratio * (colors.length - 1));
-  return colors[baseIndex];
-}
 ---
 
-<Layout title="类别" description="Categories" comments={false}>
+<Layout title="分类" description="Categories" comments={false}>
   <ViewTransitions />
 
-  <header class="categories-header">
-    <h1 class="categories-title">分类</h1>
-    <p class="categories-subtitle">共 {sortedCategories.length} 个分类</p>
-  </header>
+  <div class="cats-shell">
+    <header class="cats-hero">
+      <div class="cats-hero__primary">
+        <p class="cats-hero__eyebrow">INDEX · 分类 / Categories</p>
+        <p class="cats-hero__meta">
+          共 <strong>{sortedCategories.length}</strong> 个分类 ·
+          收录 <strong>{totalPosts}</strong> 篇文章
+        </p>
+      </div>
 
-  <div class="categories-toolbar">
-    <div class="search-box">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
-      <input
-        type="text"
-        id="category-filter"
-        class="search-input"
-        placeholder="搜索分类..."
-        autocomplete="off"
-      />
+      <div class="cats-hero__secondary">
+        <label class="cats-hero__search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            type="text"
+            id="category-filter"
+            class="cats-hero__input"
+            placeholder="搜索分类..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </label>
+      </div>
+    </header>
+
+    <div class="category-cloud" data-category-cloud>
+      {sortedCategories.map(([category, count], i) => (
+        <a
+          href={`/categories/${category}`}
+          class="category-chip"
+          data-name={category.toLowerCase()}
+          style={`--chip-size: ${getFontSize(count)}rem; --i: ${i};`}
+        >
+          <span class="category-chip__name">{category}</span>
+          <span class="category-chip__count">{count}</span>
+        </a>
+      ))}
+      <p class="category-cloud__empty" data-no-results>
+        <span class="category-cloud__empty-rule"></span>
+        暂无匹配的分类
+        <span class="category-cloud__empty-rule"></span>
+      </p>
     </div>
-  </div>
-
-  <div class="category-cloud" data-category-cloud>
-    {sortedCategories.map(([category, count]) => (
-      <a
-        href={`/categories/${category}`}
-        class="category-item"
-        data-name={category.toLowerCase()}
-        style={`--font-size: ${getFontSize(count)}rem; --category-color: ${getColor(count)};`}
-      >
-        <span class="category-name">{category}</span>
-        <span class="category-count">{count}</span>
-      </a>
-    ))}
-    <p class="no-results" data-no-results>没有匹配的分类</p>
   </div>
 </Layout>
 
@@ -78,7 +85,7 @@ function getColor(count: number): string {
     const cloud = document.querySelector('[data-category-cloud]');
     if (!input || !cloud) return;
 
-    const items = Array.from(cloud.querySelectorAll<HTMLElement>('.category-item'));
+    const items = Array.from(cloud.querySelectorAll<HTMLElement>('.category-chip'));
     const noResults = cloud.querySelector<HTMLElement>('[data-no-results]');
 
     function filter() {
@@ -93,7 +100,7 @@ function getColor(count: number): string {
       });
 
       if (noResults) {
-        noResults.style.display = visible === 0 && query ? 'block' : 'none';
+        noResults.style.display = visible === 0 && query ? 'flex' : 'none';
       }
     }
 
@@ -106,158 +113,236 @@ function getColor(count: number): string {
 </script>
 
 <style>
-  .categories-header {
-    text-align: center;
-    padding: 3rem 1rem 2rem;
-    border-bottom: 1px solid rgba(133, 133, 168, 0.15);
-    margin-bottom: 1.5rem;
+  .cats-shell {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 4vw, 2rem);
   }
 
-  .categories-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--fontc);
-    margin: 0 0 0.5rem 0;
-    font-family: var(--font-family-base);
+  /* ── HERO ─────────────────────────────────────────────────── */
+  /* No big title. The hero is a slim header bar: eyebrow + meta on
+     the left, search on the right, sitting on a single hairline. */
+  .cats-hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem) 0;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+    position: relative;
   }
 
-  .categories-subtitle {
+  .cats-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 1px;
+    background: var(--hc);
+  }
+
+  .cats-hero__primary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+
+  .cats-hero__eyebrow {
+    font-family: var(--font-family-mono);
+    font-size: 0.72rem;
+    color: var(--hc);
+    letter-spacing: 0.22em;
+    margin: 0;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cats-hero__meta {
+    font-family: var(--font-family-mono);
     font-size: 0.9rem;
     color: var(--gray);
     margin: 0;
-    font-family: var(--font-family-mono);
+    letter-spacing: 0.02em;
   }
 
-  .categories-toolbar {
-    max-width: 900px;
-    margin: 0 auto 1rem;
-    padding: 0 1rem;
+  .cats-hero__meta strong {
+    color: var(--fontc);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
   }
 
-  .search-box {
+  .cats-hero__secondary {
+    flex: 0 1 360px;
+    min-width: 240px;
+  }
+
+  /* Search input — strengthened border so it reads as a real input. */
+  .cats-hero__search {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    background: hsl(var(--card) / 0.6);
-    border: 1px solid hsl(var(--primary) / 0.15);
-    border-radius: 10px;
-    transition: all 0.25s ease;
+    gap: 0.7rem;
+    padding: 0.8rem 1.1rem;
+    background: rgba(125, 211, 252, 0.04);
+    border: 1px solid rgba(139, 139, 160, 0.4);
+    border-radius: 0.5rem;
+    transition: border-color 0.3s ease, background 0.3s ease;
   }
 
-  .search-box:focus-within {
-    background: hsl(var(--card) / 0.8);
-    border-color: hsl(var(--primary) / 0.4);
-    box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
+  .cats-hero__search:focus-within {
+    border-color: rgba(125, 211, 252, 0.65);
+    background: rgba(125, 211, 252, 0.08);
   }
 
-  .search-box svg {
+  .cats-hero__search svg {
     color: var(--gray);
     flex-shrink: 0;
+    transition: color 0.3s ease;
   }
 
-  .search-input {
+  .cats-hero__search:focus-within svg {
+    color: var(--hc);
+  }
+
+  .cats-hero__input {
     flex: 1;
+    min-width: 0;
     background: transparent;
     border: none;
     outline: none;
     color: var(--fontc);
     font-family: var(--font-family-mono);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
   }
 
-  .search-input::placeholder {
+  .cats-hero__input::placeholder {
     color: var(--gray);
   }
 
+  /* ── CLOUD ────────────────────────────────────────────────── */
   .category-cloud {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem 1rem 2rem;
-    max-width: 900px;
-    margin: 0 auto;
+    gap: 0.65rem 0.75rem;
     min-height: 30vh;
   }
 
-  .category-item {
+  /* Stronger chip — more padding, visible border, subtle background. */
+  .category-chip {
     display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 1rem;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.55rem 1.1rem;
     font-family: var(--font-family-mono);
-    font-size: var(--font-size);
-    color: var(--category-color);
-    text-decoration: none;
-    border-radius: 2rem;
-    background: hsl(var(--card) / 0.6);
-    border: 1px solid hsl(var(--primary) / 0.15);
-    transition: all 0.25s ease;
-    cursor: pointer;
-  }
-
-  .category-item:hover {
-    transform: scale(1.1) translateY(-2px);
-    background: hsl(var(--card) / 0.8);
-    border-color: var(--category-color);
-    box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
-  }
-
-  .category-name {
+    font-size: var(--chip-size, 1rem);
+    line-height: 1.4;
     font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--fontc);
+    text-decoration: none;
+    background: rgba(125, 211, 252, 0.035);
+    border: 1px solid rgba(139, 139, 160, 0.3);
+    border-radius: 2rem;
+    cursor: pointer;
+    transition:
+      transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+      border-color 0.3s ease,
+      color 0.3s ease,
+      background 0.3s ease;
+    animation: chipEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(var(--i, 0) * 40ms);
   }
 
-  .category-count {
+  .category-chip:hover {
+    transform: translateY(-1px);
+    border-color: rgba(125, 211, 252, 0.7);
+    color: var(--hc);
+    background: rgba(125, 211, 252, 0.08);
+  }
+
+  .category-chip__name {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .category-chip__count {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 1.5rem;
-    height: 1.5rem;
-    padding: 0 0.4rem;
-    font-size: calc(var(--font-size) * 0.65);
-    color: var(--gray);
-    background: rgba(133, 133, 168, 0.2);
-    border-radius: 1rem;
-    transition: all 0.3s ease;
+    min-width: 1.55rem;
+    height: 1.55rem;
+    padding: 0 0.45rem;
+    font-size: 0.65em;
+    color: var(--hc);
+    background: rgba(125, 211, 252, 0.12);
+    border: 1px solid rgba(125, 211, 252, 0.28);
+    border-radius: 0.4rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    transition: background 0.3s ease, border-color 0.3s ease;
   }
 
-  .category-item:hover .category-count {
-    background: rgba(155, 219, 238, 0.2);
-    color: var(--fontc);
+  .category-chip:hover .category-chip__count {
+    background: rgba(125, 211, 252, 0.22);
+    border-color: rgba(125, 211, 252, 0.5);
   }
 
-  .no-results {
+  @keyframes chipEnter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .category-cloud__empty {
     display: none;
     width: 100%;
-    text-align: center;
-    padding: 3rem 1rem;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 0 1rem;
     color: var(--gray);
     font-family: var(--font-family-mono);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
   }
 
+  .category-cloud__empty-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--hairline);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .category-chip {
+      animation: none;
+    }
+    .category-chip:hover {
+      transform: none;
+    }
+  }
+
+  /* ── RESPONSIVE ───────────────────────────────────────────── */
   @media (max-width: 640px) {
-    .categories-header {
-      padding: 2rem 1rem 1.5rem;
-    }
-
-    .categories-title {
-      font-size: 1.5rem;
-    }
-
     .category-cloud {
-      gap: 0.75rem;
-      padding: 1rem 0.5rem 1.5rem;
+      gap: 0.5rem 0.6rem;
     }
 
-    .category-item {
-      padding: 0.4rem 0.8rem;
+    .category-chip {
+      padding: 0.45rem 0.85rem;
     }
 
-    .search-box {
-      padding: 0.625rem 0.875rem;
+    .cats-hero__secondary {
+      flex-basis: 100%;
     }
   }
 </style>

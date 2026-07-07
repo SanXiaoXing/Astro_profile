@@ -12,149 +12,291 @@ export async function getData(tag) {
 }
 
 const postf = await getData(tag);
+const total = postf.length;
+const latest = postf[0]?.data.pubDate;
 ---
-<div class="tag-header">
-  <div class="tag-badge">#{tag}</div>
-  <p class="tag-count">共 {postf.length} 篇文章</p>
-</div>
+
+<header class="tag-detail">
+  <p class="tag-detail__crumb">
+    <a href="/tags" class="tag-detail__crumb-link">标签 / Tags</a>
+    <span class="tag-detail__crumb-sep" aria-hidden="true">/</span>
+    <span class="tag-detail__crumb-current">#{tag}</span>
+  </p>
+
+  <h1 class="tag-detail__title">
+    <span class="tag-detail__hash" aria-hidden="true">#</span>{tag}
+  </h1>
+
+  <p class="tag-detail__meta">
+    <span class="tag-detail__meta-num">{total}</span>
+    <span class="tag-detail__meta-unit">篇文章</span>
+    {latest && (
+      <>
+        <span class="tag-detail__meta-sep" aria-hidden="true">·</span>
+        <span class="tag-detail__meta-sub">最近更新</span>
+        <FormattedDate date={latest} />
+      </>
+    )}
+  </p>
+</header>
 
 <ul class="post-list" data-pagefind-ignore="all">
-    {postf.map((post) => (
-      <li class="post-item">
-        <a href={`/blog/${post.fileName}`} class="post-link">
-          <span class="post-date">
-            <FormattedDate date={post.data.pubDate} />
-          </span>
-          <span class="post-title">{post.data.title}</span>
-          <svg class="post-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"/>
-            <polyline points="12 5 19 12 12 19"/>
-          </svg>
-        </a>
-      </li>
-    ))}
+  {postf.map((post, i) => (
+    <li class="post-list__item" style={`--i: ${i};`}>
+      <a href={`/blog/${post.fileName}`} class="post-list__link">
+        <time class="post-list__date">
+          <FormattedDate date={post.data.pubDate} />
+        </time>
+        <span class="post-list__title">{post.data.title}</span>
+        <svg
+          class="post-list__arrow"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
+      </a>
+    </li>
+  ))}
 </ul>
 
 <style>
-  .tag-header {
-    text-align: center;
-    margin-bottom: 3rem;
+  /* ── DETAIL HERO ──────────────────────────────────────────── */
+  .tag-detail {
+    margin: clamp(1rem, 3vw, 2rem) 0 clamp(2.5rem, 6vw, 4rem);
+    position: relative;
   }
 
-  .tag-badge {
-    display: inline-block;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--hc);
+  .tag-detail::before {
+    content: '';
+    position: absolute;
+    top: -0.5rem;
+    left: 0;
+    width: 24px;
+    height: 1px;
+    background: var(--hc);
+  }
+
+  .tag-detail__crumb {
     font-family: var(--font-family-mono);
-    background: linear-gradient(135deg, rgba(155, 219, 238, 0.15), rgba(255, 179, 0, 0.05));
-    padding: 0.5rem 1.5rem;
-    border-radius: 1rem;
-    border: 1px solid rgba(155, 219, 238, 0.2);
-    margin-bottom: 0.5rem;
-  }
-
-  .tag-count {
+    font-size: 0.78rem;
     color: var(--gray);
-    font-family: var(--font-family-mono);
-    font-size: 0.9rem;
-    margin: 0;
+    margin: 0 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    letter-spacing: 0.05em;
   }
 
+  .tag-detail__crumb-link {
+    color: var(--gray);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 1px;
+    transition: color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .tag-detail__crumb-link:hover {
+    color: var(--hc);
+    border-bottom-color: var(--hc);
+  }
+
+  .tag-detail__crumb-sep,
+  .tag-detail__crumb-current {
+    color: var(--gray);
+  }
+
+  .tag-detail__crumb-current {
+    color: var(--fontc);
+  }
+
+  .tag-detail__title {
+    font-family: var(--font-family-display);
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--fontc);
+    margin: 0 0 1.25rem;
+    word-break: break-word;
+  }
+
+  .tag-detail__hash {
+    color: var(--hc);
+    margin-right: 0.05em;
+    display: inline-block;
+    /* Perpetual micro-loop: subtle vertical pulse on the hash. */
+    animation: hashPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes hashPulse {
+    0%, 90%, 100% { opacity: 1; transform: translateY(0); }
+    95% { opacity: 0.55; transform: translateY(-1px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tag-detail__hash { animation: none; }
+  }
+
+  .tag-detail__meta {
+    font-family: var(--font-family-mono);
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .tag-detail__meta-num {
+    color: var(--fontc);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    font-size: 1.05em;
+  }
+
+  .tag-detail__meta-unit,
+  .tag-detail__meta-sub {
+    color: var(--gray);
+  }
+
+  .tag-detail__meta-sep {
+    color: var(--hairline);
+  }
+
+  /* ── POST LIST ───────────────────────────────────────────── */
   .post-list {
     list-style: none;
     padding: 0;
     margin: 0 auto;
     max-width: 800px;
     min-height: 50vh;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
   }
 
-  .post-link {
+  .post-list__item {
+    border-top: 1px solid var(--hairline);
+    animation: rowEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
+  }
+
+  .post-list__item:last-child {
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .post-list__link {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    background: hsl(var(--card) / 0.6);
-    border: 1px solid hsl(var(--primary) / 0.15);
-    border-radius: 10px;
+    gap: 1.25rem;
+    padding: 1.25rem 0.5rem;
     text-decoration: none;
-    transition: all 0.25s ease;
-    cursor: pointer;
+    transition: background 0.3s ease, padding 0.3s ease;
+    position: relative;
   }
 
-  .post-link:hover {
-    background: hsl(var(--card) / 0.8);
-    border-color: hsl(var(--primary) / 0.4);
-    transform: translateX(4px);
-    box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
+  .post-list__link::before {
+    content: '';
+    position: absolute;
+    inset: 0 -1rem;
+    background: rgba(125, 211, 252, 0.04);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: 0.25rem;
   }
 
-  .post-date {
+  .post-list__link:hover::before {
+    opacity: 1;
+  }
+
+  .post-list__date {
     font-family: var(--font-family-mono);
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     color: var(--gray);
     min-width: 110px;
     flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
   }
 
-  .post-title {
+  .post-list__title {
     flex: 1;
     font-family: var(--font-family-base);
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     color: var(--fontc);
-    transition: color 0.25s ease;
+    transition: color 0.3s ease;
     font-weight: 500;
+    line-height: 1.5;
   }
 
-  .post-link:hover .post-title {
+  .post-list__link:hover .post-list__title {
     color: var(--hc);
   }
 
-  .post-arrow {
-    color: var(--gray);
+  .post-list__arrow {
+    color: var(--orange);
     flex-shrink: 0;
-    transition: all 0.3s ease;
     opacity: 0;
-    transform: translateX(-12px);
+    transform: translateX(-8px);
+    transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .post-link:hover .post-arrow {
-    color: var(--orange);
+  .post-list__link:hover .post-list__arrow {
     opacity: 1;
     transform: translateX(0);
   }
 
-  @media (max-width: 640px) {
-    .tag-badge {
-      font-size: 2rem;
+  @keyframes rowEnter {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
     }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-    .post-link {
+  @media (prefers-reduced-motion: reduce) {
+    .post-list__item { animation: none; }
+    .post-list__arrow { transition: opacity 0.3s ease; transform: none; }
+  }
+
+  /* ── RESPONSIVE ──────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .post-list__link {
       flex-direction: column;
       align-items: flex-start;
       gap: 0.5rem;
-      padding: 1rem;
+      padding: 1rem 0.5rem;
     }
 
-    .post-date {
+    .post-list__date {
       min-width: auto;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
     }
 
-    .post-title {
-      font-size: 1rem;
+    .post-list__title {
+      font-size: 0.98rem;
       width: 100%;
     }
 
-    .post-arrow {
+    .post-list__arrow {
       display: none;
     }
 
-    .post-link:hover {
-      transform: translateY(-2px);
+    .post-list__link::before {
+      inset: 0 -0.5rem;
     }
   }
 </style>

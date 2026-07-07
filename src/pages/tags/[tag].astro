@@ -5,81 +5,71 @@ import Tagpage from '../../components/blog/Tagpage.astro';
 import { ViewTransitions } from 'astro:transitions';
 
 export async function getStaticPaths() {
-
     const paths = [];
-
     const blog = await getCollection('blog');
     const tags = [...new Set([].concat.apply([], blog.map(post => post.data.tags)))];
-    // 为每个标签生成路径对象
     const langPaths = tags.map((tag) => {
         return {
-            params: { tag }, // 使用当前语言变量
+            params: { tag },
         };
     });
-    // 将当前语言的路径合并到总路径数组中
     paths.push(...langPaths);
-    
+
     return paths;
 }
 ---
 <Layout comments={false}>
   <ViewTransitions />
-  
-  <div class="page-header">
-    <a href="/tags" class="back-link">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+  <nav class="tag-back" aria-label="breadcrumb">
+    <a href="/tags" class="tag-back__link">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <line x1="19" y1="12" x2="5" y2="12"/>
         <polyline points="12 19 5 12 12 5"/>
       </svg>
-      返回标签页
+      <span>返回标签</span>
     </a>
-  </div>
+  </nav>
 
   <Tagpage />
 </Layout>
 
 <style>
-  .page-header {
-    margin-bottom: 2rem;
-    padding-top: 1rem;
+  .tag-back {
+    padding: clamp(1.5rem, 4vw, 2.5rem) 0 0;
   }
 
-  .back-link {
+  .tag-back__link {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.45rem 0.9rem;
     color: var(--gray);
     text-decoration: none;
     font-family: var(--font-family-mono);
-    font-size: 0.9rem;
-    border: 1px solid rgba(133, 133, 168, 0.2);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--hairline);
     border-radius: 2rem;
-    transition: all 0.25s ease;
-    background: rgba(40, 42, 53, 0.4);
+    background: transparent;
+    transition: color 0.3s ease, border-color 0.3s ease;
   }
 
-  .back-link svg {
-    transition: transform 0.25s ease;
+  .tag-back__link svg {
+    flex-shrink: 0;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .back-link:hover {
+  .tag-back__link:hover {
     color: var(--hc);
-    border-color: var(--hc);
-    background: rgba(155, 219, 238, 0.1);
-    box-shadow: 0 4px 12px rgba(155, 219, 238, 0.1);
+    border-color: rgba(125, 211, 252, 0.5);
   }
 
-  .back-link:hover svg {
+  .tag-back__link:hover svg {
     transform: translateX(-4px);
   }
 
-  main {
-    width: 960px;
-  }
-  
-  /* 隐藏原始动画样式 */
-  @keyframes scale-up-hor-right {}
-  @-webkit-keyframes scale-up-hor-right {}
+  /* Match the tags shell width. */
+  main { max-width: 1100px; }
 </style>
 </Layout>
