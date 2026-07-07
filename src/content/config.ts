@@ -31,6 +31,7 @@ const work = defineCollection({
 		company: z.string(),
 		location: z.string(),
 		position: z.string(),
+		description: z.string().optional(), // 项目整体描述
 		start: z.string(),
 		end: z.string(),
 		link: z.string().optional(),
@@ -67,6 +68,7 @@ export async function getWorkExperiences() {
 			company: exp.data.company,
 			location: exp.data.location,
 			position: exp.data.position,
+			description: exp.data.description || '',
 			start: exp.data.start,
 			end: exp.data.end,
 			link: exp.data.link || '',

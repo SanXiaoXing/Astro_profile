@@ -20,6 +20,7 @@ interface ExperienceItem {
   company: string;
   location: string;
   position: string;
+  description: string;
   start: string;
   end: string;
   link: string;
@@ -97,11 +98,22 @@ const TimelineItem = ({ item, index }: TimelineItemProps) => {
                   <h4 className="font-bold text-2xl md:text-3xl text-[var(--fontc)] mb-2 tracking-tight">
                     {item.position}
                   </h4>
-                  <div className="flex items-center gap-2 text-[var(--gray-light)] font-mono text-sm">
+                  <div className="flex items-center gap-2 text-[var(--gray-light)] font-mono text-sm mb-3">
                     <span className="text-[var(--orange)] font-semibold">@ {item.company}</span>
                     <span>•</span>
                     <span>{item.location}</span>
                   </div>
+                  {item.description && (
+                    <div className="mt-4 mb-3 max-w-2xl">
+                      <h6 className="text-sm font-semibold text-[var(--fontc)] mb-3 flex items-center gap-2">
+                        <span className="w-1 h-4 bg-[var(--hc)] rounded-sm"></span>
+                        项目概述
+                      </h6>
+                      <blockquote className="text-[var(--gray-light)] text-sm md:text-base leading-relaxed pl-6 py-4 pr-6 border-l-4 border-[var(--hc)] bg-[linear-gradient(90deg,hsla(210,80%,60%,0.08),transparent)] rounded-r-lg italic">
+                        {item.description}
+                      </blockquote>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -169,11 +181,22 @@ const TimelineItem = ({ item, index }: TimelineItemProps) => {
               <h4 className="font-bold text-2xl text-[var(--fontc)] mb-2 tracking-tight">
                 {item.position}
               </h4>
-              <div className="flex flex-wrap items-center gap-2 text-[var(--gray-light)] font-mono text-sm">
+              <div className="flex flex-wrap items-center gap-2 text-[var(--gray-light)] font-mono text-sm mb-3">
                 <span className="text-[var(--orange)] font-semibold">@ {item.company}</span>
                 <span>•</span>
                 <span>{item.location}</span>
               </div>
+              {item.description && (
+                <div className="mt-3 mb-3">
+                  <h6 className="text-sm font-semibold text-[var(--fontc)] mb-3 flex items-center gap-2">
+                    <span className="w-1 h-4 bg-[var(--hc)] rounded-sm"></span>
+                    项目概述
+                  </h6>
+                  <blockquote className="text-[var(--gray-light)] text-sm leading-relaxed pl-6 py-4 pr-6 border-l-4 border-[var(--hc)] bg-[linear-gradient(90deg,hsla(210,80%,60%,0.08),transparent)] rounded-r-lg italic">
+                    {item.description}
+                  </blockquote>
+                </div>
+              )}
             </div>
 
             <div className="space-y-6">

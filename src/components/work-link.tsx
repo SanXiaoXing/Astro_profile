@@ -17,6 +17,7 @@ interface ExperienceItem {
   company: string;
   location: string;
   position: string;
+  description: string;
   start: string;
   end: string;
   link: string;
