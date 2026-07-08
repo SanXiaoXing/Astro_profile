@@ -68,6 +68,13 @@ const friendLinksZh = [
     link: 'https://www.leehenry.top',
     description: '何妨吟啸且徐行',
   },
+  {
+    avatar: 'https://blog-theta-seven-58.vercel.app/logo.svg',
+    name: '今斤',
+    link: 'https://blog-theta-seven-58.vercel.app',
+    description: '吾日三省吾身，今日几斤？',
+    tag: '毛坯'
+  },
 ];
 
 const friendLinksInvalid = [
