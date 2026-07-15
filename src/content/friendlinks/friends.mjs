@@ -73,7 +73,7 @@ const friendLinksZh = [
     name: '今斤',
     link: 'https://blog-theta-seven-58.vercel.app',
     description: '吾日三省吾身，今日几斤？',
-    tag: '毛坯'
+    tag: '装修中'
   },
 ];
 
