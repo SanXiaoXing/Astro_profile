@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro'
 import { getWorkExperiences } from '../content/config'
 import { WorkLink } from '../components/work-link'
+import AboutInteraction from '../components/AboutInteraction.tsx'
 
 const experiences = await getWorkExperiences()
 ---
@@ -28,6 +29,8 @@ const experiences = await getWorkExperiences()
 
       <WorkLink client:load href="/work" enText="Work Experience" experiences={experiences} />
     </section>
+
+    <AboutInteraction client:load />
   </article>
 </Layout>
 
