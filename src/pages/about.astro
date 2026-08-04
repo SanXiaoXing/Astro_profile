@@ -15,17 +15,58 @@ const experiences = await getWorkExperiences()
     </header>
 
     <section class="about-body">
-      <div class="about-content">
-        <p class="about-paragraph">
-          你好，我是 SanXiaoXing。
-        </p>
-        <p class="about-paragraph">
-          我是一名软件开发者，专注于自动化工具、系统设计与工程实践。我相信，技术的价值不仅在于实现功能，更在于不断积累、持续优化，并最终解决真实的问题。
-        </p>
-        <p class="about-paragraph">
-          这个博客记录着我的学习、项目和思考，希望在分享经验的同时，也见证自己的成长。
-        </p>
-      </div>
+    <div class="about-content">
+
+      <h2 class="about-title">👋 关于我</h2>
+      <p class="about-paragraph">
+        你好，我是 SanXiaoXing，一个喜欢折腾代码、研究工具，并且偶尔和 Bug 斗智斗勇的软件开发者。
+      </p>
+
+      <h2 class="about-title">💻 我的日常</h2>
+      <p class="about-paragraph">
+        我的工作和兴趣都围绕着软件开发展开：
+        从自动化工具、系统设计，到桌面应用和工程实践。
+        我喜欢把复杂的问题拆解成简单的模块，然后一点一点让它们变成真正能够运行的东西。
+      </p>
+
+      <p class="about-paragraph">
+        当然，开发过程中也少不了一些经典环节：
+        “为什么昨天还能运行？”
+        “这个 Bug 到底是谁引入的？”
+        “删掉这一行代码之后，它为什么突然好了？”
+        毕竟，软件工程有时候也是一门关于探索未知的艺术。
+      </p>
+
+      <h2 class="about-title">🛠️ 我喜欢创造什么</h2>
+      <p class="about-paragraph">
+        我喜欢开发那些能够解决真实问题的小工具。
+        可能是帮助提高效率的自动化程序，也可能是一个记录生活、管理信息的小应用。
+      </p>
+
+      <p class="about-paragraph">
+        我相信技术的价值并不只是实现功能，而是让一些原本麻烦的事情变得简单，
+        让人的时间可以留给更加重要和有趣的事情。
+      </p>
+
+      <h2 class="about-title">🌱 这里记录什么</h2>
+      <p class="about-paragraph">
+        这个博客是我的数字记录，也是我的长期实验记录。
+        这里保存我的项目经历、技术探索、踩坑笔记，以及一些关于生活和成长的思考。
+      </p>
+
+      <p class="about-paragraph">
+        有些想法会变成项目，有些项目会成为工具，
+        有些代码可能最后只服务于某个夜晚的灵感。
+        但每一次尝试，都会成为下一次成长的积累。
+      </p>
+
+      <h2 class="about-title">🚀 持续迭代中</h2>
+      <p class="about-paragraph">
+        我始终相信，软件和人生其实有一点相似：
+        都需要不断优化、修复问题，并且持续发布新的版本。
+      </p>
+
+    </div>
 
       <WorkLink client:load href="/work" enText="Work Experience" experiences={experiences} />
     </section>

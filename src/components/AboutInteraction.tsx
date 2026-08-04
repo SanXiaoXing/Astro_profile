@@ -8,6 +8,7 @@ import {
   type LayoutCursor,
   type PreparedTextWithSegments,
 } from '@chenglou/pretext'
+import { createAsciiCanvas, type AsciiRenderer } from './about/ascii/AsciiCanvas'
 
 /**
  * 将 About 页面渲染为一个 Pretext 场景：
@@ -43,12 +44,27 @@ const CSS = `
 }
 .pretext-stage .pt-headline { color: var(--fontc); font-weight: 700; letter-spacing: -0.01em; }
 .pretext-stage .pt-subtitle { color: var(--fontc); opacity: 0.6; }
+.pretext-stage .pt-section-title { color: var(--fontc); font-weight: 700; opacity: 0.95; letter-spacing: -0.01em; }
 .pretext-stage .pt-body { color: var(--fontc); opacity: 0.88; }
 .pretext-stage .pt-ascii-line {
   color: var(--fontc);
   opacity: 1; /* ASCII 是装饰纹理：半透明会让细笔画在浅色背景上发灰发浅，须实心渲染 */
   font-family: var(--font-family-mono, "FutureMono", ui-monospace, monospace);
+  font-weight: 700; /* 加粗让细笔画在浅色背景下更清晰 */
   user-select: none;
+}
+
+/* 浅色模式：纯黑 + 描边加粗 — 小字号 ASCII 笔画太细，--fontc 显灰 */
+html.light .pretext-stage .pt-ascii-line {
+  color: #000;
+  -webkit-text-stroke: 0.4px #000;
+  paint-order: stroke fill;
+}
+
+@media (max-width: 640px) {
+  .pretext-stage .pt-ascii-line {
+    font-size: 4px; /* 移动端确保 ASCII 不溢出，由 JS 动态覆盖 */
+  }
 }
 
 .pretext-cursor {
@@ -72,25 +88,22 @@ const HEADLINE_FONT = '700 36px "noto-serif", "EmblemaOne", serif'
 const HEADLINE_LINE = 44
 const SUBTITLE_FONT = '400 14px "noto-serif", serif'
 const SUBTITLE_LINE = 22
+const SECTION_TITLE_FONT = '700 22px "noto-serif", serif'
+const SECTION_TITLE_LINE = 30
 const BODY_FONT = '400 18px "noto-serif", serif'
 const BODY_LINE = 30
 const PARAGRAPH_GAP = 14
+const SECTION_TITLE_GAP = 8
 const ASCII_MEASURE_FONT = '8px "FutureMono", ui-monospace, monospace'
-const ASCII_TARGET_W_FRAC = 0.5
 
 // 障碍参数（参照 editorial-engine）
 const CURSOR_RADIUS = 30
 const CURSOR_HPAD = 6
 const CURSOR_VPAD = 2
-const ASCII_HPAD = 10
 const ASCII_VPAD = 4
 const MIN_SLOT_W = 40
 
 const CURSOR_LERP = 0.32
-// ASCII 让位：光标圆侵入某行时，该整行向左平滑让位的最大位移（px）。
-// 让位幅度由 circleIntervalForBand 的侵入宽度决定，行距光标越近让位越多，
-// 让出的右侧空隙会同步交给正文排版，形成"ASCII 触碰并推开正文"的完整交互。
-const ASCII_PART_MAX = 40
 
 type Interval = { left: number; right: number }
 type PositionedLine = { x: number; y: number; text: string }
@@ -197,13 +210,25 @@ export default function AboutInteraction() {
     cleanups.push(() => styleEl.remove())
 
     // 抽取文本
-    const titleEl = page.querySelector<HTMLElement>('.about-title')
+    const titleEl = page.querySelector<HTMLElement>('.about-header .about-title')
     const subtitleEl = page.querySelector<HTMLElement>('.about-subtitle')
-    const paragraphEls = Array.from(page.querySelectorAll<HTMLElement>('.about-paragraph'))
+    const contentEl = page.querySelector<HTMLElement>('.about-content')
     const headlineText = (titleEl?.textContent ?? '').trim()
     const subtitleText = (subtitleEl?.textContent ?? '').trim()
-    const paragraphTexts = paragraphEls.map((el) => (el.textContent ?? '').trim()).filter(Boolean)
-    if (!headlineText && !paragraphTexts.length) return // 无内容可渲染
+    // 抽取 .about-content 中的内容序列（标题 + 段落保持原始顺序）
+    const contentSequence: { type: 'section-title' | 'body'; text: string }[] = []
+    if (contentEl) {
+      for (const child of contentEl.children) {
+        if (child.matches('h2.about-title')) {
+          const t = (child.textContent ?? '').trim()
+          if (t) contentSequence.push({ type: 'section-title', text: t })
+        } else if (child.matches('p.about-paragraph')) {
+          const t = (child.textContent ?? '').trim()
+          if (t) contentSequence.push({ type: 'body', text: t })
+        }
+      }
+    }
+    if (!headlineText && !contentSequence.length) return // 无内容可渲染
 
     page.classList.add('pretext-scene')
     cleanups.push(() => page.classList.remove('pretext-scene'))
@@ -236,10 +261,10 @@ export default function AboutInteraction() {
     }
     const headlinePool: HTMLSpanElement[] = []
     const subtitlePool: HTMLSpanElement[] = []
+    const sectionTitlePool: HTMLSpanElement[] = []
     const bodyPool: HTMLSpanElement[] = []
-    const asciiPool: HTMLSpanElement[] = []
     cleanups.push(() => {
-      ;[headlinePool, subtitlePool, bodyPool, asciiPool].forEach((p) => p.forEach((el) => el.remove()))
+      ;[headlinePool, subtitlePool, sectionTitlePool, bodyPool].forEach((p) => p.forEach((el) => el.remove()))
     })
 
     // 状态
@@ -255,13 +280,10 @@ export default function AboutInteraction() {
     // 缓存 prepared（字体加载后一次性）
     let preparedHeadline: PreparedTextWithSegments | null = null
     let preparedSubtitle: PreparedTextWithSegments | null = null
-    let preparedParagraphs: PreparedTextWithSegments[] = []
+    let preparedContentSequence: { type: 'section-title' | 'body'; prepared: PreparedTextWithSegments }[] = []
     let asciiText = ''
     let asciiFont = ''
-    let asciiW = 0
-    let asciiH = 0
-    let asciiLineH = 0
-    let asciiLines: PositionedLine[] = []
+    let asciiRenderer: AsciiRenderer | null = null
 
     const setup = async () => {
       try {
@@ -273,7 +295,10 @@ export default function AboutInteraction() {
 
       preparedHeadline = headlineText ? prepareWithSegments(headlineText, HEADLINE_FONT) : null
       preparedSubtitle = subtitleText ? prepareWithSegments(subtitleText, SUBTITLE_FONT) : null
-      preparedParagraphs = paragraphTexts.map((t) => prepareWithSegments(t, BODY_FONT))
+      preparedContentSequence = contentSequence.map((item) => ({
+        type: item.type,
+        prepared: prepareWithSegments(item.text, item.type === 'section-title' ? SECTION_TITLE_FONT : BODY_FONT),
+      }))
 
       // ASCII：测量自然宽度后反推字号，再以最终字号重新 prepare
       try {
@@ -285,18 +310,24 @@ export default function AboutInteraction() {
       if (cancelled) return
 
       if (asciiText) {
-        const probe = prepareWithSegments(asciiText, ASCII_MEASURE_FONT, { whiteSpace: 'pre-wrap' })
-        const naturalAt8 = measureNaturalWidth(probe)
         stageW = stage.clientWidth || page.clientWidth
-        const targetW = Math.max(160, Math.min(stageW * 0.5, stageW * ASCII_TARGET_W_FRAC))
-        const fontPx = naturalAt8 > 0 ? Math.max(4, Math.min(8, (8 * targetW) / naturalAt8)) : 6
-        asciiFont = `${fontPx}px "FutureMono", ui-monospace, monospace`
-        asciiLineH = Math.ceil(fontPx * 1.2)
-        const prepared = prepareWithSegments(asciiText, asciiFont, { whiteSpace: 'pre-wrap' })
-        const result = layoutWithLines(prepared, targetW, asciiLineH)
-        asciiLines = result.lines.map((l, i) => ({ x: 0, y: i * asciiLineH, text: l.text }))
-        asciiW = Math.ceil(Math.max(...result.lines.map((l) => l.width), targetW))
-        asciiH = asciiLines.length * asciiLineH
+        // 响应式宽度：移动端占更多空间，桌面端保持适中
+        const widthFrac = stageW < 640 ? 0.92 : 0.5
+        const targetW = Math.max(160, stageW * widthFrac)
+
+        // 保留原始行结构，不自动换行
+        const rawLines = asciiText.split('\n')
+        const maxLineLen = Math.max(...rawLines.map((l) => l.length))
+
+        // 测量单个字符在 8px 下的宽度，按最长行推算字号
+        const charProbe = prepareWithSegments('-', ASCII_MEASURE_FONT)
+        const charW8 = measureNaturalWidth(charProbe)
+        const fontPx =
+          maxLineLen > 0 ? Math.max(3.5, Math.min(8, (8 * targetW) / (maxLineLen * charW8))) : 6
+
+        // 字重加入 font 简写
+        asciiFont = `700 ${fontPx}px "FutureMono", ui-monospace, monospace`
+        asciiRenderer = createAsciiCanvas({ stage, text: asciiText, font: asciiFont })
       }
 
       dirty = true
@@ -359,16 +390,15 @@ export default function AboutInteraction() {
     }
 
     const layoutAndProject = () => {
-      if (!preparedHeadline && !preparedParagraphs.length) return
+      if (!preparedHeadline && !preparedContentSequence.length) return
 
       const circles: CircleObs[] =
         mouseInside && !reduced
           ? [{ cx: cursorLocalX, cy: cursorLocalY, r: CURSOR_RADIUS, hPad: CURSOR_HPAD, vPad: CURSOR_VPAD }]
           : []
-      const cursorCircle: CircleObs | null = circles[0] ?? null
 
       let y = 0
-      // 标题（无障碍，避免标题被推开影响阅读）
+      // 1. 标题（无障碍，避免标题被推开影响阅读）
       const hlLines: PositionedLine[] = []
       if (preparedHeadline) {
         const r = layoutWithLines(preparedHeadline, stageW, HEADLINE_LINE)
@@ -377,7 +407,7 @@ export default function AboutInteraction() {
       }
       projectLines(headlinePool, hlLines, 'pt-line pt-headline', HEADLINE_FONT, HEADLINE_LINE)
 
-      // 副标题
+      // 2. 副标题
       const subLines: PositionedLine[] = []
       if (preparedSubtitle) {
         const r = layoutWithLines(preparedSubtitle, stageW, SUBTITLE_LINE)
@@ -386,73 +416,56 @@ export default function AboutInteraction() {
       }
       projectLines(subtitlePool, subLines, 'pt-line pt-subtitle', SUBTITLE_FONT, SUBTITLE_LINE)
 
-      const bodyTop = y + 18
-      // ASCII 作为矩形障碍（右侧浮动），正文环绕
-      const asciiRect: RectObs | null =
-        asciiLines.length > 0
-          ? { x: stageW - asciiW - 4, y: bodyTop, w: asciiW + ASCII_HPAD, h: asciiH + ASCII_VPAD * 2 }
-          : null
-
-      // ASCII 位置（先算：正文要实时绕开 ASCII 当前的实际位置，含让位后的空隙）
-      const asciiHomeX = asciiRect ? asciiRect.x + 2 : 0
-      const asciiRender: PositionedLine[] = []
-      const asciiObstacles: RectObs[] = []
-      for (let i = 0; i < asciiLines.length; i++) {
-        const al = asciiLines[i]!
-        const lineY = bodyTop + ASCII_VPAD + al.y
-        let lx = asciiHomeX
-        if (asciiRect && cursorCircle) {
-          const iv = circleIntervalForBand(cursorCircle, lineY, lineY + asciiLineH)
-          if (iv) {
-            // 整行向左平滑让位：位移 = 光标圆从左侧侵入该行的量（封顶）。
-            // 行带越贴近光标圆心，circleIntervalForBand 返回的区间越宽，让位越多；
-            // 光标平滑跟随，让位随之连续变化，不再只"跳一下"。
-            const push = Math.min(ASCII_PART_MAX, Math.max(0, iv.right - lx))
-            lx = Math.max(2, lx - push)
-          }
-        }
-        asciiRender.push({ x: lx, y: lineY, text: al.text })
-        // 每行当前实际占位作为正文障碍：让位后右侧露出的空隙，正文会顺势流入
-        asciiObstacles.push({
-          x: lx - ASCII_HPAD / 2,
-          y: lineY - ASCII_VPAD,
-          w: asciiW + ASCII_HPAD,
-          h: asciiLineH + ASCII_VPAD * 2,
-        })
+      // 3. ASCII 图案：Canvas 渲染器（独立物理引擎，每帧自动更新）
+      let asciiBottom = 0
+      if (asciiRenderer) {
+        const asciiTop = y + 14
+        asciiRenderer.setTop(asciiTop)
+        y = asciiTop + asciiRenderer.height + 20
+        asciiBottom = asciiTop + asciiRenderer.height + 16
       }
-      projectLines(asciiPool, asciiRender, 'pt-ascii-line', asciiFont || ASCII_MEASURE_FONT, asciiLineH || 8)
 
-      // 正文：逐段排版，绕开 ASCII 当前实际占位（动态逐行障碍）+ 光标圆形障碍
+      // 4. 正文内容序列：按原始顺序排版（标题+段落），均受光标障碍影响
+      const bodyTop = y + 18
+      const allSectionTitle: PositionedLine[] = []
       const allBody: PositionedLine[] = []
       let curY = bodyTop
-      for (let pi = 0; pi < preparedParagraphs.length; pi++) {
-        const prepared = preparedParagraphs[pi]!
+      for (const item of preparedContentSequence) {
+        const lineH = item.type === 'section-title' ? SECTION_TITLE_LINE : BODY_LINE
+        const gap = item.type === 'section-title' ? SECTION_TITLE_GAP : PARAGRAPH_GAP
         const start: LayoutCursor = { segmentIndex: 0, graphemeIndex: 0 }
         const res = layoutColumnObstacle(
-          prepared,
+          item.prepared,
           start,
           0,
           curY,
           stageW,
-          100000, // 足够大；段落自身文本决定结束
-          BODY_LINE,
+          100000,
+          lineH,
           circles,
-          asciiObstacles,
+          [], // ASCII 已在上方，正文无需再绕开它
         )
-        for (const l of res.lines) allBody.push(l)
-        curY = res.endY + PARAGRAPH_GAP
+        for (const l of res.lines) {
+          if (item.type === 'section-title') {
+            allSectionTitle.push(l)
+          } else {
+            allBody.push(l)
+          }
+        }
+        curY = res.endY + gap
       }
+      projectLines(sectionTitlePool, allSectionTitle, 'pt-line pt-section-title', SECTION_TITLE_FONT, SECTION_TITLE_LINE)
       projectLines(bodyPool, allBody, 'pt-line pt-body', BODY_FONT, BODY_LINE)
 
       // stage 高度 = 正文末尾 / ASCII 底部 较大者
       const bodyBottom = curY
-      const asciiBottom = asciiRect ? bodyTop + asciiRect.h : 0
       stage.style.height = `${Math.max(bodyBottom, asciiBottom) + 16}px`
     }
 
     // 事件：障碍用 stage 局部坐标，光标 img 视口坐标在 render 中由局部+原点换算
     const onLeave = () => {
       mouseInside = false
+      if (asciiRenderer) asciiRenderer.setMouse(-9999, -9999)
       schedule()
     }
     const onResize = () => {
@@ -466,6 +479,8 @@ export default function AboutInteraction() {
       mouseInside = localX >= 0 && localX <= rect.width && localY >= 0 && localY <= rect.height
       mouseX = mouseInside ? localX : -9999
       mouseY = mouseInside ? localY : -9999
+      // ASCII 物理引擎：传入 stage 局部坐标，与 glyph.baseX/baseY 坐标系一致
+      if (asciiRenderer) asciiRenderer.setMouse(mouseX, mouseY)
       schedule()
     }
     const onWindowOut = (e: MouseEvent) => {
