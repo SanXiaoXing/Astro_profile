@@ -31,11 +31,6 @@ function generateVisitorId(): string | null {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID()
   }
-  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
-    const buf = new Uint8Array(16)
-    crypto.getRandomValues(buf)
-    return Array.from(buf, (b) => b.toString(16).padStart(2, '0')).join('')
-  }
   return null
 }
 
@@ -86,25 +81,6 @@ export async function fetchLiveCounts(
 
   if (error || !data) return {}
   return aggregateCounts(data)
-}
-
-/**
- * 获取当前访客对某篇文章已选的反应(浏览器端)。
- */
-export async function fetchMySelection(
-  supabase: import('@supabase/supabase-js').SupabaseClient,
-  postSlug: string,
-  visitorId: string,
-): Promise<string | null> {
-  const { data, error } = await supabase
-    .from('reactions')
-    .select('emoji')
-    .eq('post_slug', postSlug)
-    .eq('visitor_id', visitorId)
-    .maybeSingle()
-
-  if (error || !data) return null
-  return data.emoji
 }
 
 /**

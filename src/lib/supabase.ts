@@ -44,16 +44,4 @@ export function getSupabase(visitorId?: string): SupabaseClient | null {
   return cachedClient
 }
 
-/**
- * 用于 build-time 的便捷函数 —— 不需要 RLS header,
- * 只做只读聚合查询。
- */
-export function getSupabaseAnon(): SupabaseClient | null {
-  return getSupabase()
-}
-
-export function isSupabaseConfigured(): boolean {
-  return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY)
-}
-
 export { VISITOR_HEADER }
