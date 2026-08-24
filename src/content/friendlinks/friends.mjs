@@ -69,11 +69,11 @@ const friendLinksZh = [
     description: '何妨吟啸且徐行',
   },
   {
-    avatar: 'https://blog-theta-seven-58.vercel.app/logo.svg',
+    avatar: 'https://www.randomjin.top/assets/logo.png',
     name: '今斤',
-    link: 'https://blog-theta-seven-58.vercel.app',
+    link: 'https://www.randomjin.top/',
     description: '吾日三省吾身，今日几斤？',
-    tag: '装修中'
+    tag: '软装ing'
   },
 ];
 
