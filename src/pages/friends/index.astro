@@ -23,7 +23,7 @@ import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/fri
         {friendLinksZh.map((link, i) => (
           <a href={link.link} target="_blank" class="friend-card group" data-umami-event="Button-toFriend" style={`--i:${i}`}>
             {link.tag && <span class="friend-tag">{link.tag}</span>}
-            <div class="relative shrink-0 h-[40px] w-[40px] sm:h-[46px] sm:w-[46px] rounded-full overflow-hidden bg-muted/40 ring-2 ring-[rgba(155,219,238,0.25)] shadow-[0_2px_8px_rgba(0,0,0,0.3)] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:h-0 group-hover:w-0 group-hover:opacity-0 group-hover:-mr-[0.875rem] group-hover:scale-0 group-hover:ring-[var(--hc)]">
+            <div class="relative shrink-0 h-[40px] w-[40px] sm:h-[46px] sm:w-[46px] rounded-full overflow-hidden bg-muted/40 ring-2 ring-[rgba(155,219,238,0.25)] shadow-[0_2px_8px_rgba(0,0,0,0.3)] transition-[width,height,opacity,margin,transform,box-shadow] duration-[var(--duration-slow)] ease-[var(--ease-out)] group-hover:h-0 group-hover:w-0 group-hover:opacity-0 group-hover:-mr-[0.875rem] group-hover:scale-0 group-hover:ring-[var(--hc)]">
               <img src={link.avatar} alt={link.name} onerror="this.src='/favicon.svg';" loading="lazy" class="block h-full w-full object-cover object-center !m-0 !p-0 transition-transform duration-300 group-hover:scale-105"/>
             </div>
             <div class="friend-info">
@@ -164,7 +164,10 @@ import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/fri
         border: 1px solid hsl(var(--primary) / 0.15);
         border-radius: 10px;
         text-decoration: none;
-        transition: all 0.25s ease;
+        transition: background-color var(--duration-base) var(--ease-out),
+                    border-color var(--duration-base) var(--ease-out),
+                    box-shadow var(--duration-base) var(--ease-out),
+                    transform var(--duration-base) var(--ease-out);
         overflow: hidden;
         cursor: pointer;
         /* ponytail: 级联入场。60ms × 卡片数；若友链 > 20 个可降到 40ms 避免久等。 */
@@ -228,7 +231,9 @@ import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/fri
         color: var(--gray);
         opacity: 0;
         transform: translateX(-8px);
-        transition: all 0.3s ease;
+        transition: color var(--duration-base) var(--ease-out),
+                    opacity var(--duration-base) var(--ease-out),
+                    transform var(--duration-base) var(--ease-out);
       }
 
       .friend-card:hover .friend-arrow {
@@ -254,7 +259,8 @@ import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/fri
         font-size: 0.95rem;
         color: var(--gray);
         cursor: pointer;
-        transition: all 0.25s ease;
+        transition: color var(--duration-base) var(--ease-out),
+                    background-color var(--duration-base) var(--ease-out);
         list-style: none;
       }
 
@@ -296,7 +302,8 @@ import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/fri
         background: rgba(133, 133, 168, 0.1);
         border-radius: 6px;
         text-decoration: none;
-        transition: all 0.25s ease;
+        transition: color var(--duration-base) var(--ease-out),
+                    background-color var(--duration-base) var(--ease-out);
       }
 
       .invalid-link:hover {
@@ -338,7 +345,8 @@ import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/fri
         border-radius: 6px;
         padding: 0.4rem 0.6rem;
         overflow: hidden;
-        transition: all 0.25s ease;
+        transition: border-color var(--duration-base) var(--ease-out),
+                    background-color var(--duration-base) var(--ease-out);
         min-width: 0;
       }
 
@@ -371,7 +379,8 @@ import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/fri
         cursor: pointer;
         padding: 0.25rem;
         border-radius: 4px;
-        transition: all 0.2s ease;
+        transition: color var(--duration-base) var(--ease-out),
+                    background-color var(--duration-base) var(--ease-out);
         margin-left: 0.5rem;
         position: relative;
         flex-shrink: 0;
@@ -398,7 +407,9 @@ import { friendLinksZh, friendLinksInvalid } from '../../content/friendlinks/fri
         border-radius: 4px;
         opacity: 0;
         visibility: hidden;
-        transition: all 0.2s ease;
+        transition: opacity var(--duration-fast) var(--ease-out),
+                    visibility var(--duration-fast) var(--ease-out),
+                    right var(--duration-fast) var(--ease-out);
         white-space: nowrap;
         pointer-events: none;
         font-family: var(--font-family-mono);

@@ -270,7 +270,8 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
     border-radius: 16px;
     color: var(--hc);
     margin-bottom: 1.5rem;
-    transition: all 0.3s ease;
+    transition: transform var(--duration-base) var(--ease-out),
+                box-shadow var(--duration-base) var(--ease-out);
   }
 
   .header-icon:hover {
@@ -364,7 +365,10 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
     border: 1px solid hsl(var(--primary) / 0.15);
     border-radius: 10px;
     text-decoration: none;
-    transition: all 0.25s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                border-color var(--duration-base) var(--ease-out),
+                box-shadow var(--duration-base) var(--ease-out),
+                transform var(--duration-base) var(--ease-out);
     cursor: pointer;
   }
 
@@ -398,7 +402,9 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
   .post-arrow {
     color: var(--gray);
     flex-shrink: 0;
-    transition: all 0.25s ease;
+    transition: color var(--duration-base) var(--ease-out),
+                opacity var(--duration-base) var(--ease-out),
+                transform var(--duration-base) var(--ease-out);
     opacity: 0;
     transform: translateX(-8px);
   }
@@ -448,7 +454,9 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
     font-size: 0.9rem;
     border: 1px solid rgba(133, 133, 168, 0.3);
     border-radius: 2rem;
-    transition: all 0.25s ease;
+    transition: color var(--duration-base) var(--ease-out),
+                border-color var(--duration-base) var(--ease-out),
+                transform var(--duration-base) var(--ease-out);
     cursor: pointer;
   }
 

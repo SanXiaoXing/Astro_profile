@@ -417,7 +417,10 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
     border: 1px solid hsl(var(--primary) / 0.15);
     border-radius: 10px;
     text-decoration: none;
-    transition: all 0.25s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                border-color var(--duration-base) var(--ease-out),
+                box-shadow var(--duration-base) var(--ease-out),
+                transform var(--duration-base) var(--ease-out);
     cursor: pointer;
   }
 
@@ -426,6 +429,10 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
     border-color: hsl(var(--primary) / 0.4);
     transform: translateX(4px);
     box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
+  }
+
+  .post-link:active {
+    transform: translateX(4px) scale(0.97);
   }
 
   .post-date {
@@ -451,7 +458,9 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
   .post-arrow {
     color: var(--gray);
     flex-shrink: 0;
-    transition: all 0.25s ease;
+    transition: color var(--duration-base) var(--ease-out),
+                opacity var(--duration-base) var(--ease-out),
+                transform var(--duration-base) var(--ease-out);
     opacity: 0;
     transform: translateX(-8px);
   }

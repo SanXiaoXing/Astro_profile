@@ -147,7 +147,9 @@ const rssSlug = "/rss.xml";
     border: 1px solid var(--glass-border);
     color: var(--gray);
     text-decoration: none;
-    transition: all 0.25s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                border-color var(--duration-base) var(--ease-out),
+                color var(--duration-base) var(--ease-out);
   }
 
   .rss-btn:hover {
@@ -167,7 +169,8 @@ const rssSlug = "/rss.xml";
     border: 1px solid var(--glass-border);
     color: var(--fontc);
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                border-color var(--duration-base) var(--ease-out);
   }
 
   .menu-toggle:hover {
@@ -182,7 +185,8 @@ const rssSlug = "/rss.xml";
   .menu-toggle svg .line-top,
   .menu-toggle svg .line-mid,
   .menu-toggle svg .line-bot {
-    transition: all 0.3s ease;
+    transition: transform var(--duration-base) var(--ease-out),
+                opacity var(--duration-base) var(--ease-out);
   }
 
   .menu-toggle svg .line-top {
@@ -237,7 +241,8 @@ const rssSlug = "/rss.xml";
     text-decoration: none;
     border-radius: 10px;
     font-size: 0.95rem;
-    transition: all 0.25s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                color var(--duration-base) var(--ease-out);
   }
 
   .nav-links :global(a:hover) {

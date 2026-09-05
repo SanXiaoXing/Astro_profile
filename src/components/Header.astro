@@ -106,7 +106,8 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
     color: var(--gray);
     text-decoration: none;
     position: relative;
-    transition: all 0.25s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                color var(--duration-base) var(--ease-out);
     border-radius: 8px;
     font-size: 0.85rem;
   }
@@ -132,7 +133,8 @@ const isArticlePage = pathname.startsWith(blogSlug) || pathname.startsWith(tagSl
     color: var(--gray);
     background: transparent;
     border-radius: 8px;
-    transition: all 0.25s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                color var(--duration-base) var(--ease-out);
     cursor: pointer;
   }
 

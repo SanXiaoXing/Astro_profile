@@ -94,7 +94,8 @@ const hasHeadings = grouppedHeadings.length > 0;
     border: 1px solid rgba(155, 219, 238, 0.18);
     border-radius: 12px;
     padding: 0;
-    transition: all 0.25s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                border-color var(--duration-base) var(--ease-out);
     overflow: hidden;
   }
 
@@ -110,7 +111,8 @@ const hasHeadings = grouppedHeadings.length > 0;
     color: var(--hc);
     background: rgba(155, 219, 238, 0.06);
     border-bottom: 1px solid transparent;
-    transition: all 0.25s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                border-bottom-color var(--duration-base) var(--ease-out);
     list-style: none;
   }
 
@@ -197,7 +199,8 @@ const hasHeadings = grouppedHeadings.length > 0;
     padding-left: 1rem;
     border-radius: 6px;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                color var(--duration-base) var(--ease-out);
     font-family: var(--font-family-base);
     font-size: 0.9rem;
     font-weight: 500;
@@ -217,7 +220,9 @@ const hasHeadings = grouppedHeadings.length > 0;
     background: var(--hc);
     border-radius: 50%;
     transform: translateY(-50%);
-    transition: all 0.2s ease;
+    transition: width var(--duration-base) var(--ease-out),
+                height var(--duration-base) var(--ease-out),
+                background-color var(--duration-base) var(--ease-out);
   }
 
   .toc-link-top:hover {
@@ -247,7 +252,8 @@ const hasHeadings = grouppedHeadings.length > 0;
     border: 1px solid rgba(155, 219, 238, 0.2);
     border-radius: 4px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                border-color var(--duration-base) var(--ease-out);
     flex-shrink: 0;
   }
 
@@ -334,7 +340,9 @@ const hasHeadings = grouppedHeadings.length > 0;
     background: var(--gray);
     border-radius: 50%;
     transform: translateY(-50%);
-    transition: all 0.2s ease;
+    transition: width var(--duration-base) var(--ease-out),
+                height var(--duration-base) var(--ease-out),
+                background-color var(--duration-base) var(--ease-out);
   }
 
   /* Sub-level link */
@@ -345,7 +353,8 @@ const hasHeadings = grouppedHeadings.length > 0;
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: background-color var(--duration-base) var(--ease-out),
+                color var(--duration-base) var(--ease-out);
     font-family: var(--font-family-base);
     font-size: 0.85rem;
     color: rgba(133, 133, 168, 0.8);

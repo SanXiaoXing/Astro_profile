@@ -18,13 +18,13 @@ const posts = await getData()
       posts.map((post, i) => (
         <a
           href={`/blog/${post.fileName}`}
-          class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-300 hover:bg-primary/[0.05] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:-translate-y-0.5 active:scale-[0.98]"
+          class="group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-[background-color,box-shadow,transform] duration-[var(--duration-base)] ease-[var(--ease-out)] hover:bg-primary/[0.05] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:-translate-y-0.5 active:scale-[0.98]"
         >
           <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-mono text-primary/60 transition-colors group-hover:bg-primary/20 group-hover:text-primary">
             {i + 1}
           </span>
           <div class="min-w-0 flex-1">
-            <p class="truncate text-sm text-muted-foreground/80 transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary">
+            <p class="truncate text-sm text-muted-foreground/80 transition-[transform,color] duration-[var(--duration-base)] ease-[var(--ease-out)] group-hover:translate-x-1 group-hover:text-primary">
               {post.data.title}
             </p>
           </div>

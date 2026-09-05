@@ -69,7 +69,7 @@ function MediaGrid({ media, sensitive }: { media: MediaAttachment[]; sensitive: 
     return (
       <button
         onClick={() => setRevealed(true)}
-        className="mt-4 text-left text-xs text-[var(--gray)] transition-colors hover:text-[var(--fontc)]"
+        className="mt-4 text-left text-xs text-[var(--gray)] transition-[transform,color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:text-[var(--fontc)] active:scale-[0.97]"
       >
         <span className="font-mono text-[var(--orange)]">敏感内容</span>
         <span className="ml-2">点击显示 {media.length} 个附件</span>
@@ -128,10 +128,11 @@ function StatusCard({ status, index }: { status: Status; index: number }) {
   return (
     <motion.article
       initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{
         duration: 0.5,
-        delay: shouldReduceMotion ? 0 : index * 0.07,
+        delay: shouldReduceMotion ? 0 : (index % 4) * 0.04,
         ease: [0.16, 1, 0.3, 1],
       }}
       className="group relative"
@@ -139,7 +140,7 @@ function StatusCard({ status, index }: { status: Status; index: number }) {
       <div className="flex gap-5 sm:gap-6">
         {/* timeline line */}
         <div className="relative flex shrink-0 flex-col items-center">
-          <div className="h-2 w-2 rounded-full bg-[var(--hc)]/60 ring-4 ring-[hsl(var(--primary)/0.08)] transition-all duration-300 group-hover:bg-[var(--hc)] group-hover:ring-[hsl(var(--primary)/0.15)]" />
+          <div className="h-2 w-2 rounded-full bg-[var(--hc)]/60 ring-4 ring-[hsl(var(--primary)/0.08)] transition-[background-color,box-shadow] duration-[var(--duration-base)] group-hover:bg-[var(--hc)] group-hover:ring-[hsl(var(--primary)/0.15)]" />
           <div className="mt-3 w-px flex-1 bg-[var(--current-line)]" />
         </div>
 
@@ -154,7 +155,7 @@ function StatusCard({ status, index }: { status: Status; index: number }) {
             {formatTime(status.created_at)}
           </a>
 
-          <div className="rounded-2xl border border-[hsl(var(--primary)/0.1)] bg-[hsl(var(--card)/0.4)] p-4 transition-all duration-300 group-hover:border-[hsl(var(--primary)/0.22)] group-hover:bg-[hsl(var(--card)/0.6)] sm:p-5">
+          <div className="rounded-2xl border border-[hsl(var(--primary)/0.1)] bg-[hsl(var(--card)/0.4)] p-4 transition-[background-color,border-color] duration-[var(--duration-base)] group-hover:border-[hsl(var(--primary)/0.22)] group-hover:bg-[hsl(var(--card)/0.6)] sm:p-5">
             <ContentBody html={status.content} />
 
             {status.media_attachments.length > 0 && (
@@ -246,7 +247,7 @@ export default function MastodonFeed() {
         <p className="font-mono text-sm text-[var(--gray)]">加载失败：{error}</p>
         <button
           onClick={load}
-          className="rounded-lg border border-[hsl(var(--primary)/0.35)] bg-[hsl(var(--primary)/0.08)] px-4 py-2 font-mono text-xs text-[var(--hc)] transition-all hover:bg-[hsl(var(--primary)/0.14)]"
+          className="rounded-lg border border-[hsl(var(--primary)/0.35)] bg-[hsl(var(--primary)/0.08)] px-4 py-2 font-mono text-xs text-[var(--hc)] transition-[transform,background-color] duration-[var(--duration-fast)] ease-[var(--ease-out)] hover:bg-[hsl(var(--primary)/0.14)] active:scale-[0.97]"
         >
           重试
         </button>

@@ -24,7 +24,6 @@ import Card from '../components/Card.astro'
 
   <main
     class="mx-auto w-full max-w-5xl overflow-hidden p-3 sm:p-4 md:p-6"
-    data-animate-enter
   >
     <div class="grid gap-3 sm:gap-4 md:grid-cols-3 md:gap-4">
       <IntroCard />
@@ -51,20 +50,27 @@ import Card from '../components/Card.astro'
 
 <script is:inline>
   import { stagger, spring, timeline } from 'motion';
-  import { loaderAnimation } from '../lib/constants';
 
   function initializeAnimation() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const loader = document.querySelector('.loader');
     const cards = document.querySelectorAll('.card-animate');
 
+    if (reduceMotion) {
+      // reduced-motion:遮罩直接移除,卡片本就可见,不做位移
+      if (loader) loader.style.display = 'none';
+      return;
+    }
+
     const sequence = [
-      loaderAnimation,
+      ['.loader', { opacity: [1, 0], pointerEvents: 'none' }, { duration: 0.3, easing: 'ease-out' }],
       [
         cards,
         { y: ['40%', '0%'], opacity: [0, 1] },
         {
-          at: '-0.1',
-          duration: 0.4,
-          delay: stagger(0.3),
+          at: '-0.05',
+          duration: 0.5,
+          delay: stagger(0.1),
           easing: spring({ velocity: 100, stiffness: 50, damping: 10 }),
         },
       ],

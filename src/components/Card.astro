@@ -22,7 +22,7 @@ const { title, body, colSpan, rowSpan, href, colorText, variant = 'default' } = 
 ---
 
 <ShadcnCard
-  className={`card-animate group relative col-span-1 h-auto w-full flex-none overflow-hidden p-6 shadow-lg transition-all duration-500 ease-out ${
+  className={`card-animate group relative col-span-1 h-auto w-full flex-none overflow-hidden p-6 shadow-lg ${
     colSpan || 'md:col-span-2'
   } ${rowSpan || ''} ${href ? 'cursor-pointer' : ''}`}
   style={{
@@ -55,7 +55,7 @@ const { title, body, colSpan, rowSpan, href, colorText, variant = 'default' } = 
     ) : (
       <a href={href} class={`relative z-10 flex h-full w-full flex-col ${colorText || ''}`}>
         <SquareArrowOutUpRight
-          className="relative float-right h-6 text-muted-foreground/40 transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-primary"
+          className="relative float-right h-6 text-muted-foreground/40 transition-[color,transform] duration-[var(--duration-base)] ease-[var(--ease-out)] group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-primary"
           size={18}
         />
         <ContentCard title={title} body={body}>
@@ -79,22 +79,32 @@ const { title, body, colSpan, rowSpan, href, colorText, variant = 'default' } = 
     font-weight: 700;
     background: linear-gradient(135deg, var(--hc), var(--purple), var(--hc));
     background-size: 200% 200%;
+    background-position: 0% 50%;
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
-    animation: gradient-shift 6s ease infinite;
+    transition: background-position 500ms var(--ease-in-out);
   }
 
   .moving-gradient-text:hover {
     background: linear-gradient(135deg, hsl(var(--accent)), var(--hc), hsl(var(--accent)));
     background-size: 200% 200%;
-    -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
-    animation: gradient-shift 4s ease infinite;
+    background-position: 100% 50%;
   }
 
-  @keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+  @media (prefers-reduced-motion: reduce) {
+    .moving-gradient-text,
+    .moving-gradient-text:hover {
+      transition: none;
+      background-position: 0% 50%;
+    }
+  }
+
+  .card-animate {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .card-animate:active {
+    transform: scale(0.97);
   }
 </style>

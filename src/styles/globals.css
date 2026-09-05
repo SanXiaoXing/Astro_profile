@@ -59,6 +59,14 @@
     --gray-dark: 20, 20, 30;
     --gray-gradient: rgba(var(--gray-light), 50%), #fff;
     --box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%);
+
+    /* Motion tokens (improve-animations audit) */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-out-strong: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --duration-fast: 150ms;  /* press / tooltip */
+    --duration-base: 200ms;  /* hover / color */
+    --duration-slow: 300ms;  /* 面板/遮罩,仍 < 300ms 预算 */
   }
 
   html.light {
@@ -112,49 +120,6 @@
     background: hsl(var(--primary) / 0.3);
     color: var(--fontc);
   }
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 1s ease-in-out;
-}
-
-@keyframes enter {
-  0% {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes blurOut {
-  from {
-    filter: blur(20px);
-  }
-  to {
-    filter: blur(0px);
-  }
-}
-
-[data-animate-enter] {
-  --stagger: 0;
-  --delay: 1000ms;
-  --start: 500ms;
-  animation: enter var(--delay) ease-in-out, blurOut var(--delay) ease-in-out;
-  animation-fill-mode: both;
-  animation-delay: var(--start);
 }
 
 @font-face {
@@ -347,7 +312,8 @@ h5 {
   color: var(--hc);
   text-decoration: none;
   border-bottom: 1px dashed var(--hc);
-  transition: all 0.2s ease;
+  transition: color var(--duration-base) var(--ease-out),
+              border-bottom-color var(--duration-base) var(--ease-out);
   padding-bottom: 1px;
 }
 
@@ -455,7 +421,8 @@ h5 {
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(139, 139, 160, 0.2);
-  transition: all 0.3s ease;
+  transition: border-color var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out);
 }
 
 .expressive-code:hover {

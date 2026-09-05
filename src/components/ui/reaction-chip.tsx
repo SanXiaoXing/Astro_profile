@@ -196,7 +196,7 @@ export function MessageWithReactions({
                 className={cn(
                   'relative flex min-w-[52px] flex-col items-center gap-0.5',
                   'rounded-xl px-3 py-2.5',
-                  'transition-all duration-200 ease-out select-none',
+                  'transition-[background-color,box-shadow,transform] duration-[var(--duration-base)] ease-[var(--ease-out)] select-none',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
 
                   isSelected

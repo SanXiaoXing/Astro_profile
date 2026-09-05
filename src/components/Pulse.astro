@@ -1,6 +1,14 @@
 <span class="relative flex h-4 w-4">
   <span
-    class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"
+    class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75 pulse-ring"
   ></span>
   <span class="relative inline-flex h-4 w-4 rounded-full bg-green-500"></span>
 </span>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .pulse-ring {
+      display: none;
+    }
+  }
+</style>
