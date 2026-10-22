@@ -41,6 +41,14 @@ const work = defineCollection({
 export const collections = {
 	blog,
 	work,
+	papers: defineCollection({
+		type: 'content',
+		schema: z.object({
+			title: z.string(),
+			date: z.coerce.date(),
+			draft: z.boolean().default(false),
+		}),
+	}),
 };
 
 export async function getBlogPosts() {

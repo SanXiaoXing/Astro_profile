@@ -1,0 +1,334 @@
+---
+import { getCollection } from 'astro:content'
+import Layout from '../layouts/Layout.astro'
+import PaperFold from '../components/PaperFold.astro'
+import {
+  paperMonth,
+  defaultPaperMonth,
+} from '../components/paper-fold/board.mjs'
+
+const papers = await getCollection('papers', ({ data }) => !data.draft)
+papers.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+const rendered = await Promise.all(
+  papers.map(async (paper, index) => ({
+    ...paper,
+    month: paperMonth(paper.data.date),
+    seed: 47 + index * 133,
+    Content: (await paper.render()).Content,
+  })),
+)
+const months = [...new Set(rendered.map((paper) => paper.month))]
+const currentMonth = defaultPaperMonth(months)
+const currentPapers = rendered.filter((paper) => paper.month === currentMonth)
+---
+
+<Layout title="纸间" description="展开一张纸，读一段记忆。">
+  <section class="paper-memories">
+    <header class="paper-page-header">
+      <p class="paper-eyebrow">PAPER MEMORIES</p>
+      <h1>纸间</h1>
+      <p class="paper-description">
+        散落的日常，留在这个月。拖动纸团，点击展开。
+      </p>
+    </header>
+    <paper-board>
+      <div class="paper-toolbar">
+        <label class="paper-month-label">
+          <span>翻阅月份</span>
+          <span class="paper-month-control">
+            <svg
+              class="paper-month-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="4" y="5" width="16" height="16" rx="3"></rect>
+              <path d="M8 3v4m8-4v4M4 11h16m-12 5h3"></path>
+            </svg>
+            <select aria-label="筛选月份" disabled={months.length === 0}>
+              {months.length === 0 && <option value="">暂无记录</option>}
+              {
+                months.map((month) => (
+                  <option value={month} selected={month === currentMonth}>
+                    {month.replace('-', ' 年 ')} 月
+                  </option>
+                ))
+              }
+            </select>
+            <svg
+              class="paper-month-chevron"
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"><path d="m5 6 3 3 3-3"></path></svg
+            >
+          </span>
+        </label>
+        <span
+          class="paper-count"
+          data-paper-count
+          role="status"
+          aria-live="polite">{currentPapers.length} 张纸</span
+        >
+      </div>
+      <div class="paper-desk">
+        <div
+          class="paper-board"
+          aria-label="当月纸团，可拖动；键盘方向键可移动"
+        >
+          {
+            currentPapers.map(({ data, seed, Content }) => (
+              <PaperFold title={data.title} date={data.date} seed={seed}>
+                <Content />
+              </PaperFold>
+            ))
+          }
+        </div>
+        <p
+          class="paper-empty"
+          data-paper-empty
+          hidden={currentPapers.length > 0}
+          role="status"
+        >
+          这个月还没有留下记忆。
+        </p>
+      </div>
+      {
+        months.map((month) => (
+          <template data-month={month}>
+            {rendered
+              .filter((paper) => paper.month === month)
+              .map(({ data, seed, Content }) => (
+                <PaperFold title={data.title} date={data.date} seed={seed}>
+                  <Content />
+                </PaperFold>
+              ))}
+          </template>
+        ))
+      }
+    </paper-board>
+    <footer>留住每一个片刻。</footer>
+  </section>
+</Layout>
+
+<script>
+  import '../components/paper-fold/board-client.js'
+</script>
+
+<style>
+  .paper-memories {
+    padding: 3rem 0;
+  }
+  .paper-eyebrow {
+    color: hsl(var(--muted-foreground));
+    font: 0.65rem var(--font-family-mono);
+    letter-spacing: 0.2em;
+  }
+  h1 {
+    font-size: 2.25rem;
+    margin: 0.6rem 0;
+    letter-spacing: 0.12em;
+  }
+  .paper-description {
+    font-size: 0.85rem;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.8;
+  }
+  paper-board {
+    display: block;
+    margin-top: 2rem;
+  }
+  .paper-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .paper-month-label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
+  }
+  select {
+    appearance: none;
+    display: block;
+    width: 100%;
+    min-height: 42px;
+    font-family: 'noto-serif', serif;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.035em;
+    color: var(--fontc);
+    background: var(--glass-bg);
+    border: 1px solid hsl(var(--border) / 0.65);
+    border-radius: 10px;
+    padding: 0.6rem 2.3rem 0.6rem 2.4rem;
+    cursor: pointer;
+    color-scheme: dark;
+    transition:
+      background-color var(--duration-base) ease,
+      border-color var(--duration-base) ease;
+  }
+  .paper-month-control {
+    position: relative;
+    display: inline-flex;
+    min-width: 174px;
+    color: hsl(var(--muted-foreground));
+  }
+  .paper-month-icon,
+  .paper-month-chevron {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .paper-month-icon {
+    left: 0.8rem;
+    width: 16px;
+    height: 16px;
+  }
+  .paper-month-chevron {
+    right: 0.7rem;
+    width: 16px;
+    height: 16px;
+  }
+  .paper-month-control:focus-within {
+    color: hsl(var(--primary));
+  }
+  select:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+  select:active:not(:disabled) {
+    background: hsl(var(--muted) / 0.5);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    select:hover:not(:disabled) {
+      border-color: hsl(var(--muted-foreground) / 0.65);
+      background: hsl(var(--muted) / 0.3);
+    }
+  }
+  option {
+    font-family: 'noto-serif', serif;
+    font-weight: 400;
+    background: var(--bgc);
+    color: var(--fontc);
+  }
+  :global(html.light) select {
+    color-scheme: light;
+  }
+  select:focus-visible {
+    border-color: hsl(var(--primary) / 0.6);
+    outline: 2px solid hsl(var(--primary) / 0.25);
+    outline-offset: 3px;
+  }
+  @supports (appearance: base-select) {
+    select,
+    select::picker(select) {
+      appearance: base-select;
+    }
+    select::picker-icon {
+      display: none;
+    }
+    select::picker(select) {
+      margin-top: 0.5rem;
+      padding: 0.35rem;
+      border: 1px solid hsl(var(--border) / 0.65);
+      border-radius: 12px;
+      background: var(--bgc);
+      box-shadow: var(--glass-shadow);
+      color: var(--fontc);
+      max-height: min(320px, 50svh);
+      overflow-y: auto;
+    }
+    option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      min-height: 38px;
+      padding: 0.55rem 0.8rem;
+      border-radius: 7px;
+      font-size: 0.8125rem;
+      cursor: pointer;
+    }
+    option:checked {
+      background: hsl(var(--primary) / 0.1);
+      color: hsl(var(--primary));
+    }
+    option:hover,
+    option:focus {
+      background: hsl(var(--muted) / 0.6);
+      outline: none;
+    }
+    option::checkmark {
+      order: 1;
+      margin-left: auto;
+      color: hsl(var(--primary));
+    }
+  }
+  .paper-count {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+  .paper-desk {
+    position: relative;
+  }
+  .paper-board {
+    position: relative;
+    min-height: 360px;
+  }
+  .paper-board[data-ready] :global(> paper-fold) {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    transform: translate(-50%, -50%);
+  }
+  .paper-board[data-ready] :global(.paper-fold-trigger) {
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+  .paper-board :global(paper-fold.is-dragging) {
+    z-index: 2;
+  }
+  .paper-board :global(.is-dragging .paper-fold-trigger) {
+    cursor: grabbing;
+  }
+  .paper-empty {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: hsl(var(--muted-foreground));
+    pointer-events: none;
+  }
+  .paper-empty[hidden] {
+    display: none;
+  }
+  footer {
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 1rem;
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
+    letter-spacing: 0.1em;
+  }
+</style>
