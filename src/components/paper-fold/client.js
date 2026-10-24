@@ -92,6 +92,10 @@ class PaperFoldElement extends HTMLElement {
       }
     })
     this.observer.observe(this)
+    this.contentObserver = new ResizeObserver(() => {
+      if (active === this) this.drawStage()
+    })
+    this.contentObserver.observe(this.body)
     window.addEventListener(
       'resize',
       () => {
@@ -226,6 +230,12 @@ class PaperFoldElement extends HTMLElement {
     const end = Focus.pose(this.home, viewport, 1)
     this.reader.style.setProperty('--paper-width', `${end.scale * 320}px`)
     this.reader.style.setProperty('--paper-height', `${end.scale * 430}px`)
+    // Measure the native reader, including padding and loaded images, so the
+    // animated sheet meets its content-sized HTML counterpart without a jump.
+    this.reader.style.visibility = 'hidden'
+    this.reader.hidden = false
+    pose.heightRatio =
+      this.reader.getBoundingClientRect().height / (end.scale * 430)
     renderer.draw(
       this.stage,
       this.mesh,
@@ -235,6 +245,7 @@ class PaperFoldElement extends HTMLElement {
       this.texture,
     )
     this.reader.hidden = this.progress !== 1 || this.target !== 1
+    this.reader.style.visibility = ''
     this.stage.hidden = !this.reader.hidden
   }
 
@@ -271,6 +282,7 @@ class PaperFoldElement extends HTMLElement {
     if (active === this) this.release()
     cancelAnimationFrame(this.frame)
     this.observer?.disconnect()
+    this.contentObserver?.disconnect()
     this.controller.abort()
     this.controller = null
     this.fallback.append(this.body)

@@ -88,7 +88,7 @@ export class PaperRenderer {
       positions = []
     for (let k = 0; k < points.length; k += 3) {
       let x = points[k],
-        y = points[k + 1],
+        y = points[k + 1] * (1 + ((pose.heightRatio ?? 1) - 1) * progress),
         z = points[k + 2]
       ;[y, z] = [
         y * Math.cos(ax) - z * Math.sin(ax),

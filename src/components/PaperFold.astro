@@ -150,14 +150,71 @@ const formattedDate =
     left: 50%;
     top: 50%;
     width: var(--paper-width);
-    height: var(--paper-height);
+    height: auto;
+    max-height: var(--paper-height);
     transform: translate(-50%, -50%);
     overflow: auto;
     overscroll-behavior: contain;
     background: #f4f0e4;
     color: #455346;
-    box-shadow: 0 15px 40px #242f2230;
+    box-shadow:
+      0 15px 40px #242f2230,
+      0 2px 5px #242f2220;
     scrollbar-color: #a3aa98 #f4f0e4;
+  }
+  .paper-fold-reader .paper-fold-body {
+    position: relative;
+    isolation: isolate;
+  }
+  .paper-fold-reader .paper-fold-body::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    /* Paired light and dark edges suggest pressed folds, rather than ink lines.
+       Keep the texture attached to the paper as long entries scroll. */
+    background:
+      linear-gradient(
+        92deg,
+        transparent 45%,
+        #685b4010 48.8%,
+        #685b4026 49.6%,
+        #fffdf5a6 49.9%,
+        #fffdf530 50.5%,
+        transparent 54%
+      ),
+      linear-gradient(
+        178deg,
+        transparent 31%,
+        #685b4012 34.2%,
+        #685b4021 34.8%,
+        #fffdf58c 35.1%,
+        transparent 38%
+      ),
+      linear-gradient(
+        183deg,
+        transparent 65%,
+        #fffdf550 68%,
+        #fffdf58c 68.7%,
+        #685b401f 69%,
+        transparent 72%
+      ),
+      linear-gradient(
+        133deg,
+        transparent 17%,
+        #685b400c 21.5%,
+        #fffdf566 22%,
+        transparent 25%,
+        transparent 77%,
+        #685b4012 80%,
+        #fffdf566 80.4%,
+        transparent 83%
+      );
+    box-shadow:
+      inset 1px 0 2px #fffdf5b3,
+      inset -1px 0 3px #685b4026,
+      inset 0 -2px 6px #685b4012;
   }
   .paper-fold-close {
     position: absolute;
