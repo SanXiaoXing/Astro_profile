@@ -183,7 +183,8 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
       const allItems = root.querySelectorAll<HTMLElement>(".post-item");
       gsap.set(allItems, { y: 16, opacity: 0 });
       ScrollTrigger.batch(allItems, {
-        start: "top 90%",
+        // Reveal before entering the viewport, including the initial bottom rows.
+        start: "top bottom+=64",
         onEnter: (batch) => {
           gsap.to(batch, {
             y: 0,
