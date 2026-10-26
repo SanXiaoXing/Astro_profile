@@ -34,7 +34,6 @@ const work = defineCollection({
 		description: z.string().optional(), // 项目整体描述
 		start: z.string(),
 		end: z.string(),
-		link: z.string().optional(),
 	}),
 });
 
@@ -67,6 +66,15 @@ export async function getBlogPosts() {
 	})
 }
 
+export function groupPostsByYear(posts: Awaited<ReturnType<typeof getBlogPosts>>) {
+	const groups = posts.reduce<Record<string, typeof posts>>((result, post) => {
+		const year = String(post.data.pubDate.getFullYear());
+		(result[year] ??= []).push(post);
+		return result;
+	}, {});
+	return Object.entries(groups).sort(([a], [b]) => Number(b) - Number(a));
+}
+
 export async function getWorkExperiences() {
 	const experiences = await getCollection('work');
 
@@ -79,7 +87,6 @@ export async function getWorkExperiences() {
 			description: exp.data.description || '',
 			start: exp.data.start,
 			end: exp.data.end,
-			link: exp.data.link || '',
 			tasks: parseTasksFromMarkdown(exp.body || ''),
 		}));
 }

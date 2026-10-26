@@ -1,0 +1,81 @@
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  let cleanup = () => {};
+
+  function init() {
+    cleanup();
+    const root = document.querySelector<HTMLElement>("[data-year-timeline]");
+    if (!root) return;
+
+    const groups = root.querySelectorAll<HTMLElement>("[data-year-group]");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      groups.forEach((group) => {
+        const track = group.querySelector<HTMLElement>("[data-year-track]");
+        const label = group.querySelector<HTMLElement>("[data-year-label]");
+        if (track) track.style.transform = "scaleY(1)";
+        if (label) label.style.opacity = "1";
+      });
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      groups.forEach((group) => {
+        const track = group.querySelector<HTMLElement>("[data-year-track]");
+        const label = group.querySelector<HTMLElement>("[data-year-label]");
+        if (!track || !label) return;
+
+        gsap.set(track, { scaleY: 0, transformOrigin: "top center" });
+        gsap.set(label, { x: -24, opacity: 0 });
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: group,
+            start: "top 85%",
+            end: "top 20%",
+            scrub: 1,
+          },
+        })
+          .to(track, { scaleY: 1, ease: "power3.out", duration: 0.6 })
+          .to(label, { x: 0, opacity: 1, ease: "power3.out", duration: 0.5 }, "<0.1")
+          .to(label, { yPercent: -8, ease: "sine.inOut", duration: 0.4 }, ">")
+          .to(label, { yPercent: 0, ease: "sine.inOut", duration: 0.4 });
+      });
+
+      const items = root.querySelectorAll<HTMLElement>(".post-item");
+      gsap.set(items, { y: 16, opacity: 0 });
+      ScrollTrigger.batch(items, {
+        start: "top bottom+=64",
+        onEnter: reveal,
+        onEnterBack: reveal,
+      });
+    }, root);
+
+    cleanup = () => {
+      ctx.revert();
+      cleanup = () => {};
+    };
+    ScrollTrigger.refresh();
+  }
+
+  function reveal(items: Element[]) {
+    gsap.to(items, {
+      y: 0,
+      opacity: 1,
+      duration: 0.5,
+      ease: "power2.out",
+      stagger: 0.06,
+      overwrite: true,
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+  document.addEventListener("astro:page-load", init);
+  document.addEventListener("astro:before-swap", () => cleanup());
+</script>

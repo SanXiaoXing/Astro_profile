@@ -26,7 +26,6 @@ interface ExperienceItem {
   description: string;
   start: string;
   end: string;
-  link: string;
   tasks: Task[];
 }
 

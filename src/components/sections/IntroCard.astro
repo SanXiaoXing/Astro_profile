@@ -2,10 +2,7 @@
 import Card from '../Card.astro'
 import { Button } from '../ui/button'
 import { LINKS } from '../../lib/constants'
-import { Github, Mail, Rss } from 'lucide-react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faGit} from '@fortawesome/free-brands-svg-icons';
-import { faHouseSignal } from '@fortawesome/free-solid-svg-icons';
+import { Github, GitFork, Home, Mail, Rss } from 'lucide-react'
 import { FlipWords } from "../ui/flip-words";
 
 const words = ["你好，欢迎来到我的博客", "这是我的开心乐园", "这里记录我的技术成长", "努力向上，天天开心啊！"];
@@ -41,17 +38,17 @@ const words = ["你好，欢迎来到我的博客", "这是我的开心乐园", 
       <div class="flex gap-3">
         <a href={LINKS.github} aria-label="github profile" target="_blank">
           <Button variant="outline" size="icon" className="h-9 w-9 rounded-full border-muted/30 bg-transparent hover:bg-primary/10 hover:border-primary/40 transition-[background-color,border-color] duration-[var(--duration-base)] ease-[var(--ease-out)]">
-            <FontAwesomeIcon icon={faGithub} className="h-4 w-4 text-muted-foreground hover:text-primary" />
+            <Github className="h-4 w-4 text-muted-foreground hover:text-primary" />
           </Button>
         </a>
         <a href={LINKS.gitee} aria-label="gitee profile" target="_blank">
           <Button variant="outline" size="icon" className="h-9 w-9 rounded-full border-muted/30 bg-transparent hover:bg-secondary/10 hover:border-secondary/40 transition-[background-color,border-color] duration-[var(--duration-base)] ease-[var(--ease-out)]">
-            <FontAwesomeIcon icon={faGit} className="h-4 w-4 text-muted-foreground hover:text-secondary" />
+            <GitFork className="h-4 w-4 text-muted-foreground hover:text-secondary" />
           </Button>
         </a>
         <a href={LINKS.homepage} aria-label="homepage profile" target="_blank">
           <Button variant="outline" size="icon" className="h-9 w-9 rounded-full border-muted/30 bg-transparent hover:bg-accent/10 hover:border-accent/40 transition-[background-color,border-color] duration-[var(--duration-base)] ease-[var(--ease-out)]">
-            <FontAwesomeIcon icon={faHouseSignal} className="h-4 w-4 text-muted-foreground hover:text-accent" />
+            <Home className="h-4 w-4 text-muted-foreground hover:text-accent" />
           </Button>
         </a>
         <a href={LINKS.mail} aria-label="mail profile" target="_blank">

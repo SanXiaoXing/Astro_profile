@@ -1,6 +1,7 @@
 ---
+import YearTimeline from "./YearTimeline.astro";
 import FormattedDate from "./FormattedDate.astro";
-import { getBlogPosts } from "../../content/config";
+import { getBlogPosts, groupPostsByYear } from "../../content/config";
 const { category } = Astro.params;
 
 export async function getData(category) {
@@ -17,15 +18,7 @@ const latest = postf[0]?.data.pubDate;
 
 // Group by year — same shape as /blog so the article list reads as part
 // of the blog surface, not a separate flat table.
-const groupedPosts = postf.reduce((groups, post) => {
-  const year = post.data.pubDate.getFullYear().toString();
-  if (!groups[year]) groups[year] = [];
-  groups[year].push(post);
-  return groups;
-}, {});
-const sortedGroupedPosts = Object.entries(groupedPosts).sort(
-  ([yearA], [yearB]) => parseInt(yearB) - parseInt(yearA)
-);
+const sortedGroupedPosts = groupPostsByYear(postf);
 ---
 
 <header class="category-detail">
@@ -95,146 +88,7 @@ const sortedGroupedPosts = Object.entries(groupedPosts).sort(
   }
 </section>
 
-<script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  declare global {
-    interface Window {
-      __yearTimelineInit?: () => () => void;
-      __yearTimelineCleanup?: () => void;
-    }
-  }
-
-  function initYearTimeline() {
-    const root = document.querySelector<HTMLElement>("[data-year-timeline]");
-    if (!root) return () => {};
-
-    const groups = Array.from(
-      root.querySelectorAll<HTMLElement>("[data-year-group]")
-    );
-    if (groups.length === 0) return () => {};
-
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (reduceMotion) {
-      groups.forEach((group) => {
-        const track = group.querySelector<HTMLElement>("[data-year-track]");
-        const label = group.querySelector<HTMLElement>("[data-year-label]");
-        if (track) track.style.transform = "scaleY(1)";
-        if (label) label.style.opacity = "1";
-      });
-      return () => {};
-    }
-
-    const ctx = gsap.context(() => {
-      groups.forEach((group) => {
-        const track = group.querySelector<HTMLElement>("[data-year-track]");
-        const label = group.querySelector<HTMLElement>("[data-year-label]");
-
-        if (!track || !label) return;
-
-        gsap.set(track, { scaleY: 0, transformOrigin: "top center" });
-        gsap.set(label, { x: -24, opacity: 0 });
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: group,
-            start: "top 85%",
-            end: "top 20%",
-            scrub: 1,
-          },
-        });
-
-        tl.to(track, {
-          scaleY: 1,
-          ease: "power3.out",
-          duration: 0.6,
-        }).to(
-          label,
-          {
-            x: 0,
-            opacity: 1,
-            ease: "power3.out",
-            duration: 0.5,
-          },
-          "<0.1"
-        );
-
-        tl.to(
-          label,
-          {
-            yPercent: -8,
-            ease: "sine.inOut",
-            duration: 0.4,
-          },
-          ">"
-        ).to(label, {
-          yPercent: 0,
-          ease: "sine.inOut",
-          duration: 0.4,
-        });
-      });
-
-      const allItems = root.querySelectorAll<HTMLElement>(".post-item");
-      gsap.set(allItems, { y: 16, opacity: 0 });
-      ScrollTrigger.batch(allItems, {
-        // Reveal before entering the viewport, including the initial bottom rows.
-        start: "top bottom+=64",
-        onEnter: (batch) => {
-          gsap.to(batch, {
-            y: 0,
-            opacity: 1,
-            duration: 0.5,
-            ease: "power2.out",
-            stagger: 0.06,
-            overwrite: true,
-          });
-        },
-        onEnterBack: (batch) => {
-          gsap.to(batch, {
-            y: 0,
-            opacity: 1,
-            duration: 0.5,
-            ease: "power2.out",
-            stagger: 0.06,
-            overwrite: true,
-          });
-        },
-      });
-    }, root);
-
-    return () => {
-      ctx.revert();
-      groups.forEach((group) => {
-        const track = group.querySelector<HTMLElement>("[data-year-track]");
-        const label = group.querySelector<HTMLElement>("[data-year-label]");
-        if (track) track.style.willChange = "";
-        if (label) label.style.willChange = "";
-      });
-      ScrollTrigger.refresh();
-    };
-  }
-
-  window.__yearTimelineInit = initYearTimeline;
-
-  function bootTimeline() {
-    window.__yearTimelineCleanup?.();
-    window.__yearTimelineCleanup = initYearTimeline();
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", bootTimeline);
-  } else {
-    bootTimeline();
-  }
-
-  document.addEventListener("astro:page-load", bootTimeline);
-</script>
+<YearTimeline />
 
 <style>
   /* ── DETAIL HERO ──────────────────────────────────────────── */
