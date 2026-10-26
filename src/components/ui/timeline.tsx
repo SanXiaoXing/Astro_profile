@@ -375,7 +375,7 @@ export const Timeline = ({ experiences }: TimelineProps) => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-64 bg-[var(--hc)]/10 blur-[120px] rounded-full" />
       </div>
 
-      <div className="max-w-7xl mx-auto py-20 px-4 md:px-8 lg:px-10 relative z-10">
+      <div className="max-w-7xl mx-auto py-20 md:pt-16 md:pb-8 px-4 md:px-8 lg:px-10 relative z-10">
         <motion.h2
           initial={reduceMotion ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -409,7 +409,7 @@ export const Timeline = ({ experiences }: TimelineProps) => {
         </motion.p>
       </div>
 
-      <div ref={ref} className="relative max-w-7xl mx-auto pb-20 pt-10 md:pt-20 overflow-visible">
+      <div ref={ref} className="relative max-w-7xl mx-auto pb-20 pt-10 overflow-visible">
         {/* Center line */}
         <div
           style={{

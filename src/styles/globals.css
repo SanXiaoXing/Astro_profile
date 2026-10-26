@@ -169,6 +169,29 @@ body {
   counter-reset: h1-counter;
 }
 
+@keyframes contentPageEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+::view-transition-group(site-logo) {
+  animation-duration: var(--duration-slow);
+  animation-timing-function: var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes contentPageEnter {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  ::view-transition-group(site-logo),
+  ::view-transition-old(site-logo),
+  ::view-transition-new(site-logo) {
+    animation-duration: 1ms !important;
+  }
+}
+
 body::before {
     content: "";
     position: fixed;

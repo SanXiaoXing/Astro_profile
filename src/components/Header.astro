@@ -14,7 +14,7 @@ const blogActive = blogLinks.some(({ href }) => isWithin(href));
 
 <header data-desktop-header>
   <nav aria-label="主导航">
-    <a class="header-home" href="/">SanXiaoXing</a>
+    <a class="header-home" href="/" transition:name="site-logo">SanXiaoXing</a>
     <div class="internal-links">
       <details class="nav-dropdown">
         <summary class:list={["nav-item", { active: blogActive }]}>
@@ -133,6 +133,10 @@ const blogActive = blogLinks.some(({ href }) => isWithin(href));
 
 <style>
   header {
+    --menu-bg: #1c2230;
+    --menu-border: rgba(125, 211, 252, 0.24);
+    --menu-text: #c5ccda;
+    --menu-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
     z-index: 50;
     position: sticky;
     top: 0;
@@ -141,6 +145,13 @@ const blogActive = blogLinks.some(({ href }) => isWithin(href));
     -webkit-backdrop-filter: blur(20px);
     background: var(--glass-bg);
     border-bottom: 1px solid var(--glass-border);
+  }
+
+  :global(html.light) header {
+    --menu-bg: #fffefa;
+    --menu-border: rgba(3, 105, 161, 0.18);
+    --menu-text: #475569;
+    --menu-shadow: 0 18px 38px rgba(31, 41, 55, 0.12);
   }
 
   nav {
@@ -232,22 +243,23 @@ const blogActive = blogLinks.some(({ href }) => isWithin(href));
     left: 0;
     width: 160px;
     height: 100%;
-    background: var(--bgc);
-    border: 1px solid var(--glass-border);
+    background: var(--menu-bg);
+    border: 1px solid var(--menu-border);
     border-radius: 16px;
-    box-shadow: 0 12px 32px rgb(0 0 0 / 0.12);
+    box-shadow: var(--menu-shadow);
   }
 
   details:not([data-expanded]) .menu-surface { display: none; }
 
   /* Native details remains usable before the enhancement loads. */
   details:not([data-expanded]) .dropdown-panel {
-    background: var(--bgc);
-    border: 1px solid var(--glass-border);
+    background: var(--menu-bg);
+    border: 1px solid var(--menu-border);
     border-radius: 12px;
+    box-shadow: var(--menu-shadow);
   }
 
-  .dropdown-panel a { display: block; padding: 0.65rem 0.8rem; white-space: nowrap; }
+  .dropdown-panel a { display: block; padding: 0.65rem 0.8rem; white-space: nowrap; color: var(--menu-text); }
   .theme-toggle-wrapper { display: flex; align-items: center; gap: 0.4rem; margin-left: 0.6rem; }
 
   .travellings-link {
