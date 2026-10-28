@@ -7,7 +7,7 @@ import { ViewTransitions } from 'astro:transitions';
 export async function getStaticPaths() {
     const allPosts = await getCollection('blog'); // 获取原始未过滤数据
     return allPosts.map(page => ({
-        params: { slug: page.slug }, // 直接使用内容集合的slug
+        params: { slug: page.slug.split('/').pop() }, // 年份目录不影响文章原有地址
         props: { page }
     }));
 }

@@ -1,0 +1,354 @@
+---
+import Layout from '../../layouts/Layout.astro';
+const { kind } = Astro.props;
+const isTag = kind === 'tags';
+const label = isTag ? '标签' : '分类';
+const english = isTag ? 'Tags' : 'Categories';
+import { getCollection } from 'astro:content';
+import { ViewTransitions } from 'astro:transitions';
+
+const blog = await getCollection('blog');
+const tagsMap: Record<string, number> = {};
+blog.forEach(post => {
+  post.data[kind].forEach(tag => {
+    tagsMap[tag] = (tagsMap[tag] || 0) + 1;
+  });
+});
+
+const sortedTags = Object.entries(tagsMap).sort((a, b) => b[1] - a[1]);
+const totalPosts = sortedTags.reduce((sum, [, c]) => sum + c, 0);
+
+// Wider tier-based sizing — the contrast between min and max now reads
+// as a deliberate visual hierarchy, not a typo.
+const maxCount = sortedTags[0]?.[1] || 1;
+const minCount = sortedTags[sortedTags.length - 1]?.[1] || 1;
+const maxFontSize = 2.4;
+const minFontSize = 0.9;
+
+function getFontSize(count: number): number {
+  if (maxCount === minCount) return (maxFontSize + minFontSize) / 2;
+  return minFontSize + ((count - minCount) / (maxCount - minCount)) * (maxFontSize - minFontSize);
+}
+---
+
+<Layout title={label} description={english} comments={false}>
+  <ViewTransitions />
+
+  <div class="tags-shell">
+    <header class="tags-hero">
+      <div class="tags-hero__primary">
+        <p class="tags-hero__eyebrow">INDEX · {label} / {english}</p>
+        <p class="tags-hero__meta">
+          共 <strong>{sortedTags.length}</strong> 个{label} ·
+          收录 <strong>{totalPosts}</strong> 篇文章
+        </p>
+      </div>
+
+      <div class="tags-hero__secondary">
+        <label class="tags-hero__search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            type="text"
+            id="tag-filter"
+            class="tags-hero__input"
+            placeholder={`搜索${label}...`}
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </label>
+      </div>
+    </header>
+
+    <div class="tag-cloud" data-tag-cloud>
+      {sortedTags.map(([tag, count], i) => (
+        <a
+          href={`/${kind}/${tag}`}
+          class="tag-chip"
+          data-name={tag.toLowerCase()}
+          style={`--chip-size: ${getFontSize(count)}rem; --i: ${i};`}
+        >
+          <span class="tag-chip__name">{isTag ? '#' : ''}{tag}</span>
+          <span class="tag-chip__count">{count}</span>
+        </a>
+      ))}
+      <p class="tag-cloud__empty" data-no-results>
+        <span class="tag-cloud__empty-rule"></span>
+        暂无匹配的{label}
+        <span class="tag-cloud__empty-rule"></span>
+      </p>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function initTagFilter() {
+    const input = document.getElementById('tag-filter') as HTMLInputElement | null;
+    const cloud = document.querySelector('[data-tag-cloud]');
+    if (!input || !cloud) return;
+
+    const items = Array.from(cloud.querySelectorAll<HTMLElement>('.tag-chip'));
+    const noResults = cloud.querySelector<HTMLElement>('[data-no-results]');
+
+    function filter() {
+      const query = input.value.trim().toLowerCase();
+      let visible = 0;
+
+      items.forEach(item => {
+        const name = item.dataset.name || '';
+        const match = name.includes(query);
+        item.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+
+      if (noResults) {
+        noResults.style.display = visible === 0 && query ? 'flex' : 'none';
+      }
+    }
+
+    input.addEventListener('input', filter);
+    filter();
+  }
+
+  initTagFilter();
+  document.addEventListener('astro:page-load', initTagFilter);
+</script>
+
+<style>
+  .tags-shell {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 4vw, 2rem);
+  }
+
+  /* ── HERO ─────────────────────────────────────────────────── */
+  /* No big title. The hero is a slim header bar: eyebrow + meta on
+     the left, search on the right, sitting on a single hairline. */
+  .tags-hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem) 0;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+    position: relative;
+  }
+
+  .tags-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 1px;
+    background: var(--hc);
+  }
+
+  .tags-hero__primary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+
+  .tags-hero__eyebrow {
+    font-family: var(--font-family-mono);
+    font-size: 0.72rem;
+    color: var(--hc);
+    letter-spacing: 0.22em;
+    margin: 0;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tags-hero__meta {
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+
+  .tags-hero__meta strong {
+    color: var(--fontc);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tags-hero__secondary {
+    flex: 0 1 360px;
+    min-width: 240px;
+  }
+
+  /* Search input — strengthened border so it reads as a real input,
+     not a decorative element. No glow, no shadow. */
+  .tags-hero__search {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.8rem 1.1rem;
+    background: rgba(125, 211, 252, 0.04);
+    border: 1px solid rgba(139, 139, 160, 0.4);
+    border-radius: 0.5rem;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+
+  .tags-hero__search:focus-within {
+    border-color: rgba(125, 211, 252, 0.65);
+    background: rgba(125, 211, 252, 0.08);
+  }
+
+  .tags-hero__search svg {
+    color: var(--gray);
+    flex-shrink: 0;
+    transition: color 0.3s ease;
+  }
+
+  .tags-hero__search:focus-within svg {
+    color: var(--hc);
+  }
+
+  .tags-hero__input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--fontc);
+    font-family: var(--font-family-mono);
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+  }
+
+  .tags-hero__input::placeholder {
+    color: var(--gray);
+  }
+
+  /* ── CLOUD ────────────────────────────────────────────────── */
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.65rem 0.75rem;
+    min-height: 30vh;
+  }
+
+  /* Stronger chip — more padding, visible border, subtle background
+     so the chips read as content, not decoration. */
+  .tag-chip {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    font-family: var(--font-family-mono);
+    font-size: var(--chip-size, 1rem);
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--fontc);
+    text-decoration: none;
+    background: rgba(125, 211, 252, 0.035);
+    border: 1px solid rgba(139, 139, 160, 0.3);
+    border-radius: 2rem;
+    cursor: pointer;
+    transition:
+      transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+      border-color 0.3s ease,
+      color 0.3s ease,
+      background 0.3s ease;
+    animation: chipEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(var(--i, 0) * 40ms);
+  }
+
+  .tag-chip:hover {
+    transform: translateY(-1px);
+    border-color: rgba(125, 211, 252, 0.7);
+    color: var(--hc);
+    background: rgba(125, 211, 252, 0.08);
+  }
+
+  .tag-chip__name {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .tag-chip__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.55rem;
+    height: 1.55rem;
+    padding: 0 0.45rem;
+    font-size: 0.65em;
+    color: var(--hc);
+    background: rgba(125, 211, 252, 0.12);
+    border: 1px solid rgba(125, 211, 252, 0.28);
+    border-radius: 0.4rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  .tag-chip:hover .tag-chip__count {
+    background: rgba(125, 211, 252, 0.22);
+    border-color: rgba(125, 211, 252, 0.5);
+  }
+
+  @keyframes chipEnter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .tag-cloud__empty {
+    display: none;
+    width: 100%;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 0 1rem;
+    color: var(--gray);
+    font-family: var(--font-family-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-cloud__empty-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--hairline);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tag-chip {
+      animation: none;
+    }
+    .tag-chip:hover {
+      transform: none;
+    }
+  }
+
+  /* ── RESPONSIVE ───────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .tag-cloud {
+      gap: 0.5rem 0.6rem;
+    }
+
+    .tag-chip {
+      padding: 0.45rem 0.85rem;
+    }
+
+    .tags-hero__secondary {
+      flex-basis: 100%;
+    }
+  }
+</style>

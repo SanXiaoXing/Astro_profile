@@ -1,0 +1,212 @@
+---
+import YearTimeline from './YearTimeline.astro';
+import FormattedDate from './FormattedDate.astro';
+const { sortedGroupedPosts } = Astro.props;
+---
+
+<section class="blog-list" data-year-timeline>
+  {
+    sortedGroupedPosts.map(([year, yearPosts]) => (
+      <div class="year-group" data-year-group>
+        <div class="year-timeline">
+          <div class="year-track" data-year-track />
+          <div class="year-label" data-year-label>
+            <span class="year-label-text">{year}</span>
+          </div>
+        </div>
+        <ul class="post-list">
+          {yearPosts.map((post) => (
+            <li class="post-item">
+              <a href={`/blog/${post.fileName}`} class="post-link">
+                <span class="post-date">
+                  <FormattedDate date={post.data.pubDate} />
+                </span>
+                <span class="post-title">{post.data.title}</span>
+                <svg
+                  class="post-arrow"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</section>
+
+<YearTimeline />
+
+<style>
+  /* ── BLOG-STYLE YEAR LIST ─────────────────────────────────── */
+  /* Same card-row surface as /blog so the tag article list reads
+     as part of the blog, not a separate flat table. */
+  .blog-list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .year-group {
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .year-timeline {
+    position: relative;
+    min-height: 100%;
+  }
+
+  .year-track {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(133, 133, 168, 0.15);
+    transform-origin: top center;
+    will-change: transform;
+  }
+
+  .year-label {
+    position: sticky;
+    top: 5rem;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem 0.5rem 0;
+    background: linear-gradient(90deg, hsl(var(--background) / 0.92) 70%, transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    will-change: transform, opacity;
+  }
+
+  .year-label-text {
+    font-family: var(--font-family-mono);
+    font-size: 1.75rem;
+    color: var(--gray);
+    padding-left: 0.5rem;
+    border-left: 3px solid var(--hc);
+    line-height: 1.2;
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .post-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .post-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: hsl(var(--card) / 0.6);
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background-color var(--duration-base) var(--ease-out),
+                border-color var(--duration-base) var(--ease-out),
+                box-shadow var(--duration-base) var(--ease-out),
+                transform var(--duration-base) var(--ease-out);
+    cursor: pointer;
+  }
+
+  .post-link:hover {
+    background: hsl(var(--card) / 0.8);
+    border-color: hsl(var(--primary) / 0.4);
+    transform: translateX(4px);
+    box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
+  }
+
+  .post-link:active {
+    transform: translateX(4px) scale(0.97);
+  }
+
+  .post-date {
+    font-family: var(--font-family-mono);
+    font-size: 0.85rem;
+    color: var(--gray);
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+
+  .post-title {
+    flex: 1;
+    font-family: var(--font-family-mono);
+    font-size: 0.95rem;
+    color: var(--fontc);
+    transition: color 0.25s ease;
+  }
+
+  .post-link:hover .post-title {
+    color: var(--hc);
+  }
+
+  .post-arrow {
+    color: var(--gray);
+    flex-shrink: 0;
+    transition: color var(--duration-base) var(--ease-out),
+                opacity var(--duration-base) var(--ease-out),
+                transform var(--duration-base) var(--ease-out);
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  .post-link:hover .post-arrow {
+    color: var(--orange);
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  @media (max-width: 640px) {
+    .year-label-text {
+      font-size: 1.25rem;
+    }
+
+    .year-group {
+      grid-template-columns: 60px 1fr;
+      gap: 1rem;
+    }
+
+    .year-label {
+      top: 4rem;
+    }
+
+    .post-link {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .post-date {
+      min-width: auto;
+    }
+
+    .post-title {
+      width: calc(100% - 24px);
+    }
+
+    .post-arrow {
+      display: none;
+    }
+  }
+</style>
