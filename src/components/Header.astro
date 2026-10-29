@@ -37,7 +37,7 @@ const blogActive = blogLinks.some(({ href }) => isWithin(href));
         <div class="menu-surface" aria-hidden="true"></div>
         <div class="dropdown-panel">
           <a href="/mastodon" class:list={{ active: isWithin("/mastodon") }} aria-current={pathname === "/mastodon" ? "page" : undefined}>嘟文</a>
-          <a href="/papers" class:list={{ active: isWithin("/papers") }} aria-current={pathname === "/papers" ? "page" : undefined}>纸间</a>
+          <a href="/papers" class:list={{ active: isWithin("/papers") }} aria-current={pathname === "/papers" ? "page" : undefined}>纸团</a>
         </div>
       </details>
       <a href="/friends" class:list={["nav-item", { active: isWithin("/friends") }]} aria-current={pathname === "/friends" ? "page" : undefined}>友链</a>

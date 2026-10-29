@@ -21,6 +21,7 @@ const blog = defineCollection({
 		updatedDate: z.coerce.date().optional(),
 		heroImage: z.string().optional(),
 		author: z.string().optional(),
+		creation: z.enum(['original', 'aigc', 'ai-assisted']).default('original'),
 		tags: z.array(z.string()).default([]).transform(removeDuplicates),
 		categories: z.array(z.string()).default([]).transform(removeDuplicates),
 	}),

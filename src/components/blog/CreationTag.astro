@@ -1,0 +1,22 @@
+---
+const { creation = 'original' } = Astro.props;
+const label = creation === 'aigc' ? 'AIGC' : creation === 'ai-assisted' ? 'AIGC 辅助' : '原创';
+---
+
+{creation !== 'original' && <span class="post-creation-tag">{label}</span>}
+
+<style>
+  .post-creation-tag {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0 9px 0 8px;
+    background: var(--orange);
+    color: var(--bgc);
+    font-family: var(--font-family-mono);
+    font-size: 0.7rem;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+</style>

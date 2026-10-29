@@ -47,6 +47,20 @@ Astro SanXiaoXing是一个卡片式的博客网站，简易、轻量、高效
 
 # Astro 博客预览与使用方法
 
+### 文章创作标识
+
+文章默认归为原创。文章详情页显示创作标识，列表中仅为 AIGC 和 AIGC 辅助文章显示角标。在 Markdown 顶部的 frontmatter 中通过 `creation` 设置：
+
+```yaml
+creation: ai-assisted
+```
+
+- `original`：原创；不填写时默认使用。
+- `aigc`：主要依靠 AI 创作的内容必须标记为 AIGC，不计入原创文章。
+- `ai-assisted`：使用 AI 辅助润色、查找资料等时，建议标记为 AIGC 辅助。
+
+标识由作者自行设置，不会自动判断内容的创作方式；加入申请由维护组成员人工判断是否为 AIGC。
+
 > ##  🧑‍🚀如何使用
 
 ```sh

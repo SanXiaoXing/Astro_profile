@@ -141,6 +141,7 @@ const sortedGroupedPosts = groupPostsByYear(posts);
   }
 
   .post-link {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -155,6 +156,7 @@ const sortedGroupedPosts = groupPostsByYear(posts);
                 transform var(--duration-base) var(--ease-out);
     cursor: pointer;
   }
+
 
   .post-link:hover {
     background: hsl(var(--card) / 0.8);
