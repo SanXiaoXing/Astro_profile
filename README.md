@@ -47,6 +47,28 @@ Astro SanXiaoXing是一个卡片式的博客网站，简易、轻量、高效
 
 # Astro 博客预览与使用方法
 
+### 文章图片排版
+
+使用 `image-grid` 指令可以将图片按两列排列，每张图片之间留一个空行。放入两张图片时并排显示，放入四张时显示为 2×2：
+
+```markdown
+:::image-grid
+![图片一](/images/one.jpg)
+
+![图片二](/images/two.jpg)
+
+![图片三](/images/three.jpg)
+
+![图片四](/images/four.jpg)
+:::
+```
+
+文章图片可以点击或通过键盘放大；同一图片组内可用左右按钮或方向键切换。
+
+### 纸团关联文章
+
+在纸团 Markdown 的 frontmatter 中添加文章地址中的日期，例如 `article: "2026-06-02"`。对应文章会自动显示纸团入口，纸团展开后也会显示文章链接。草稿纸团和隐藏文章不会显示关联入口。
+
 ### 文章创作标识
 
 文章默认归为原创。文章详情页显示创作标识，列表中仅为 AIGC 和 AIGC 辅助文章显示角标。在 Markdown 顶部的 frontmatter 中通过 `creation` 设置：

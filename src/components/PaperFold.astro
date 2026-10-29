@@ -4,9 +4,10 @@ interface Props {
   date?: Date
   seed?: number
   class?: string
+  paperId?: string
 }
 
-const { title, date, seed = 47, class: className } = Astro.props
+const { title, date, seed = 47, class: className, paperId } = Astro.props
 const formattedDate =
   date &&
   new Intl.DateTimeFormat('zh-CN', {
@@ -21,6 +22,7 @@ const formattedDate =
   class:list={['paper-fold', className]}
   data-title={title}
   data-seed={seed}
+  data-paper-id={paperId}
 >
   <button
     class="paper-fold-trigger"

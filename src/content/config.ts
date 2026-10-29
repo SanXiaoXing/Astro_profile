@@ -47,6 +47,7 @@ export const collections = {
 			title: z.string(),
 			date: z.coerce.date(),
 			draft: z.boolean().default(false),
+			article: z.string().optional(),
 		}),
 	}),
 };

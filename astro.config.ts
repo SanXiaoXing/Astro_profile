@@ -11,6 +11,7 @@ import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 
 import remarkRemoveObsidianLinks from './src/components/mdrenders/remark-remove-obsidian-links'
 import remarkChatDirective from './src/components/mdrenders/remark-chat-directive.mjs'
+import remarkImageGrid from './src/components/mdrenders/remark-image-grid.mjs'
 
 import expressiveCode from "astro-expressive-code";
 
@@ -48,7 +49,7 @@ export default defineConfig({
     }
   },
   markdown: {
-    remarkPlugins: [remarkRemoveObsidianLinks ,remarkFigureCaption,remarkDirective, remarkCalloutDirectives, remarkChatDirective, remarkReadingTime],
+    remarkPlugins: [remarkRemoveObsidianLinks ,remarkFigureCaption,remarkDirective, remarkCalloutDirectives, remarkChatDirective, remarkImageGrid, remarkReadingTime],
   },
 
 })

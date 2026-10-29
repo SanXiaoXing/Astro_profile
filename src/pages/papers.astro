@@ -2,12 +2,14 @@
 import { getCollection } from 'astro:content'
 import Layout from '../layouts/Layout.astro'
 import PaperFold from '../components/PaperFold.astro'
+import { getBlogPosts } from '../content/config'
 import {
   paperMonth,
   defaultPaperMonth,
 } from '../components/paper-fold/board.mjs'
 
 const papers = await getCollection('papers', ({ data }) => !data.draft)
+const posts = await getBlogPosts()
 papers.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 const rendered = await Promise.all(
   papers.map(async (paper, index) => ({
@@ -84,9 +86,10 @@ const currentPapers = rendered.filter((paper) => paper.month === currentMonth)
           aria-label="当月纸团，可拖动；键盘方向键可移动"
         >
           {
-            currentPapers.map(({ data, seed, Content }) => (
-              <PaperFold title={data.title} date={data.date} seed={seed}>
+            currentPapers.map(({ data, slug, seed, Content }) => (
+              <PaperFold title={data.title} date={data.date} seed={seed} paperId={slug}>
                 <Content />
+                {posts.find((post) => post.fileName === data.article) && <p><a href={`/blog/${data.article}`}>读完整故事 →</a></p>}
               </PaperFold>
             ))
           }
@@ -105,9 +108,10 @@ const currentPapers = rendered.filter((paper) => paper.month === currentMonth)
           <template data-month={month}>
             {rendered
               .filter((paper) => paper.month === month)
-              .map(({ data, seed, Content }) => (
-                <PaperFold title={data.title} date={data.date} seed={seed}>
+              .map(({ data, slug, seed, Content }) => (
+                <PaperFold title={data.title} date={data.date} seed={seed} paperId={slug}>
                   <Content />
+                  {posts.find((post) => post.fileName === data.article) && <p><a href={`/blog/${data.article}`}>读完整故事 →</a></p>}
                 </PaperFold>
               ))}
           </template>

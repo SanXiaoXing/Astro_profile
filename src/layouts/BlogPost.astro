@@ -8,10 +8,12 @@ import Random from "../components/blog/utils/Randomblogs.astro"
 import { MessageWithReactions } from "../components/ui/reaction-chip";
 import { fetchBuildTimeCounts } from "../lib/reactions";
 import ChatBubbleOptimizer from "../components/ChatBubbleOptimizer.astro";
+import ImageViewer from "../components/blog/ImageViewer.astro";
 
-type Props = CollectionEntry<"blog">["data"];
+type Props = CollectionEntry<"blog">["data"] & { relatedPapers?: { title: string; href: string }[] };
 
 const { title, description, pubDate, updatedDate, heroImage, tags, categories, comments, random, creation = 'original' } = Astro.props;
+const { relatedPapers = [] } = Astro.props;
 
 const postSlug = Astro.url.pathname;
 let initialCounts: Record<string, number> = {};
@@ -103,6 +105,9 @@ initialCounts = await fetchBuildTimeCounts(postSlug);
     </div>
 
     <ChatBubbleOptimizer />
+    <ImageViewer />
+
+    {relatedPapers.length > 0 && <aside class="related-papers"><span>纸团里的记忆</span>{relatedPapers.map((paper) => <a href={paper.href}>{paper.title} ↗</a>)}</aside>}
 
     <div class="reaction-container">
       <MessageWithReactions
@@ -123,6 +128,9 @@ initialCounts = await fetchBuildTimeCounts(postSlug);
   </article>
 
   <style>
+    .related-papers { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin: 2rem 0; padding: 1rem 1.25rem; border-left: 2px solid var(--orange); background: hsl(var(--card) / .6); }
+    .related-papers span { color: var(--gray); font-size: .85rem; }
+    .related-papers a { color: var(--fontc); text-decoration: underline; text-underline-offset: .25em; }
     .article-container {
       max-width: 800px;
       margin: 0 auto;

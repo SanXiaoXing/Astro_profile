@@ -102,7 +102,17 @@ class PaperBoard extends HTMLElement {
     )
     this.observer = new ResizeObserver(() => this.arrange())
     this.observer.observe(this.board)
+    const paperId = new URL(window.location.href).searchParams.get('paper')
+    const matchingTemplate = paperId && Array.from(this.querySelectorAll('template[data-month]'))
+      .find((template) => Array.from(template.content.querySelectorAll('paper-fold')).some((paper) => paper.dataset.paperId === paperId))
+    if (matchingTemplate) this.input.value = matchingTemplate.dataset.month
     this.selectMonth(this.input.value)
+    if (matchingTemplate) {
+      const paper = Array.from(this.board.querySelectorAll('paper-fold')).find((item) => item.dataset.paperId === paperId)
+      const trigger = paper?.querySelector('.paper-fold-trigger')
+      if (trigger && !trigger.hidden) trigger.click()
+      else if (paper) paper.querySelector('details').open = true
+    }
   }
 
   selectMonth(month) {

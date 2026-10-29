@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
 import TableOfContents from '../../components/blog/utils/TableOfContents.astro';
 import { ViewTransitions } from 'astro:transitions';
+import { paperLink, relatedPapers } from '../../lib/paper-links.mjs';
 
 export async function getStaticPaths() {
     const allPosts = await getCollection('blog'); // 获取原始未过滤数据
@@ -15,10 +16,11 @@ export async function getStaticPaths() {
 const { page } = Astro.props;
 // const page = Astro.props;
 const { Content, headings, remarkPluginFrontmatter } = await page.render();
+const papers = page.data.hidden ? [] : relatedPapers(await getCollection('papers'), page.slug.split('/').pop());
 
 ---
 
-<BlogPost {...page.data}>
+<BlogPost {...page.data} relatedPapers={papers.map((paper) => ({ title: paper.data.title, href: paperLink(paper) }))}>
     <ViewTransitions />
     <TableOfContents headings={headings} />
     <hr>

@@ -1,0 +1,124 @@
+<dialog class="image-viewer" aria-label="图片查看器">
+  <button class="image-viewer-close" type="button" aria-label="关闭图片查看器">×</button>
+  <button class="image-viewer-prev" type="button" aria-label="上一张图片">‹</button>
+  <figure><img alt="" /><figcaption></figcaption></figure>
+  <button class="image-viewer-next" type="button" aria-label="下一张图片">›</button>
+</dialog>
+
+<script>
+  import { nextImageIndex, imageTransform } from './image-viewer.mjs'
+
+  function initialize() {
+    const article = document.querySelector('.article-container .headline')
+    const dialog = document.querySelector('.image-viewer') as HTMLDialogElement | null
+    if (!article || !dialog || dialog.dataset.ready) return
+    dialog.dataset.ready = 'true'
+    const displayed = dialog.querySelector('img')!
+    const caption = dialog.querySelector('figcaption')!
+    const previous = dialog.querySelector('.image-viewer-prev') as HTMLButtonElement
+    const next = dialog.querySelector('.image-viewer-next') as HTMLButtonElement
+    let images: HTMLImageElement[] = []
+    let index = 0
+    let opener: HTMLElement | null = null
+    let animation: Animation | undefined
+    let sequence = 0
+    let closing = false
+    const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches
+    const options: KeyframeAnimationOptions = { duration: 200, easing: getComputedStyle(document.documentElement).getPropertyValue('--ease-out').trim() || 'ease-out' }
+    const show = () => {
+      displayed.src = images[index].currentSrc || images[index].src
+      displayed.alt = images[index].alt
+      caption.textContent = images[index].alt
+      previous.hidden = next.hidden = images.length < 2
+    }
+    article.querySelectorAll('img').forEach((image) => {
+      if (image.closest('a')) return
+      image.tabIndex = 0
+      image.setAttribute('role', 'button')
+      image.setAttribute('aria-label', `放大图片：${image.alt || '文章图片'}`)
+      const open = async (animate: boolean) => {
+        if (dialog.open) return
+        const current = ++sequence
+        const grid = image.closest('.image-grid')
+        images = grid ? Array.from(grid.querySelectorAll('img')).filter((item) => !item.closest('a')) : [image]
+        index = images.indexOf(image)
+        opener = image
+        show()
+        displayed.style.visibility = 'hidden'
+        dialog.showModal()
+        try { await displayed.decode() } catch { /* An unavailable image still keeps the viewer usable. */ }
+        if (current !== sequence || !dialog.open) return
+        const transform = imageTransform(image.getBoundingClientRect(), displayed.getBoundingClientRect())
+        displayed.style.visibility = ''
+        dialog.classList.add('is-visible')
+        if (animate && transform && !reducedMotion()) {
+          animation = displayed.animate([{ transform }, { transform: 'none' }], options)
+        }
+      }
+      image.addEventListener('click', () => open(true))
+      image.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(false) }
+      })
+    })
+    const move = (direction: number) => {
+      if (closing) return
+      ++sequence
+      animation?.cancel()
+      displayed.style.visibility = ''
+      dialog.classList.add('is-visible')
+      index = nextImageIndex(index, direction, images.length)
+      show()
+    }
+    const close = async (animate = true) => {
+      if (closing || !dialog.open) return
+      closing = true
+      ++sequence
+      const currentTransform = getComputedStyle(displayed).transform
+      animation?.cancel()
+      displayed.style.visibility = ''
+      dialog.classList.remove('is-visible')
+      const source = images[index]
+      const rect = source?.getBoundingClientRect()
+      const transform = rect && rect.bottom > 0 && rect.top < innerHeight && rect.right > 0 && rect.left < innerWidth
+        ? imageTransform(rect, displayed.getBoundingClientRect()) : null
+      if (animate && transform && !reducedMotion()) {
+        animation = displayed.animate([{ transform: currentTransform }, { transform }], options)
+        try { await animation.finished } catch { /* The dialog may have been removed during navigation. */ }
+      }
+      if (dialog.open) dialog.close()
+      closing = false
+    }
+    previous.addEventListener('click', () => move(-1))
+    next.addEventListener('click', () => move(1))
+    dialog.querySelector('.image-viewer-close')!.addEventListener('click', (event) => close((event as MouseEvent).detail !== 0))
+    dialog.addEventListener('click', (event) => { if (event.target === dialog) close() })
+    dialog.addEventListener('cancel', (event) => { event.preventDefault(); close(false) })
+    dialog.addEventListener('keydown', (event) => {
+      if (images.length > 1 && event.key === 'ArrowLeft') { event.preventDefault(); move(-1) }
+      if (images.length > 1 && event.key === 'ArrowRight') { event.preventDefault(); move(1) }
+    })
+    dialog.addEventListener('close', () => opener?.focus())
+  }
+  document.addEventListener('astro:page-load', initialize)
+  initialize()
+</script>
+
+<style is:global>
+  .headline img[role="button"] { cursor: zoom-in; }
+  .headline img[role="button"]:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+  .image-viewer { width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 3.5rem 3rem; border: 0; background: transparent; color: white; }
+  .image-viewer::backdrop { background: rgba(13, 14, 17, .95); opacity: 0; transition: opacity var(--duration-base) var(--ease-out); }
+  .image-viewer.is-visible::backdrop { opacity: 1; }
+  .image-viewer[open] { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 1rem; }
+  .image-viewer figure { margin: 0; text-align: center; min-width: 0; }
+  .image-viewer figure img { display: block; max-width: 100%; max-height: calc(100dvh - 9rem); width: auto; height: auto; margin: auto; object-fit: contain; transform-origin: top left; }
+  .image-viewer figcaption { margin-top: .8rem; color: #ddd; font-size: .85rem; }
+  .image-viewer button { color: white; border: 0; background: transparent; font-size: 2.5rem; cursor: pointer; padding: .3rem .7rem; line-height: 1; }
+  .image-viewer button:focus-visible { outline: 2px solid white; outline-offset: 2px; }
+  .image-viewer button[hidden] { visibility: hidden; display: block; }
+  .image-viewer-close { position: absolute; top: 1rem; right: 1rem; }
+  .image-viewer button, .image-viewer figcaption { opacity: 0; transition: opacity var(--duration-base) var(--ease-out); }
+  .image-viewer.is-visible button, .image-viewer.is-visible figcaption { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .image-viewer::backdrop, .image-viewer button, .image-viewer figcaption { transition: none; } }
+  @media (max-width: 600px) { .image-viewer { padding: 3.5rem .5rem; } .image-viewer[open] { gap: 0; } .image-viewer button { padding: .3rem; } }
+</style>
